@@ -1,0 +1,26 @@
+# Build artifacts
+/build/
+*.o
+*.obj
+*.exe
+*.out
+*.a
+*.so
+*.dll
+*.lib
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+
+# VS Code settings
+.vscode/
+
+# Logs
+*.log
+
+# Ignore system files
+.DS_Store
+Thumbs.db
