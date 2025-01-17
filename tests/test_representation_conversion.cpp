@@ -174,6 +174,41 @@ TEST(ConversionTest, ParametricToImplicit_PointSatisfyability) {
     }
 }
 
+TEST(ConversionTest, ImplicitToParametric_PointSatisfyability) {
+    int num_parameter_changes = 10; // Number of random test cases
+    int max_n = 10; // Maximum number of dimensions
+
+    for (int n = 2; n < max_n; n++) {
+        for (int d = 1; d < n; d++) {
+            for (int t = 0; t < num_parameter_changes; ++t) {
+                // Randomly generate plane parameters
+                Eigen::MatrixXd N = Eigen::MatrixXd::Random(n - d, n);
+                Eigen::VectorXd c = Eigen::VectorXd::Random(n - d);
+
+                // Create and initialize the model
+                AffineFit model(d, n);
+                model.override_implicit(N, c);
+
+                // Convert to parametric representation
+                auto [A, b_vec] = model.get_parametric_repr();
+
+                // Check for orthogonality between A and N
+                Eigen::MatrixXd A_N = A.transpose() * N.transpose();
+                
+                // Check if A_N == 0
+                for (int i = 0; i < d; ++i) {
+                    for (int j = 0; j < n - d; ++j) {
+                        ASSERT_NEAR(A_N(i, j), 0.0, 1e-6);
+                    }
+                }
+
+                // Sample `y` points from the equation x = A*y + b_vec
+                test_parametric_implicit_equality(A, b_vec, N, c, d, n);
+            }
+        }
+    }
+}
+
 
 
 

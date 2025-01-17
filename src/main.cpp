@@ -161,7 +161,7 @@ void testFlatModel(bool split) {
         auto loss_fn = [](Eigen::VectorXd Y_true, Eigen::VectorXd Y_pred){return Eigen::VectorXd((Y_true - Y_pred).array().square().matrix());};
         auto metric_fn = [](Eigen::VectorXd Y_true, Eigen::VectorXd Y_pred){return (Y_true - Y_pred).squaredNorm() / Y_true.size();};
 
-        RANSAC ransac(ransac_max_iterations, ransac_threshold, ransac_train_data_percenatge, ransac_min_inliners, loss_fn, r2_metric);
+        RANSAC ransac(ransac_max_iterations, ransac_threshold, ransac_train_data_percenatge, ransac_min_inliners, loss_fn, metric_fn);
         
         Eigen::MatrixXd X = hyperplanePoints.leftCols(d);
         Eigen::VectorXd Y = hyperplanePoints.col(d);
@@ -201,7 +201,7 @@ void generatePointCloud() {
 
     // Compare datasets	
     AffineFit* m = new AffineFit(n - 1, n);
-    m->fit(hyperplanePoints.leftCols(d), hyperplanePoints.col(d));
+    m->fit(hyperplanePoints);
     // Eigen::MatrixXd D1 = FlatSampler::sampleFlat(*m, points, noise, outlierRatio, outlierStrength);
 
     // m = new AffineFit(n - 1);

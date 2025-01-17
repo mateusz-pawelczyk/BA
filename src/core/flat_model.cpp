@@ -45,8 +45,8 @@ void FlatModel::parametric_to_implicit() {
     //    (the rows of N span the left-orthogonal subspace of A)
     N = orthogonalComplement(*A).transpose();
 
-    // 2) c = N * b_vec
-    c = (*N) * (*b_vec);
+    // 2) c = -N * b_vec
+    c = -(*N) * (*b_vec);
     // Print the normal form
 
     if (orthonormalized) {
@@ -437,6 +437,7 @@ void FlatModel::orthonormalize_parametric() {
 
     Eigen::VectorXd b_proj = A.value() * (A.value().transpose() * b_vec.value());
     b_vec = b_vec.value() - b_proj;
+
 }
 
 void FlatModel::orthonormalize_implicit() {
