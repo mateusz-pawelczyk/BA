@@ -19,6 +19,13 @@ option(POLYSCOPE_IMGUI_ENABLED      "Enable ImGui within Polyscope"       ON)
 # Add the Polyscope directory
 # This will pick up Polyscope's own CMakeLists.txt file under external/polyscope/
 add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/external/polyscope")
+add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/external/googletest")
+
+#############################
+#        GOOGLE TEST        #
+#############################
+enable_testing()
+include(GoogleTest)
 
 #############################
 #          EIGEN

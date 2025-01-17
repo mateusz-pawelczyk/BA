@@ -1,8 +1,7 @@
 #
 # CMakeLists.txt (Root)
 #
-# This file configures the overall build for GraphicsProject.
-# It defines project settings, includes external dependencies, and sets up the main executable.
+# Configures the overall build for GraphicsProject.
 #
 
 # ------------------------------------------------------------------------------
@@ -33,11 +32,9 @@ endif()
 # ------------------------------------------------------------------------------
 # Compiler Warnings (For Clean Code)
 # ------------------------------------------------------------------------------
-add_compile_options(
-    -Wall         # Show all standard warnings
-    -Wextra       # Enable extra warnings
-    -Wpedantic    # Enforce strict ISO C++ compliance
-)
+# add_compile_options(
+#     -Wall         # Show all standard warnings
+# )
 
 # ------------------------------------------------------------------------------
 # Dependencies and External Libraries
@@ -58,51 +55,69 @@ file(GLOB_RECURSE PROJECT_HEADERS
     "${CMAKE_CURRENT_SOURCE_DIR}/include/*.tpp"
 )
 
+file(GLOB_RECURSE PROJECT_TESTS
+    "${CMAKE_CURRENT_SOURCE_DIR}/tests/*.cpp"
+)
+
+# ------------------------------------------------------------------------------
+# Main Library (Shared Project Logic)
+# ------------------------------------------------------------------------------
+add_library(GraphicsProjectLib
+    ${PROJECT_SOURCES}
+    ${PROJECT_HEADERS}  # Headers included for IDE indexing
+)
+
+# Ensure all required include directories are added to the library
+target_include_directories(GraphicsProjectLib
+    PUBLIC
+    "${CMAKE_CURRENT_SOURCE_DIR}/include"
+    "${CMAKE_CURRENT_SOURCE_DIR}/external/polyscope/include"  # Add Polyscope includes
+    "${EIGEN_INCLUDE_DIR}"  # Add Eigen includes
+)
+
+target_link_libraries(GraphicsProjectLib
+    PRIVATE
+    polyscope  # Link Polyscope
+)
+
 # ------------------------------------------------------------------------------
 # Main Executable
 # ------------------------------------------------------------------------------
 add_executable(${PROJECT_NAME}
-    ${PROJECT_SOURCES}
-    ${PROJECT_HEADERS}  # Headers can be included for IDE indexing, not needed for compilation
+    src/main.cpp  # Only include the main file here
 )
 
-# ------------------------------------------------------------------------------
-# Include Directories
-# ------------------------------------------------------------------------------
-# Add project include directory
-target_include_directories(${PROJECT_NAME} 
-    PRIVATE 
-    "${CMAKE_CURRENT_SOURCE_DIR}/include"
-)
-
-# Ensure Eigen's header-only include path is available
-target_include_directories(${PROJECT_NAME}
-    PRIVATE 
-    "${EIGEN_INCLUDE_DIR}"
-)
-
-# ------------------------------------------------------------------------------
-# Linking External Libraries
-# ------------------------------------------------------------------------------
-# Link Polyscope (Ensure Polyscope is correctly added via Dependencies.cmake)
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
-    polyscope
+    GraphicsProjectLib
+    polyscope  # Link Polyscope
 )
 
 # ------------------------------------------------------------------------------
-# Post-Build Actions (Optional)
+# Testing Executable
 # ------------------------------------------------------------------------------
-# This section can handle asset copying, shader distribution, or other post-build tasks.
-# For example:
-# add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-#     COMMAND ${CMAKE_COMMAND} -E copy_directory
-#     "${CMAKE_SOURCE_DIR}/assets"
-#     "${CMAKE_BINARY_DIR}/assets"
-# )
+add_executable(${PROJECT_NAME}_tests
+    ${PROJECT_TESTS}
+)
+
+target_include_directories(${PROJECT_NAME}_tests
+    PRIVATE
+    "${CMAKE_CURRENT_SOURCE_DIR}/include"
+    "${CMAKE_CURRENT_SOURCE_DIR}/external/polyscope/include"  # Add Polyscope includes
+    "${EIGEN_INCLUDE_DIR}"  # Add Eigen includes
+)
+
+target_link_libraries(${PROJECT_NAME}_tests
+    PRIVATE
+    GraphicsProjectLib  # Link shared project logic
+    gtest
+    gtest_main
+    polyscope  # Link Polyscope
+)
+
+# Automatically discover and register tests
+gtest_discover_tests(${PROJECT_NAME}_tests)
 
 # ------------------------------------------------------------------------------
-# Summary
+# End of File
 # ------------------------------------------------------------------------------
-# This CMakeLists.txt file is structured to ensure clear separation of project components
-# and maintainability, while enforcing good practices for dependency management and warnings.
