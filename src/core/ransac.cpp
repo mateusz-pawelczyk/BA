@@ -171,9 +171,6 @@ std::unique_ptr<FlatModel> RANSAC::run(const Eigen::MatrixXd& D, FlatModel *mode
     std::vector<int> indices(N);
     std::iota(indices.begin(), indices.end(), 0); // Fill indices with 0,1,2,...
 
-    std::random_device rd;
-    std::mt19937 g(rd());
-
     // Minheap based on error
     // using ModelEntry = std::pair<double, std::unique_ptr<FlatModel>>;
     auto compare = [](const FlatModelEntry& a, const FlatModelEntry& b) {
@@ -190,6 +187,10 @@ std::unique_ptr<FlatModel> RANSAC::run(const Eigen::MatrixXd& D, FlatModel *mode
     while (heap.empty()) {
         #pragma omp parallel
         {
+            // Each thread has its own random engine:
+            std::random_device rd_thread;
+            std::mt19937 g(rd_thread());
+
             // Local heap for thread safety because multiple threads shouldn't access the same heap
             decltype(heap) local_heap(compare);
 
@@ -323,7 +324,6 @@ std::unique_ptr<FlatModel> RANSAC::run2(const Eigen::MatrixXd &D,
         #pragma omp parallel
         {
             // Each thread has its own random engine:
-            // Use thread_num to vary seeds, or just call random_device again:
             std::random_device rd_thread;
             std::mt19937 g_local(rd_thread());
 
@@ -394,7 +394,7 @@ std::unique_ptr<FlatModel> RANSAC::run2(const Eigen::MatrixXd &D,
 
         if (heap.empty()) {
             threshold *= 1.25;
-            std::cout << "No good model found. Running again with higher threshold: " 
+            std::cout << "No good d-flat found. Running again with higher threshold: " 
                       << threshold << std::endl;
         }
     }
@@ -410,6 +410,7 @@ std::unique_ptr<FlatModel> RANSAC::run2(const Eigen::MatrixXd &D,
         std::unique_ptr<FlatModel> fm = medianSDF(models, n - 1, &errors); 
         return fm;
     } else {
+        std::cout << "Only one model found for the d-flat." << std::endl;
         return medianSDF(models, n - 1, &errors);
     }
 }
@@ -444,8 +445,12 @@ std::vector<double> RANSAC::getWeights(std::vector<double>* errors) const {
     std::vector<double> weights(model_count);
 
     if (errors != nullptr) {
+        for (int i = 0; i < model_count; ++i) {
+            errors->at(i) += 1.0;
+        }
         double epsilon = 1e-15;
-        double error_sum = std::accumulate(errors->begin(), errors->end(), 0.0) + epsilon * errors->size(); 
+        double error_sum = std::accumulate(errors->begin(), errors->end(), 0.0) + 1.0; 
+
         for (int i = 0; i < errors->size(); ++i) {
             weights[i] = 1.0 - ((errors->at(i) + epsilon) / error_sum); 
         }
@@ -502,7 +507,7 @@ std::unique_ptr<FlatModel> RANSAC::medianSDF(std::vector<std::unique_ptr<FlatMod
     // Initialize Q_star and r_star
     Eigen::MatrixXd Q_star = Eigen::MatrixXd::Zero(n, n);
     Eigen::VectorXd r_star = Eigen::VectorXd::Zero(n);
-
+    std::cout << "======================" << std::endl;
     // Accumulate Q_i and r_i from all input flats
     for (size_t i = 0; i < model_count; ++i) {
         models[i]->orthonormalize();
@@ -511,8 +516,12 @@ std::unique_ptr<FlatModel> RANSAC::medianSDF(std::vector<std::unique_ptr<FlatMod
 
         Q_star += Q * weights[i];
         r_star -= r * weights[i]; // Careful: In the paper it's the POSITIVE sum, but that is wrong!
+        std::cout << "Q_star:\n" << Q << std::endl;
+        std::cout << "r_star:\n" << r << std::endl;
+        std::cout << "weights:\n" << weights[i] << std::endl;
     }
-
+        std::cout << "======================" << std::endl;
+    
     // eigen-decomposition on Q_star
     Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> eigensolver(Q_star);
     if (eigensolver.info() != Eigen::Success) {
