@@ -17,6 +17,7 @@ public:
     std::unique_ptr<Model> run(const Eigen::MatrixXd& X, const Eigen::VectorXd& Y, Model* model);
 
     std::unique_ptr<FlatModel> run(const Eigen::MatrixXd& D, FlatModel* model, int best_model_count=1) const;
+    std::unique_ptr<FlatModel> run2(const Eigen::MatrixXd& D, FlatModel* model, int best_model_count=1) const;
 
 private:
     Eigen::VectorXd getInliner(const Eigen::VectorXd& Y, const Eigen::VectorXd& Y_pred) const;
@@ -46,7 +47,12 @@ private:
                             std::vector<int> &indices,
                             std::mt19937 &g) const;
 
-    std::vector<int> findInliers(const Eigen::VectorXd &loss_values) const;
+    void sampleRandomSubset(const Eigen::MatrixXd &D,
+                                Eigen::MatrixXd &D_subset,
+                                std::vector<int> &indices, 
+                                std::mt19937 &g) const;
+
+    std::vector<int> findInliers(const Eigen::VectorXd &loss_values, double threshold) const;
 
     // Gathers top models from the global heap into sorted vectors
     template <typename Comparator>

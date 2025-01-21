@@ -333,17 +333,31 @@ int FlatModel::get_ambient_dimension() {
     return n;
 }
 
+void FlatModel::reset() {
+    A.reset();
+    b_vec.reset();
+    N.reset();
+    c.reset();
+    w.reset();
+    b.reset();
+    Q.reset();
+    r.reset();
+    orthonormalized = false;
+}   
 
 void FlatModel::override_parametric(const Eigen::MatrixXd& Anew, const Eigen::VectorXd& bnew) {
+    reset();
+
     A = Anew;
     b_vec = bnew;
 
-    orthonormalized = false;
+    n = Anew.rows();
+    d = Anew.cols();
 
     if (n == d + 1) {
         parametric_to_explicit();
     }
-    
+
     parametric_to_implicit();
 
     if (Q.has_value() || r.has_value()) {
@@ -353,11 +367,13 @@ void FlatModel::override_parametric(const Eigen::MatrixXd& Anew, const Eigen::Ve
 }
 
 void FlatModel::override_implicit(const Eigen::MatrixXd& Nnew, const Eigen::VectorXd& cnew) {
+    reset();
+
     N = Nnew;
     c = cnew;
 
-    orthonormalized = false;
-
+    n = Nnew.cols();
+    d = n - Nnew.rows();
 
     if (n == d + 1) {
         implicit_to_explicit();
@@ -370,10 +386,13 @@ void FlatModel::override_implicit(const Eigen::MatrixXd& Nnew, const Eigen::Vect
 }
 
 void FlatModel::override_explicit(const Eigen::VectorXd& wnew, double bnew) {
+    reset();
+
     w = wnew;
     b = bnew;
 
-    orthonormalized = false;
+    d = wnew.size();
+    n = d + 1;
 
     explicit_to_implicit();
     explicit_to_parametric();
@@ -480,4 +499,20 @@ double FlatModel::quadratic_loss(const Eigen::VectorXd point) {
         compute_QR();
     }
     return (point.transpose() * Q.value() * point)(0) + 2 * r->dot(point) + r->dot(r.value());
+}
+
+Eigen::VectorXd FlatModel::quadratic_loss(const Eigen::MatrixXd& points) {
+    if (!Q.has_value() || !r.has_value()) {
+        compute_QR();
+    }
+
+    int N = points.rows();
+
+    Eigen::VectorXd result(N);
+
+    for (int i = 0; i < N; ++i) {
+        result(i) = quadratic_loss(static_cast<Eigen::VectorXd>(points.row(i)));
+    }
+
+    return result;
 }

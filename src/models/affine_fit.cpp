@@ -89,11 +89,14 @@ void AffineFit::visualize(const std::string& name, double sideLen, double lineRa
         double halfSideLen = sideLen / 2.0;
 
     if (d == 1) {
-        get_explicit_repr();
+        orthonormalize();
+        get_parametric_repr();
+        
         Eigen::VectorXd x = Eigen::VectorXd::LinSpaced(numPoints, -halfSideLen, halfSideLen);
-        vertices = Eigen::MatrixXd::Zero(numPoints, 3);
-        vertices.col(0) = x;
-        vertices.col(1) = x * (*w)(0) + Eigen::VectorXd::Ones(numPoints) * (*b);
+        vertices = Eigen::MatrixXd::Zero(4, 3);
+
+        vertices = x * A->transpose() + b_vec->transpose().replicate(2, 1);
+
 
         faces.resize(numPoints - 1, 2);
         faces.col(0) = Eigen::VectorXi::LinSpaced(numPoints - 1, 0, numPoints - 2);

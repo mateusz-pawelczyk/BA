@@ -37,6 +37,7 @@ protected:
 
     void compute_QR();
 
+
 public:
     virtual ~FlatModel() = default;  
 
@@ -71,4 +72,8 @@ public:
     std::pair<Eigen::MatrixXd, Eigen::VectorXd> get_QR();
 
     double quadratic_loss(const Eigen::VectorXd point);
+    Eigen::VectorXd quadratic_loss(const Eigen::MatrixXd& points);
+
+    void reset();
+
 };

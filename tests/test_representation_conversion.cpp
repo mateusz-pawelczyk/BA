@@ -60,6 +60,7 @@ TEST(ConversionTest, ExplicitToParametric_PointSatisfyability) {
 
             // Create and initialize the model
             AffineFit model(d, d + 1);
+            std::cout << "Overriding explicit" << std::endl;
             model.override_explicit(w, b);
 
             // Convert to parametric representation
@@ -106,6 +107,8 @@ TEST(ConversionTest, ExplicitToImplicit_PointSatisfyability) {
 
             // Create and initialize the model
             AffineFit model(d, d + 1);
+            std::cout << "Overriding explicit" << std::endl;
+
             model.override_explicit(w, b);
 
             // Convert to parametric representation

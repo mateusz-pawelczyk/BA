@@ -94,6 +94,8 @@ double r2_metric(Eigen::VectorXd Y_true, Eigen::VectorXd Y_pred) {
 }
 
 
+
+
 void visualizeFittingPlane() {
     // Loss is per-point and metric is overall
     auto loss_fn = [](Eigen::VectorXd Y_true, Eigen::VectorXd Y_pred){return Eigen::VectorXd((Y_true - Y_pred).array().square().matrix());};
@@ -107,6 +109,8 @@ void visualizeFittingPlane() {
 
     std::unique_ptr<Model> singleBestModel = ransac.run(X, Y, model.get());
     std::unique_ptr<FlatModel> averagedBestModel = ransac.run(hyperplanePoints, (FlatModel*)model.get(), average_contributions);
+    AffineFit* tmpModel = new AffineFit(1, 3);
+    std::unique_ptr<FlatModel> lineAveragedBestModel = ransac.run2(hyperplanePoints, tmpModel, average_contributions);
 
     if (singleBestModel == nullptr) {
         std::cout << "No good Model with these parameters could be found." << std::endl;
@@ -117,17 +121,21 @@ void visualizeFittingPlane() {
 
     FlatModel* singleBestModel_ptr = (FlatModel*)singleBestModel.get();
     FlatModel* averagedBestModel_ptr = (FlatModel*)averagedBestModel.get();
+    FlatModel* lineAveragedBestModel_ptr = (FlatModel*)lineAveragedBestModel.get();
     
     double singleBestModelMSE = singleBestModel_ptr->MSE(X, Y);
     double averagedBestModelMSE = averagedBestModel_ptr->MSE(X, Y);
+    double lineAveragedBestModelMSE = lineAveragedBestModel_ptr->MSE(X, Y);
 
     std::cout << "Single Best Model performance: " << singleBestModelMSE << std::endl;
     std::cout << "Averaged Best Model performance: " << averagedBestModelMSE << std::endl;
+    std::cout << "Line-Averaged Best Flat performance: " << lineAveragedBestModelMSE << std::endl;
     std::cout << "Single Best Model outperformed by: " << (averagedBestModelMSE - singleBestModelMSE) / (averagedBestModelMSE + singleBestModelMSE) << std::endl;
     if (d != 1 && d != 2) return;
 
     singleBestModel_ptr->visualize("Single Best Flat", 6.0, pointRadius / 2.0, 0.6);
     averagedBestModel_ptr->visualize("Averaged Best Flat", 6.0, pointRadius / 2.0, 0.6);
+    lineAveragedBestModel_ptr->visualize("Line-Averaged Best Flat", 6.0, pointRadius / 2.0, 0.6);
 
     
 }
@@ -139,6 +147,7 @@ void visualizeFittingPlane() {
 void generatePointCloud() {
     // Compare datasets	
     AffineFit* m = new AffineFit(n - 1, n);
+
     m->override_explicit(w, b);
 
     hyperplanePoints = FlatSampler::sampleFlat(*m, points, noise, outlierRatio, outlierStrength, 1.0, saltAndPepper);
@@ -210,9 +219,25 @@ void modelSelectionGUI() {
 }
 
 
+void test() {
+    AffineFit* m = new AffineFit(1, 3);
+    Eigen::MatrixXd D(3, 3);
+    D << 1.0, -1.0, 0.5,
+         2.0, 1.0, 0.5,
+         3.0, 2.0, 0.5;
+    m->fit(D);
+    auto [A, b] = m->get_parametric_repr();
+    std::cout << "A:\n" << A << std::endl;
+    std::cout << "b:\n" << b << std::endl;
+
+    m->visualize("Test", 6.0, 0.01, 0.6);
+    Visualizer::plotPoints(D, "Test Points", "Sphere", 0.01);
+}
+
 
 int main() {
     polyscope::init();
+    // test();
 
     w = Eigen::VectorXd::Random(d);
     w_ui = w.cast<float>();

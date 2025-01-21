@@ -48,7 +48,7 @@ std::unique_ptr<Model> RANSAC::run(const Eigen::MatrixXd& X, const Eigen::Vector
             Eigen::VectorXd loss   = loss_fn(Y, Y_pred);
 
             // 4. Extract inliers based on the loss threshold
-            std::vector<int> inliers = findInliers(loss);
+            std::vector<int> inliers = findInliers(loss, threshold);
             if (inliers.size() < min_inliners)
                 continue; // Skip if inliers are less than the threshold
 
@@ -121,9 +121,27 @@ void RANSAC::sampleRandomSubset(const Eigen::MatrixXd &X,
 }
 
 /**
+ * @brief Randomly samples a subset from D using the given indices and random engine.
+ */
+void RANSAC::sampleRandomSubset(const Eigen::MatrixXd &D,
+                                Eigen::MatrixXd &D_subset,
+                                std::vector<int> &indices, 
+                                std::mt19937 &g) const 
+{
+    // Shuffle the indices
+    std::shuffle(indices.begin(), indices.end(), g);
+
+    // Copy the first subset_size rows
+    const int subset_size = static_cast<int>(D_subset.rows());
+    for (int i = 0; i < subset_size; ++i) {
+        D_subset.row(i) = D.row(indices[i]);
+    }
+}
+
+/**
  * @brief Finds inliers based on a loss threshold.
  */
-std::vector<int> RANSAC::findInliers(const Eigen::VectorXd &loss_values) const
+std::vector<int> RANSAC::findInliers(const Eigen::VectorXd &loss_values, double threshold) const
 {
     std::vector<int> inliers;
     inliers.reserve(loss_values.size());
@@ -181,6 +199,7 @@ std::unique_ptr<FlatModel> RANSAC::run(const Eigen::MatrixXd& D, FlatModel *mode
                 sampleRandomSubset(X, Y, X_subset, Y_subset, indices, g);
 
                 // 2. Fit the model to the random subset
+                model->reset();
                 model->fit(X_subset, Y_subset);
 
                 // 3. Compute loss for ALL data
@@ -188,7 +207,7 @@ std::unique_ptr<FlatModel> RANSAC::run(const Eigen::MatrixXd& D, FlatModel *mode
                 Eigen::VectorXd loss   = loss_fn(Y, Y_pred);
 
                 // 4. Extract inliers based on the loss threshold
-                std::vector<int> inliers = findInliers(loss);
+                std::vector<int> inliers = findInliers(loss, threshold);
                 if (inliers.size() < min_inliners)
                     continue; // Skip if inliers are less than the threshold
 
@@ -256,6 +275,144 @@ std::unique_ptr<FlatModel> RANSAC::run(const Eigen::MatrixXd& D, FlatModel *mode
     }
 }
 
+double r2_metric(Eigen::MatrixXd D, FlatModel *model) {
+    Eigen::VectorXd mean = D.colwise().mean();
+    double ss_res = model->quadratic_loss(D).sum();
+    double ss_tot = (D.rowwise() - mean.transpose()).squaredNorm();
+
+    return 1.0 - ss_res / ss_tot;
+}
+
+std::unique_ptr<FlatModel> RANSAC::run2(const Eigen::MatrixXd &D, 
+                                        FlatModel *model, 
+                                        int best_model_count) const
+{
+    if (model == nullptr) {
+        throw std::runtime_error("Model can't be `nullptr`.");
+    }
+
+    int N = D.rows();
+    int d = model->get_dimension();
+    int n = model->get_ambient_dimension();
+
+    if (n != D.cols()) {
+        throw std::runtime_error("Dimension mismatch between model and data.");
+    }
+
+    int subset_size = static_cast<int>(std::ceil(train_data_percentage * N));
+
+    // We still keep a reference copy of the original indices:
+    std::vector<int> indices(N);
+    std::iota(indices.begin(), indices.end(), 0); // 0,1,2,... N-1
+
+    // Define a comparator for our max-heap (we store the "best" models).
+    auto compare = [](const FlatModelEntry& a, const FlatModelEntry& b) {
+        return a.first < b.first; 
+    };
+
+    // Global heap: we will merge thread-local heaps into it via critical sections.
+    std::priority_queue<FlatModelEntry, std::vector<FlatModelEntry>, decltype(compare)> heap(compare);
+
+    Eigen::MatrixXd D_subset(subset_size, n);
+    double threshold = this->threshold;
+
+    // Because of the "while (heap.empty())" loop, we may have to repeat
+    // until we find enough inliers. Each pass can raise the threshold.
+    while (heap.empty()) {
+
+        #pragma omp parallel
+        {
+            // Each thread has its own random engine:
+            // Use thread_num to vary seeds, or just call random_device again:
+            std::random_device rd_thread;
+            std::mt19937 g_local(rd_thread());
+
+            // We also use a local heap for each thread
+            // to avoid concurrent accesses to 'heap'.
+            decltype(heap) local_heap(compare);
+
+            #pragma omp for
+            for (int iter = 0; iter < max_iterations; ++iter) {
+                // 1. Make a private copy of 'indices' to shuffle
+                std::vector<int> local_indices = indices;
+                std::shuffle(local_indices.begin(), local_indices.end(), g_local);
+
+                
+                
+
+                // 2. Create the D_subset from those shuffled indices
+                for (int i = 0; i < subset_size; ++i) {
+                    D_subset.row(i) = D.row(local_indices[i]);
+                }
+
+                // 3. Fit the model to the random subset
+                model->reset();
+                model->fit(D_subset);
+
+                // 4. Compute loss for ALL data
+                Eigen::VectorXd loss = model->quadratic_loss(D);
+
+                // 5. Extract inliers
+                std::vector<int> inliers = findInliers(loss, threshold);
+                if (inliers.size() < min_inliners) {
+                    continue; // not enough inliers, skip
+                }
+
+                // 6. Refit using inliers
+                Eigen::MatrixXd D_inliers(inliers.size(), n);
+                for (size_t i = 0; i < inliers.size(); ++i) {
+                    D_inliers.row(i) = D.row(inliers[i]);
+                }
+                // Print top 2 inliers for debugging
+                model->fit(D_inliers);
+
+
+                // 7. Evaluate the model and push onto local heap
+                double error = -r2_metric(D_inliers, model); 
+                local_heap.emplace(error, castToModel(model->clone()));
+
+                // Keep only the best X in the local heap
+                if (local_heap.size() > best_model_count) {
+                    local_heap.pop();
+                }
+            }
+
+            // Now merge the local heap into the global heap safely
+            #pragma omp critical
+            {
+                while (!local_heap.empty()) {
+                    auto topVal = std::move(const_cast<FlatModelEntry&>(local_heap.top()));
+                    local_heap.pop();
+
+                    heap.emplace(std::move(topVal));
+                    if (heap.size() > best_model_count) {
+                        heap.pop();
+                    }
+                }
+            }
+        } // end parallel region
+
+        if (heap.empty()) {
+            threshold *= 1.25;
+            std::cout << "No good model found. Running again with higher threshold: " 
+                      << threshold << std::endl;
+        }
+    }
+
+    // Collect top models from the heap
+    std::vector<std::unique_ptr<FlatModel>> models;
+    std::vector<double> errors;
+    models.reserve(best_model_count);
+    errors.reserve(best_model_count);
+    gatherTopModels(heap, models, errors);
+
+    if (models.size() > 1) {
+        std::unique_ptr<FlatModel> fm = medianSDF(models, n - 1, &errors); 
+        return fm;
+    } else {
+        return medianSDF(models, n - 1, &errors);
+    }
+}
 
 //// ---------- HELPER ----------
 
@@ -311,13 +468,13 @@ std::vector<double> RANSAC::getWeights(std::vector<double>* errors) const {
 
 std::pair<int, int> RANSAC::validateAndGetFlatDimensions(const std::vector<std::unique_ptr<FlatModel>>& models) const {
     // Assume all A_i have the same dimensions
-    int n = models[0]->get_parametric_repr().first.rows(); // Space dimension
-    int d = models[0]->get_parametric_repr().first.cols(); // Dimension of each flat (should be consistent)
+    int n = models[0]->get_ambient_dimension(); // Space dimension
+    int d = models[0]->get_dimension(); // Dimension of each flat (should be consistent)
 
     // Validate the dimension of the flats
     for (size_t i = 1; i < models.size(); ++i) {
         // Here, the parametric representation is also computed for every model. No need to do it later
-        if (models[i]->get_parametric_repr().first.rows() != n || models[i]->get_parametric_repr().first.cols() != d) {
+        if (models[i]->get_ambient_dimension() != n || models[i]->get_dimension() != d) {
             throw std::runtime_error("All A matrices must have the same dimensions.");
         }
     }
@@ -351,6 +508,7 @@ std::unique_ptr<FlatModel> RANSAC::medianSDF(std::vector<std::unique_ptr<FlatMod
         models[i]->orthonormalize();
         auto [A, b] = models[i]->get_parametric_repr();
         auto [Q, r] = models[i]->get_QR();
+
         Q_star += Q * weights[i];
         r_star -= r * weights[i]; // Careful: In the paper it's the POSITIVE sum, but that is wrong!
     }
