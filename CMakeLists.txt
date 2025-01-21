@@ -14,7 +14,7 @@ cmake_minimum_required(VERSION 3.14)
 # ------------------------------------------------------------------------------
 project(GraphicsProject LANGUAGES CXX)
 
-# Set C++ standard to C++20 (compatible with GCC 11.4.0)
+# Set C++ standard to C++20
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)  # Use pure ISO C++ (no compiler-specific extensions)
@@ -30,92 +30,74 @@ if (CMAKE_BINARY_DIR STREQUAL CMAKE_SOURCE_DIR)
 endif()
 
 # ------------------------------------------------------------------------------
-# Compiler Warnings (For Clean Code)
-# ------------------------------------------------------------------------------
-# add_compile_options(
-#     -Wall         # Show all standard warnings
-# )
-
-# ------------------------------------------------------------------------------
 # Dependencies and External Libraries
 # ------------------------------------------------------------------------------
 # External dependencies are managed separately in Dependencies.cmake
 include(cmake/Dependencies.cmake)
 
 # ------------------------------------------------------------------------------
-# Source and Header File Management
+# Main Library (Core Project Logic)
 # ------------------------------------------------------------------------------
-# Automatically collect all .cpp and .h/.hpp/.tpp files for compilation
-file(GLOB_RECURSE PROJECT_SOURCES 
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
-)
-file(GLOB_RECURSE PROJECT_HEADERS 
-    "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/include/*.hpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/include/*.tpp"
-)
+# Collect all source files, excluding main.cpp
+file(GLOB_RECURSE PROJECT_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
+list(FILTER PROJECT_SOURCES EXCLUDE REGEX ".*src/main.cpp$")
 
-file(GLOB_RECURSE PROJECT_TESTS
-    "${CMAKE_CURRENT_SOURCE_DIR}/tests/*.cpp"
-)
+add_library(GraphicsProjectLib ${PROJECT_SOURCES})
 
-# ------------------------------------------------------------------------------
-# Main Library (Shared Project Logic)
-# ------------------------------------------------------------------------------
-add_library(GraphicsProjectLib
-    ${PROJECT_SOURCES}
-    ${PROJECT_HEADERS}  # Headers included for IDE indexing
-)
-
-# Ensure all required include directories are added to the library
+# Include directories for the library
 target_include_directories(GraphicsProjectLib
     PUBLIC
     "${CMAKE_CURRENT_SOURCE_DIR}/include"
-    "${CMAKE_CURRENT_SOURCE_DIR}/external/polyscope/include"  # Add Polyscope includes
-    "${EIGEN_INCLUDE_DIR}"  # Add Eigen includes
+    "${CMAKE_CURRENT_SOURCE_DIR}/external/polyscope/include"  # Polyscope includes
+    "${EIGEN_INCLUDE_DIR}"  # Eigen includes
 )
 
+# Link external dependencies
 target_link_libraries(GraphicsProjectLib
     PRIVATE
-    polyscope  # Link Polyscope
+    polyscope
 )
 
 # ------------------------------------------------------------------------------
 # Main Executable
 # ------------------------------------------------------------------------------
-add_executable(${PROJECT_NAME}
-    src/main.cpp  # Only include the main file here
-)
+# Define the main executable
+add_executable(${PROJECT_NAME} src/main.cpp)
 
+# Link libraries to the main executable
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
     GraphicsProjectLib
-    polyscope  # Link Polyscope
+    polyscope
 )
 
 # ------------------------------------------------------------------------------
 # Testing Executable
 # ------------------------------------------------------------------------------
-add_executable(${PROJECT_NAME}_tests
-    ${PROJECT_TESTS}
-)
+# Collect all test files
+file(GLOB_RECURSE PROJECT_TEST_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/tests/*.cpp")
 
+# Define the test executable
+add_executable(${PROJECT_NAME}_tests ${PROJECT_TEST_SOURCES})
+
+# Include directories for the test executable
 target_include_directories(${PROJECT_NAME}_tests
     PRIVATE
     "${CMAKE_CURRENT_SOURCE_DIR}/include"
-    "${CMAKE_CURRENT_SOURCE_DIR}/external/polyscope/include"  # Add Polyscope includes
-    "${EIGEN_INCLUDE_DIR}"  # Add Eigen includes
+    "${CMAKE_CURRENT_SOURCE_DIR}/external/polyscope/include"
+    "${EIGEN_INCLUDE_DIR}"
 )
 
+# Link libraries to the test executable
 target_link_libraries(${PROJECT_NAME}_tests
     PRIVATE
-    GraphicsProjectLib  # Link shared project logic
+    GraphicsProjectLib  # Link core project library
     gtest
     gtest_main
-    polyscope  # Link Polyscope
 )
 
 # Automatically discover and register tests
+include(GoogleTest)
 gtest_discover_tests(${PROJECT_NAME}_tests)
 
 # ------------------------------------------------------------------------------

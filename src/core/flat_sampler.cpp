@@ -7,7 +7,7 @@ namespace FlatSampler {
     std::random_device rd;
     std::mt19937 generator(rd());
 
-    Eigen::MatrixXd sampleFlat(FlatModel& model, int N, double noise, double outlierRatio, double outlierStrength, double volume) {
+    Eigen::MatrixXd sampleFlat(FlatModel& model, int N, double noise, double outlierRatio, double outlierStrength, double volume, bool saltAndPepper) {
         int d = model.get_dimension();
         int n = model.get_ambient_dimension();
 
@@ -15,12 +15,6 @@ namespace FlatSampler {
         model.orthonormalize();
         
         auto [A, b] = model.get_parametric_repr();
-        // auto [w, bLocal] = model.get_explicit_repr();
-        
-        // // Print the explicit form
-        // std::cout << "Explicit form: " << std::endl;
-        // std::cout << "w: " << w.transpose() << std::endl;
-        // std::cout << "b: " << bLocal << std::endl;
 
         // Generate points on the flat
         Eigen::MatrixXd points = sampleGaussianPoints(N, d);
@@ -33,7 +27,7 @@ namespace FlatSampler {
 
         // Add outliers (salt-and-pepper noise)
         std::uniform_real_distribution<double> dist;
-        addOutlier(points, N_model, outlierStrength, outlierRatio);
+        addOutlier(points, N_model, outlierStrength, outlierRatio, saltAndPepper);
 
         return points;
     }
@@ -47,13 +41,23 @@ namespace FlatSampler {
         }
     }
 
-    void addOutlier(Eigen::MatrixXd& points, const Eigen::MatrixXd& N, double strength, double ratio) {
+    void addOutlier(Eigen::MatrixXd& points, const Eigen::MatrixXd& N, double strength, double ratio, bool saltAndPepper) {
         std::uniform_real_distribution<double> dist;
         double outlierPosNegRatio = dist(generator);
         for (auto normal : N.rowwise()) {
             for (int i = 0; i < points.rows(); ++i) {
                 if (dist(generator) < ratio) {
-                    points.row(i) += normal * dist(generator) * strength * (dist(generator) < outlierPosNegRatio ? 1.0 : -1.0);
+                    Eigen::VectorXd outlierOffset = normal * strength;
+
+                    if (!saltAndPepper) {
+                        outlierOffset *= dist(generator);
+                    }
+
+                    if (dist(generator) < outlierPosNegRatio) {
+                        outlierOffset *= -1;
+                    }
+
+                    points.row(i) += outlierOffset;
                 }
             }
         }

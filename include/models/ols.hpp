@@ -14,10 +14,6 @@ public:
 
     double predict(const Eigen::VectorXd& point) const override;
     Eigen::VectorXd predict(const Eigen::MatrixXd& data) const override;
-
-    // Getter
-    Eigen::VectorXd get_w() const;
-    double get_b() const;
     
     // Cloning
     std::unique_ptr<Model> clone() const override;

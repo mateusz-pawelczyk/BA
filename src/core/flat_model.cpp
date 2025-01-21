@@ -45,9 +45,8 @@ void FlatModel::parametric_to_implicit() {
     //    (the rows of N span the left-orthogonal subspace of A)
     N = orthogonalComplement(*A).transpose();
 
-    // 2) c = -N * b_vec
+    // 2) c = -N * b_vec <==> N*x + c = 0
     c = -(*N) * (*b_vec);
-    // Print the normal form
 
     if (orthonormalized) {
         orthonormalize_implicit();
@@ -104,7 +103,7 @@ void FlatModel::parametric_to_explicit() {
     const int n = Aref.rows();
     const int d_local = Aref.cols();
     if (d_local != n - 1) {
-        throw std::runtime_error("parametric_to_explicit: Only valid if subspace dimension = n-1 (hyperplane).");
+        throw std::runtime_error("parametric_to_explicit: Only valid if subspace dimension = n-1 (hyperplane). You have d = " + std::to_string(d_local) + ", n = " + std::to_string(n));
     }
 
     //// TODO: Explain better what to do
@@ -327,33 +326,11 @@ std::pair<Eigen::MatrixXd, Eigen::VectorXd> FlatModel::get_parametric_repr() {
 
 
 int FlatModel::get_dimension() {
-    if (d.has_value()) {} 
-    else if (A.has_value()) {
-        d = A->cols();
-    } else if (N.has_value()) {
-        d = N->cols() - N->rows();
-    } else if (w.has_value()) {
-        d = w->size();
-    } else {
-        throw std::runtime_error("Model wasn't fitted yet. Cannot get dimension.");
-    }
-
-    return d.value();
+    return d;
 }
 
 int FlatModel::get_ambient_dimension() {
-    if (n.has_value()) {} 
-    else if (A.has_value()) {
-        n = A->rows();
-    } else if (N.has_value()) {
-        n = N->cols();
-    } else if (w.has_value()) {
-        n = w->size() + 1;
-    } else {
-        throw std::runtime_error("Model wasn't fitted yet. Cannot get ambient dimension.");
-    }
-
-    return n.value();
+    return n;
 }
 
 
@@ -363,7 +340,7 @@ void FlatModel::override_parametric(const Eigen::MatrixXd& Anew, const Eigen::Ve
 
     orthonormalized = false;
 
-    if (n.value() == d.value() + 1) {
+    if (n == d + 1) {
         parametric_to_explicit();
     }
     
@@ -382,7 +359,7 @@ void FlatModel::override_implicit(const Eigen::MatrixXd& Nnew, const Eigen::Vect
     orthonormalized = false;
 
 
-    if (n.value() == d.value() + 1) {
+    if (n == d + 1) {
         implicit_to_explicit();
     }
     implicit_to_parametric();
@@ -441,17 +418,36 @@ void FlatModel::orthonormalize_parametric() {
 }
 
 void FlatModel::orthonormalize_implicit() {
-    // QR decomposition of N^T
-    Eigen::ColPivHouseholderQR<Eigen::MatrixXd> qr(N.value().transpose());
-    Eigen::MatrixXd Q = qr.householderQ();
-    Eigen::MatrixXd R = qr.matrixR().topLeftCorner(N->rows(), N->rows());
+    // Ensure N and c are set
+    if (!N.has_value() || !c.has_value()) {
+        throw std::runtime_error("N and c must be set before orthonormalizing.");
+    }
+    int rows = n - d;
 
-    // Orthonormalize N
-    N = Q.leftCols(N->rows()).transpose();
+    // Transpose N
+    Eigen::MatrixXd N_t = N->transpose(); // N_t is n x (n-d) => example: 5 x 2
 
-    // Adjust c
-    c = R.transpose().inverse() * c.value();
+    // Perform the (reduced) QR factorization: N^T = Q * R
+    Eigen::HouseholderQR<Eigen::MatrixXd> qr(N_t);
+
+    // Extract Q_hat (n x (n-d)) and R_hat ((n-d) x (n-d))
+    Eigen::MatrixXd Q_full = qr.householderQ();
+    Eigen::MatrixXd Q_hat = Q_full.leftCols(rows); // Q_hat is n x (n-d)
+
+    // Extract R_hat from the upper triangular part of matrixQR()
+    Eigen::MatrixXd R_full = qr.matrixQR().template triangularView<Eigen::Upper>();
+    Eigen::MatrixXd R_hat = R_full.topLeftCorner(rows, rows); // (n-d) x (n-d)
+
+    Eigen::MatrixXd M = Q_hat.transpose(); 
+
+    // Solve R_hat^T * d = c
+    Eigen::VectorXd d_vec = R_hat.transpose().colPivHouseholderQr().solve(c.value());
+
+    // Update the internal representation
+    N = M;
+    c = d_vec;
 }
+
 
 
 void FlatModel::orthonormalize_explicit() {

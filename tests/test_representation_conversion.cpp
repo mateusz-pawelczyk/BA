@@ -39,7 +39,7 @@ void test_parametric_implicit_equality(const Eigen::MatrixXd& A, const Eigen::Ve
     Eigen::MatrixXd points = points_subspace * A.transpose() + b_vec.transpose().replicate(num_points, 1);
 
     Eigen::MatrixXd complement_points = points * N.transpose() + c.transpose().replicate(num_points, 1);
-    std::cerr << "(n, d) = (" << n << ", " << d << ")" << std::endl;
+
     // Check if complement_points == 0
     for (int i = 0; i < num_points; ++i) {
         for (int j = 0; j < n - d; ++j) {
@@ -158,12 +158,12 @@ TEST(ConversionTest, ParametricToImplicit_PointSatisfyability) {
                 auto [N, c] = model.get_implicit_repr();
 
                 // Check for orthogonality between A and N
-                Eigen::MatrixXd A_N = A.transpose() * N.transpose();
+                Eigen::MatrixXd N_A = N * A;
                 
                 // Check if A_N == 0
-                for (int i = 0; i < d; ++i) {
-                    for (int j = 0; j < n - d; ++j) {
-                        ASSERT_NEAR(A_N(i, j), 0.0, 1e-6);
+                for (int i = 0; i < n - d; ++i) {
+                    for (int j = 0; j < d; ++j) {
+                        ASSERT_NEAR(N_A(i, j), 0.0, 1e-6);
                     }
                 }
 
@@ -193,12 +193,12 @@ TEST(ConversionTest, ImplicitToParametric_PointSatisfyability) {
                 auto [A, b_vec] = model.get_parametric_repr();
 
                 // Check for orthogonality between A and N
-                Eigen::MatrixXd A_N = A.transpose() * N.transpose();
+                Eigen::MatrixXd N_A = N * A;
                 
                 // Check if A_N == 0
-                for (int i = 0; i < d; ++i) {
-                    for (int j = 0; j < n - d; ++j) {
-                        ASSERT_NEAR(A_N(i, j), 0.0, 1e-6);
+                for (int i = 0; i < n - d; ++i) {
+                    for (int j = 0; j < d; ++j) {
+                        ASSERT_NEAR(N_A(i, j), 0.0, 1e-6);
                     }
                 }
 
@@ -209,11 +209,43 @@ TEST(ConversionTest, ImplicitToParametric_PointSatisfyability) {
     }
 }
 
+TEST(ConversionTest, OverrideParametric_ImplicitConversion) {
+    int num_parameter_changes = 10; // Number of random test cases
+    int max_n = 10; // Maximum number of dimensions
+
+    for (int n = 2; n < max_n; n++) {
+        for (int d = 1; d < n; d++) {
+            for (int t = 0; t < num_parameter_changes; ++t) {
+                // Randomly generate plane parameters
+                Eigen::MatrixXd A = Eigen::MatrixXd::Random(n, d);
+                Eigen::VectorXd b_vec = Eigen::VectorXd::Random(n);
+
+                Eigen::MatrixXd N = Eigen::MatrixXd::Random(n - d, n);
+                Eigen::VectorXd c = Eigen::VectorXd::Random(n - d);
+
+                // Create and initialize the model
+                AffineFit model(d, n);
+                model.override_implicit(N, c);
+                model.override_parametric(A, b_vec);
+
+                auto [N_new, c_new] = model.get_implicit_repr();
+
+                // Check for orthogonality between A and N
+                Eigen::MatrixXd N_A = N_new * A;
+                
+                // Check if A_N == 0
+                for (int i = 0; i < n - d; ++i) {
+                    for (int j = 0; j < d; ++j) {
+                        ASSERT_NEAR(N_A(i, j), 0.0, 1e-6);
+                    }
+                }
+
+                // Sample `y` points from the equation x = A*y + b_vec
+                test_parametric_implicit_equality(A, b_vec, N_new, c_new, d, n);
+
+            }
+        }
+    }
+}               
 
 
-
-// Main function for running tests
-int main(int argc, char **argv) {
-    ::testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
-}

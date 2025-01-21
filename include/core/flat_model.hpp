@@ -19,8 +19,8 @@ protected:
     std::optional<Eigen::MatrixXd> Q;           // (n x n) Matrix with the orthogonal complement of A
     std::optional<Eigen::VectorXd> r;           // offset n-vector of the orthogonal complement of A
 
-    std::optional<int> d;                       // Dimension of the flat
-    std::optional<int> n;                       // Ambient space dimension
+    int d;                       // Dimension of the flat
+    int n;                       // Ambient space dimension
     bool orthonormalized = false;
 
 

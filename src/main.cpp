@@ -23,6 +23,7 @@
 #include "Definitions.h"
 #include "visualization/visualizer.h"
 
+
 Eigen::VectorXd w;
 double b;
 int points = 20;
@@ -33,6 +34,7 @@ bool sphereRepr = false;
 int d = 2; // Hyperplane Dimensions
 int n = 3; // Ambient Space Dimensions
 int average_contributions = 10;
+bool saltAndPepper = false;
 
 int ransac_max_iterations = 1000;
 double ransac_threshold = 0.0001;
@@ -98,7 +100,7 @@ void visualizeFittingPlane() {
     auto metric_fn = [](Eigen::VectorXd Y_true, Eigen::VectorXd Y_pred){return (Y_true - Y_pred).squaredNorm() / Y_true.size();};
 
     // Maybe move to global to avoid reinitialization???
-    RANSAC ransac(ransac_max_iterations, ransac_threshold, ransac_train_data_percenatge, ransac_min_inliners, loss_fn, r2_metric);
+    RANSAC ransac(ransac_max_iterations, ransac_threshold, ransac_train_data_percenatge, ransac_min_inliners, loss_fn, metric_fn);
     
     Eigen::MatrixXd X = hyperplanePoints.leftCols(d);
     Eigen::VectorXd Y = hyperplanePoints.col(d);
@@ -131,82 +133,15 @@ void visualizeFittingPlane() {
 }
 
 
-void testFlatModel(bool split) {
-    int iterations = 10000;
-    double singleBestModelMSE = 0.0;
-    double averagedBestModelMSE = 0.0;
 
-    int test_points = 10;
-    double test_noise = 0.0;
-    double test_outlierRatio = 0.0;
-    double outlierStrength = 1.0;
-
-    std::default_random_engine generator;
-    std::normal_distribution<double> dist(0.0, 1.0);
-
-    for (int i = 0; i < iterations; ++i) {
-        model = createObject("Affine Fit", d, n);
-        w = Eigen::VectorXd::Random(d);
-        b = dist(generator);
-        hyperplanePoints = Generation::generateHyperPlane(w, b, test_points, test_noise, test_outlierRatio, outlierStrength);
-        AffineFit* m = new AffineFit(n - 1, n);
-        if (split) {
-            m->fit(hyperplanePoints.leftCols(d), hyperplanePoints.col(d));
-        } else {
-            m->fit(hyperplanePoints);
-        }
-        hyperplanePoints = FlatSampler::sampleFlat(*m, points, noise, outlierRatio, outlierStrength);
-
-        // Loss is per-point and metric is overall
-        auto loss_fn = [](Eigen::VectorXd Y_true, Eigen::VectorXd Y_pred){return Eigen::VectorXd((Y_true - Y_pred).array().square().matrix());};
-        auto metric_fn = [](Eigen::VectorXd Y_true, Eigen::VectorXd Y_pred){return (Y_true - Y_pred).squaredNorm() / Y_true.size();};
-
-        RANSAC ransac(ransac_max_iterations, ransac_threshold, ransac_train_data_percenatge, ransac_min_inliners, loss_fn, metric_fn);
-        
-        Eigen::MatrixXd X = hyperplanePoints.leftCols(d);
-        Eigen::VectorXd Y = hyperplanePoints.col(d);
-
-        std::unique_ptr<Model> singleBestModel = ransac.run(X, Y, model.get());
-        std::unique_ptr<FlatModel> averagedBestModel = ransac.run(hyperplanePoints, (FlatModel*)model.get(), average_contributions);
-
-        if (singleBestModel == nullptr) {
-            std::cout << "No good Model with these parameters could be found." << std::endl;
-            return;
-        }
-
-        float pointRadius = calculatePointRadius();
-
-        FlatModel* singleBestModel_ptr = (FlatModel*)singleBestModel.get();
-        FlatModel* averagedBestModel_ptr = (FlatModel*)averagedBestModel.get();
-        
-        singleBestModelMSE += singleBestModel_ptr->MSE(X, Y);
-        averagedBestModelMSE += averagedBestModel_ptr->MSE(X, Y);
-
-        // Increment all parameters
-        noise += 0.3 / iterations;
-        outlierRatio += 1.0 / iterations;
-        outlierStrength += 10.0 / iterations;
-        test_points += 10;
-    }
-
-    std::cout << "Single Best Model performance: " << singleBestModelMSE / iterations << std::endl;
-    std::cout << "Averaged Best Model performance: " << averagedBestModelMSE / iterations << std::endl;
-
-
-}
 
 
 void generatePointCloud() {
-    hyperplanePoints = Generation::generateHyperPlane(w, b, points, noise, outlierRatio, outlierStrength);
-
     // Compare datasets	
     AffineFit* m = new AffineFit(n - 1, n);
-    m->fit(hyperplanePoints);
-    // Eigen::MatrixXd D1 = FlatSampler::sampleFlat(*m, points, noise, outlierRatio, outlierStrength);
+    m->override_explicit(w, b);
 
-    // m = new AffineFit(n - 1);
-    // m->fit(hyperplanePoints);
-    hyperplanePoints = FlatSampler::sampleFlat(*m, points, noise, outlierRatio, outlierStrength);
+    hyperplanePoints = FlatSampler::sampleFlat(*m, points, noise, outlierRatio, outlierStrength, 1.0, saltAndPepper);
 
     float pointRadius = calculatePointRadius();
     Visualizer::plotPoints(hyperplanePoints, "Hyperplane Point Cloud", sphereRepr ? "Sphere" : "Quad", pointRadius);
@@ -222,6 +157,7 @@ void dataParameterGUI() {
     ImGui::SliderFloat("outlier strength", &outlierStrength_ui, 1.0f, 10.0f, "%.4f");
     ImGui::SliderInt("Number of Points", &points, 20, 20000);
     ImGui::SliderInt("Flat dimensions", &d, 1, 3);
+    ImGui::Checkbox("Salt and Pepper Noise", &saltAndPepper);
 }
 
 void dataReprGUI() {
@@ -283,10 +219,7 @@ int main() {
     b = 0.0;
 
     initializeLabelToModel();
-    // std::cout << "Test model with split:" << std::endl;
-    // testFlatModel(true);
-    // std::cout << "Test model without split:" << std::endl;
-    // testFlatModel(false);
+
     generatePointCloud();
 
     

@@ -7,7 +7,7 @@
 #include <iostream>
 #include <queue>
 #include <tuple>
-
+#include <cassert>
 #include <Eigen/Eigenvalues>
 #include <Eigen/Dense>
 
@@ -33,51 +33,54 @@ std::unique_ptr<Model> RANSAC::run(const Eigen::MatrixXd& X, const Eigen::Vector
 
     Eigen::MatrixXd X_subset(subset_size, d);
     Eigen::VectorXd Y_subset(subset_size);
-    #pragma omp parallel for
-    for (int iter = 0; iter < max_iterations; ++iter) {
-        // 1. Randomly sample a subset
-        sampleRandomSubset(X, Y, X_subset, Y_subset, indices, g);
 
-        // 2. Fit the model to the random subset
-        model->fit(X_subset, Y_subset);
+    while (bestModel == nullptr) {
+        #pragma omp parallel for
+        for (int iter = 0; iter < max_iterations; ++iter) {
+            // 1. Randomly sample a subset
+            sampleRandomSubset(X, Y, X_subset, Y_subset, indices, g);
 
-        // 3. Compute loss for ALL data
-        Eigen::VectorXd Y_pred = model->predict(X);
-        Eigen::VectorXd loss   = loss_fn(Y, Y_pred);
+            // 2. Fit the model to the random subset
+            model->fit(X_subset, Y_subset);
 
-        // 4. Extract inliers based on the loss threshold
-        std::vector<int> inliers = findInliers(loss);
-        if (inliers.size() < min_inliners)
-            continue; // Skip if inliers are less than the threshold
+            // 3. Compute loss for ALL data
+            Eigen::VectorXd Y_pred = model->predict(X);
+            Eigen::VectorXd loss   = loss_fn(Y, Y_pred);
 
-        // 5. Refit the model using inliers
-        Eigen::MatrixXd X_inliers(inliers.size(), d);
-        Eigen::VectorXd Y_inliers(inliers.size());
-        for (size_t i = 0; i < inliers.size(); ++i) {
-            X_inliers.row(i) = X.row(inliers[i]);
-            Y_inliers[i]     = Y[inliers[i]];
+            // 4. Extract inliers based on the loss threshold
+            std::vector<int> inliers = findInliers(loss);
+            if (inliers.size() < min_inliners)
+                continue; // Skip if inliers are less than the threshold
+
+            // 5. Refit the model using inliers
+            Eigen::MatrixXd X_inliers(inliers.size(), d);
+            Eigen::VectorXd Y_inliers(inliers.size());
+            for (size_t i = 0; i < inliers.size(); ++i) {
+                X_inliers.row(i) = X.row(inliers[i]);
+                Y_inliers[i]     = Y[inliers[i]];
+            }
+            model->fit(X_inliers, Y_inliers);
+
+            // 6. Evaluate the model
+            Eigen::VectorXd Y_pred_inliers = model->predict(X_inliers);
+            double error = metric_fn(Y_inliers, Y_pred_inliers);
+
+            #pragma omp critical
+            // Update the best model if current model is better
+            if (error < bestModelError) {
+                auto clonedModel = model->clone();
+                bestModel = std::move(clonedModel);
+                bestModelError = error;
+            }
         }
-        model->fit(X_inliers, Y_inliers);
 
-        // 6. Evaluate the model
-        Eigen::VectorXd Y_pred_inliers = model->predict(X_inliers);
-        double error = metric_fn(Y_inliers, Y_pred_inliers);
-
-        #pragma omp critical
-        // Update the best model if current model is better
-        if (error < bestModelError) {
-            auto clonedModel = model->clone();
-            bestModel = std::move(clonedModel);
-            bestModelError = error;
+        if (bestModel == nullptr) {
+            // run again with 25% higher threshold
+            threshold *= 1.25;
+            std::cout << "No good single model found. Running again with higher threshold: " << threshold << std::endl;
         }
     }
-
-    if (bestModel == nullptr) {
-        // run again with 25% higher threshold
-        threshold *= 1.25;
-        std::cout << "No good single model found. Running again with higher threshold: " << threshold << std::endl;
-        return run(X, Y, model);
-    }
+    
 
     return bestModel;
 }
@@ -383,7 +386,9 @@ std::unique_ptr<FlatModel> RANSAC::medianSDF(std::vector<std::unique_ptr<FlatMod
 
     // Verify that b is orthogonal to the subspace spanned by A
     Eigen::VectorXd check = A.transpose() * b;
-    assert(check.norm() < 1e-6 && "b is not orthogonal to the subspace spanned by A");
+    if (check.norm() > 1e-6) {
+        throw std::runtime_error("b is not orthogonal to the subspace spanned by A.");
+    }
 
     std::unique_ptr<FlatModel> result = std::move(models.front());
     return result;
