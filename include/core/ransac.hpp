@@ -8,17 +8,27 @@
 #include "core/model.hpp"
 #include "core/flat_model.hpp"
 
+
+// different metrics (aws ENUM or something)
+enum class MetricType {
+    R2,   // R^2
+    RSS,  // Residual Sum of Squares
+    MSE,  // Mean Squared Error
+    RMSE // Root Mean Squared Error
+};
+
 using FlatModelEntry = std::pair<double, std::unique_ptr<FlatModel>>;
 
 class RANSAC {
 public:
-    RANSAC(int max_iterations, double threshold, double train_data_percenatge, int min_inliners, Eigen::VectorXd (*loss_fn)(Eigen::VectorXd, Eigen::VectorXd), double (*metric_fn)(Eigen::VectorXd, Eigen::VectorXd)) 
-        : max_iterations(max_iterations), threshold(threshold), train_data_percentage(train_data_percenatge), min_inliners(min_inliners), loss_fn(loss_fn), metric_fn(metric_fn) {}
-    std::unique_ptr<Model> run(const Eigen::MatrixXd& X, const Eigen::VectorXd& Y, Model* model);
+    RANSAC(int max_iterations, double threshold, double train_data_percenatge, int min_inliners, MetricType metric = MetricType::R2);
+    std::unique_ptr<Model> run(const Eigen::MatrixXd& X, const Eigen::VectorXd& Y, Model* model, std::function<Eigen::VectorXd(Eigen::VectorXd, Eigen::VectorXd)> loss_fn, std::function<double(Eigen::VectorXd, Eigen::VectorXd)> metric_fn);
 
-    std::unique_ptr<FlatModel> run(const Eigen::MatrixXd& D, FlatModel* model, int best_model_count=1) const;
+    std::unique_ptr<FlatModel> run(const Eigen::MatrixXd& D, FlatModel* model, int best_model_count, std::function<Eigen::VectorXd(Eigen::VectorXd, Eigen::VectorXd)> loss_fn, std::function<double(Eigen::VectorXd, Eigen::VectorXd)> metric_fn) const;
     std::unique_ptr<FlatModel> run2(const Eigen::MatrixXd& D, FlatModel* model, int best_model_count=1) const;
-
+    std::unique_ptr<FlatModel> run_slow(const Eigen::MatrixXd &D, 
+                                        FlatModel *model, 
+                                        int best_model_count) const;
 private:
     Eigen::VectorXd getInliner(const Eigen::VectorXd& Y, const Eigen::VectorXd& Y_pred) const;
     int max_iterations;
@@ -26,12 +36,18 @@ private:
     double train_data_percentage;
     int min_inliners;
 
-    Eigen::VectorXd (*loss_fn)(Eigen::VectorXd, Eigen::VectorXd);
-    double (*metric_fn)(Eigen::VectorXd, Eigen::VectorXd);
+    // Eigen::VectorXd (*loss_fn)(Eigen::VectorXd, Eigen::VectorXd);
+    // double (*metric_fn)(Eigen::VectorXd, Eigen::VectorXd);
+    std::function<double(Eigen::MatrixXd, FlatModel*)> metric_fn2;
 
     // MedianSDF
     std::unique_ptr<FlatModel> medianSDF(std::vector<std::unique_ptr<FlatModel>>& models, int k, std::vector<double>* errors = nullptr) const;
 
+    // === Evaluation Metrics ===
+    // double r2_metric(Eigen::MatrixXd D, FlatModel *model) const;
+    // double rss_metric(Eigen::MatrixXd D, FlatModel *model) const;
+    // double mse_metric(Eigen::MatrixXd D, FlatModel *model) const;
+    // double rmse_metric(Eigen::MatrixXd D, FlatModel *model) const;
 
 
     // === helper methods for RANSAC ===

@@ -22,6 +22,9 @@ set(CMAKE_CXX_EXTENSIONS OFF)  # Use pure ISO C++ (no compiler-specific extensio
 # Export compile commands for IDEs, LSPs, and code analysis tools
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+# set(CMAKE_CXX_FLAGS_RELEASE "-O3 -march=native -flto")
+# set(CMAKE_BUILD_TYPE Release)
+
 # ------------------------------------------------------------------------------
 # Prevent In-Source Builds (Forces Build Directory)
 # ------------------------------------------------------------------------------

@@ -20,3 +20,4 @@ public:
     // Visualize
     virtual void visualize(const std::string& name, double sideLen, double lineRadius, float flatAlpha) = 0;
 };
+

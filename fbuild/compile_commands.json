@@ -1,0 +1,692 @@
+[
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -I/home/truntaler/dev/test/BA/include -I/home/truntaler/dev/test/BA/external/polyscope/include -I/home/truntaler/dev/test/BA/external/eigen -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -std=c++20 -o CMakeFiles/GraphicsProjectLib.dir/src/core/flat_model.cpp.o -c /home/truntaler/dev/test/BA/src/core/flat_model.cpp",
+  "file": "/home/truntaler/dev/test/BA/src/core/flat_model.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -I/home/truntaler/dev/test/BA/include -I/home/truntaler/dev/test/BA/external/polyscope/include -I/home/truntaler/dev/test/BA/external/eigen -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -std=c++20 -o CMakeFiles/GraphicsProjectLib.dir/src/core/flat_sampler.cpp.o -c /home/truntaler/dev/test/BA/src/core/flat_sampler.cpp",
+  "file": "/home/truntaler/dev/test/BA/src/core/flat_sampler.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -I/home/truntaler/dev/test/BA/include -I/home/truntaler/dev/test/BA/external/polyscope/include -I/home/truntaler/dev/test/BA/external/eigen -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -std=c++20 -o CMakeFiles/GraphicsProjectLib.dir/src/core/generation.cpp.o -c /home/truntaler/dev/test/BA/src/core/generation.cpp",
+  "file": "/home/truntaler/dev/test/BA/src/core/generation.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -I/home/truntaler/dev/test/BA/include -I/home/truntaler/dev/test/BA/external/polyscope/include -I/home/truntaler/dev/test/BA/external/eigen -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -std=c++20 -o CMakeFiles/GraphicsProjectLib.dir/src/core/model.cpp.o -c /home/truntaler/dev/test/BA/src/core/model.cpp",
+  "file": "/home/truntaler/dev/test/BA/src/core/model.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -I/home/truntaler/dev/test/BA/include -I/home/truntaler/dev/test/BA/external/polyscope/include -I/home/truntaler/dev/test/BA/external/eigen -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -std=c++20 -o CMakeFiles/GraphicsProjectLib.dir/src/core/ransac.cpp.o -c /home/truntaler/dev/test/BA/src/core/ransac.cpp",
+  "file": "/home/truntaler/dev/test/BA/src/core/ransac.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -I/home/truntaler/dev/test/BA/include -I/home/truntaler/dev/test/BA/external/polyscope/include -I/home/truntaler/dev/test/BA/external/eigen -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -std=c++20 -o CMakeFiles/GraphicsProjectLib.dir/src/evaluation/evaluator.cpp.o -c /home/truntaler/dev/test/BA/src/evaluation/evaluator.cpp",
+  "file": "/home/truntaler/dev/test/BA/src/evaluation/evaluator.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -I/home/truntaler/dev/test/BA/include -I/home/truntaler/dev/test/BA/external/polyscope/include -I/home/truntaler/dev/test/BA/external/eigen -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -std=c++20 -o CMakeFiles/GraphicsProjectLib.dir/src/models/affine_fit.cpp.o -c /home/truntaler/dev/test/BA/src/models/affine_fit.cpp",
+  "file": "/home/truntaler/dev/test/BA/src/models/affine_fit.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -I/home/truntaler/dev/test/BA/include -I/home/truntaler/dev/test/BA/external/polyscope/include -I/home/truntaler/dev/test/BA/external/eigen -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -std=c++20 -o CMakeFiles/GraphicsProjectLib.dir/src/models/ols.cpp.o -c /home/truntaler/dev/test/BA/src/models/ols.cpp",
+  "file": "/home/truntaler/dev/test/BA/src/models/ols.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -I/home/truntaler/dev/test/BA/include -I/home/truntaler/dev/test/BA/external/polyscope/include -I/home/truntaler/dev/test/BA/external/eigen -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -std=c++20 -o CMakeFiles/GraphicsProjectLib.dir/src/visualization/visualizer.cpp.o -c /home/truntaler/dev/test/BA/src/visualization/visualizer.cpp",
+  "file": "/home/truntaler/dev/test/BA/src/visualization/visualizer.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -I/home/truntaler/dev/test/BA/include -I/home/truntaler/dev/test/BA/external/polyscope/include -I/home/truntaler/dev/test/BA/external/eigen -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -std=c++20 -o CMakeFiles/GraphicsProject.dir/src/main.cpp.o -c /home/truntaler/dev/test/BA/src/main.cpp",
+  "file": "/home/truntaler/dev/test/BA/src/main.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild",
+  "command": "/usr/bin/c++  -I/home/truntaler/dev/test/BA/include -I/home/truntaler/dev/test/BA/external/polyscope/include -I/home/truntaler/dev/test/BA/external/eigen -isystem /home/truntaler/dev/test/BA/external/googletest/googletest/include -isystem /home/truntaler/dev/test/BA/external/googletest/googletest -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -std=c++20 -o CMakeFiles/GraphicsProject_tests.dir/tests/test_flat_orientation_invariance.cpp.o -c /home/truntaler/dev/test/BA/tests/test_flat_orientation_invariance.cpp",
+  "file": "/home/truntaler/dev/test/BA/tests/test_flat_orientation_invariance.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild",
+  "command": "/usr/bin/c++  -I/home/truntaler/dev/test/BA/include -I/home/truntaler/dev/test/BA/external/polyscope/include -I/home/truntaler/dev/test/BA/external/eigen -isystem /home/truntaler/dev/test/BA/external/googletest/googletest/include -isystem /home/truntaler/dev/test/BA/external/googletest/googletest -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -std=c++20 -o CMakeFiles/GraphicsProject_tests.dir/tests/test_orthonormalization.cpp.o -c /home/truntaler/dev/test/BA/tests/test_orthonormalization.cpp",
+  "file": "/home/truntaler/dev/test/BA/tests/test_orthonormalization.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild",
+  "command": "/usr/bin/c++  -I/home/truntaler/dev/test/BA/include -I/home/truntaler/dev/test/BA/external/polyscope/include -I/home/truntaler/dev/test/BA/external/eigen -isystem /home/truntaler/dev/test/BA/external/googletest/googletest/include -isystem /home/truntaler/dev/test/BA/external/googletest/googletest -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -std=c++20 -o CMakeFiles/GraphicsProject_tests.dir/tests/test_representation_conversion.cpp.o -c /home/truntaler/dev/test/BA/tests/test_representation_conversion.cpp",
+  "file": "/home/truntaler/dev/test/BA/tests/test_representation_conversion.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/deps/glad/src",
+  "command": "/usr/bin/cc  -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -O3 -DNDEBUG -fPIC -o CMakeFiles/glad.dir/glad.c.o -c /home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/glad.c",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/glad.c"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/deps/glfw/src",
+  "command": "/usr/bin/cc -D_GLFW_USE_CONFIG_H -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/src -I/home/truntaler/dev/test/BA/fbuild/external/polyscope/deps/glfw/src -O3 -DNDEBUG -fPIC -Wall -std=gnu99 -Wdeclaration-after-statement -o CMakeFiles/glfw.dir/context.c.o -c /home/truntaler/dev/test/BA/external/polyscope/deps/glfw/src/context.c",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/src/context.c"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/deps/glfw/src",
+  "command": "/usr/bin/cc -D_GLFW_USE_CONFIG_H -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/src -I/home/truntaler/dev/test/BA/fbuild/external/polyscope/deps/glfw/src -O3 -DNDEBUG -fPIC -Wall -std=gnu99 -Wdeclaration-after-statement -o CMakeFiles/glfw.dir/init.c.o -c /home/truntaler/dev/test/BA/external/polyscope/deps/glfw/src/init.c",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/src/init.c"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/deps/glfw/src",
+  "command": "/usr/bin/cc -D_GLFW_USE_CONFIG_H -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/src -I/home/truntaler/dev/test/BA/fbuild/external/polyscope/deps/glfw/src -O3 -DNDEBUG -fPIC -Wall -std=gnu99 -Wdeclaration-after-statement -o CMakeFiles/glfw.dir/input.c.o -c /home/truntaler/dev/test/BA/external/polyscope/deps/glfw/src/input.c",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/src/input.c"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/deps/glfw/src",
+  "command": "/usr/bin/cc -D_GLFW_USE_CONFIG_H -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/src -I/home/truntaler/dev/test/BA/fbuild/external/polyscope/deps/glfw/src -O3 -DNDEBUG -fPIC -Wall -std=gnu99 -Wdeclaration-after-statement -o CMakeFiles/glfw.dir/monitor.c.o -c /home/truntaler/dev/test/BA/external/polyscope/deps/glfw/src/monitor.c",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/src/monitor.c"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/deps/glfw/src",
+  "command": "/usr/bin/cc -D_GLFW_USE_CONFIG_H -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/src -I/home/truntaler/dev/test/BA/fbuild/external/polyscope/deps/glfw/src -O3 -DNDEBUG -fPIC -Wall -std=gnu99 -Wdeclaration-after-statement -o CMakeFiles/glfw.dir/vulkan.c.o -c /home/truntaler/dev/test/BA/external/polyscope/deps/glfw/src/vulkan.c",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/src/vulkan.c"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/deps/glfw/src",
+  "command": "/usr/bin/cc -D_GLFW_USE_CONFIG_H -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/src -I/home/truntaler/dev/test/BA/fbuild/external/polyscope/deps/glfw/src -O3 -DNDEBUG -fPIC -Wall -std=gnu99 -Wdeclaration-after-statement -o CMakeFiles/glfw.dir/window.c.o -c /home/truntaler/dev/test/BA/external/polyscope/deps/glfw/src/window.c",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/src/window.c"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/deps/glfw/src",
+  "command": "/usr/bin/cc -D_GLFW_USE_CONFIG_H -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/src -I/home/truntaler/dev/test/BA/fbuild/external/polyscope/deps/glfw/src -O3 -DNDEBUG -fPIC -Wall -std=gnu99 -o CMakeFiles/glfw.dir/x11_init.c.o -c /home/truntaler/dev/test/BA/external/polyscope/deps/glfw/src/x11_init.c",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/src/x11_init.c"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/deps/glfw/src",
+  "command": "/usr/bin/cc -D_GLFW_USE_CONFIG_H -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/src -I/home/truntaler/dev/test/BA/fbuild/external/polyscope/deps/glfw/src -O3 -DNDEBUG -fPIC -Wall -std=gnu99 -o CMakeFiles/glfw.dir/x11_monitor.c.o -c /home/truntaler/dev/test/BA/external/polyscope/deps/glfw/src/x11_monitor.c",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/src/x11_monitor.c"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/deps/glfw/src",
+  "command": "/usr/bin/cc -D_GLFW_USE_CONFIG_H -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/src -I/home/truntaler/dev/test/BA/fbuild/external/polyscope/deps/glfw/src -O3 -DNDEBUG -fPIC -Wall -std=gnu99 -o CMakeFiles/glfw.dir/x11_window.c.o -c /home/truntaler/dev/test/BA/external/polyscope/deps/glfw/src/x11_window.c",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/src/x11_window.c"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/deps/glfw/src",
+  "command": "/usr/bin/cc -D_GLFW_USE_CONFIG_H -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/src -I/home/truntaler/dev/test/BA/fbuild/external/polyscope/deps/glfw/src -O3 -DNDEBUG -fPIC -Wall -std=gnu99 -o CMakeFiles/glfw.dir/xkb_unicode.c.o -c /home/truntaler/dev/test/BA/external/polyscope/deps/glfw/src/xkb_unicode.c",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/src/xkb_unicode.c"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/deps/glfw/src",
+  "command": "/usr/bin/cc -D_GLFW_USE_CONFIG_H -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/src -I/home/truntaler/dev/test/BA/fbuild/external/polyscope/deps/glfw/src -O3 -DNDEBUG -fPIC -Wall -std=gnu99 -o CMakeFiles/glfw.dir/posix_time.c.o -c /home/truntaler/dev/test/BA/external/polyscope/deps/glfw/src/posix_time.c",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/src/posix_time.c"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/deps/glfw/src",
+  "command": "/usr/bin/cc -D_GLFW_USE_CONFIG_H -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/src -I/home/truntaler/dev/test/BA/fbuild/external/polyscope/deps/glfw/src -O3 -DNDEBUG -fPIC -Wall -std=gnu99 -o CMakeFiles/glfw.dir/posix_thread.c.o -c /home/truntaler/dev/test/BA/external/polyscope/deps/glfw/src/posix_thread.c",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/src/posix_thread.c"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/deps/glfw/src",
+  "command": "/usr/bin/cc -D_GLFW_USE_CONFIG_H -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/src -I/home/truntaler/dev/test/BA/fbuild/external/polyscope/deps/glfw/src -O3 -DNDEBUG -fPIC -Wall -std=gnu99 -o CMakeFiles/glfw.dir/glx_context.c.o -c /home/truntaler/dev/test/BA/external/polyscope/deps/glfw/src/glx_context.c",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/src/glx_context.c"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/deps/glfw/src",
+  "command": "/usr/bin/cc -D_GLFW_USE_CONFIG_H -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/src -I/home/truntaler/dev/test/BA/fbuild/external/polyscope/deps/glfw/src -O3 -DNDEBUG -fPIC -Wall -std=gnu99 -Wdeclaration-after-statement -o CMakeFiles/glfw.dir/egl_context.c.o -c /home/truntaler/dev/test/BA/external/polyscope/deps/glfw/src/egl_context.c",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/src/egl_context.c"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/deps/glfw/src",
+  "command": "/usr/bin/cc -D_GLFW_USE_CONFIG_H -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/src -I/home/truntaler/dev/test/BA/fbuild/external/polyscope/deps/glfw/src -O3 -DNDEBUG -fPIC -Wall -std=gnu99 -Wdeclaration-after-statement -o CMakeFiles/glfw.dir/osmesa_context.c.o -c /home/truntaler/dev/test/BA/external/polyscope/deps/glfw/src/osmesa_context.c",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/src/osmesa_context.c"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/deps/glfw/src",
+  "command": "/usr/bin/cc -D_GLFW_USE_CONFIG_H -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/src -I/home/truntaler/dev/test/BA/fbuild/external/polyscope/deps/glfw/src -O3 -DNDEBUG -fPIC -Wall -std=gnu99 -o CMakeFiles/glfw.dir/linux_joystick.c.o -c /home/truntaler/dev/test/BA/external/polyscope/deps/glfw/src/linux_joystick.c",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/src/linux_joystick.c"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/deps/glm/glm",
+  "command": "/usr/bin/c++  -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -std=c++20 -o CMakeFiles/glm.dir/detail/glm.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/deps/glm/glm/detail/glm.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/deps/glm/glm/detail/glm.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/deps/imgui",
+  "command": "/usr/bin/c++ -DIMGUI_IMPL_OPENGL_LOADER_GLAD -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/../glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/../glad/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -O3 -march=native -flto -funroll-loops -Wno-error -O3 -DNDEBUG -fPIC -std=c++20 -o CMakeFiles/imgui.dir/imgui/imgui.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui/imgui.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui/imgui.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/deps/imgui",
+  "command": "/usr/bin/c++ -DIMGUI_IMPL_OPENGL_LOADER_GLAD -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/../glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/../glad/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -O3 -march=native -flto -funroll-loops -Wno-error -O3 -DNDEBUG -fPIC -std=c++20 -o CMakeFiles/imgui.dir/imgui/imgui_draw.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui/imgui_draw.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui/imgui_draw.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/deps/imgui",
+  "command": "/usr/bin/c++ -DIMGUI_IMPL_OPENGL_LOADER_GLAD -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/../glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/../glad/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -O3 -march=native -flto -funroll-loops -Wno-error -O3 -DNDEBUG -fPIC -std=c++20 -o CMakeFiles/imgui.dir/imgui/imgui_tables.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui/imgui_tables.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui/imgui_tables.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/deps/imgui",
+  "command": "/usr/bin/c++ -DIMGUI_IMPL_OPENGL_LOADER_GLAD -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/../glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/../glad/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -O3 -march=native -flto -funroll-loops -Wno-error -O3 -DNDEBUG -fPIC -std=c++20 -o CMakeFiles/imgui.dir/imgui/imgui_widgets.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui/imgui_widgets.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui/imgui_widgets.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/deps/imgui",
+  "command": "/usr/bin/c++ -DIMGUI_IMPL_OPENGL_LOADER_GLAD -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/../glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/../glad/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -O3 -march=native -flto -funroll-loops -Wno-error -O3 -DNDEBUG -fPIC -std=c++20 -o CMakeFiles/imgui.dir/imgui/imgui_demo.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui/imgui_demo.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui/imgui_demo.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/deps/imgui",
+  "command": "/usr/bin/c++ -DIMGUI_IMPL_OPENGL_LOADER_GLAD -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/../glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/../glad/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -O3 -march=native -flto -funroll-loops -Wno-error -O3 -DNDEBUG -fPIC -std=c++20 -o CMakeFiles/imgui.dir/imgui/backends/imgui_impl_glfw.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui/backends/imgui_impl_glfw.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui/backends/imgui_impl_glfw.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/deps/imgui",
+  "command": "/usr/bin/c++ -DIMGUI_IMPL_OPENGL_LOADER_GLAD -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/../glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/../glad/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -O3 -march=native -flto -funroll-loops -Wno-error -O3 -DNDEBUG -fPIC -std=c++20 -o CMakeFiles/imgui.dir/imgui/backends/imgui_impl_opengl3.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui/backends/imgui_impl_opengl3.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui/backends/imgui_impl_opengl3.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/deps/stb",
+  "command": "/usr/bin/c++  -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++20 -o CMakeFiles/stb.dir/stb_impl.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/deps/stb/stb_impl.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/deps/stb/stb_impl.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/polyscope.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/polyscope.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/polyscope.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/options.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/options.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/options.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/internal.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/internal.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/internal.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/state.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/state.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/state.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/structure.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/structure.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/structure.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/quantity.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/quantity.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/quantity.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/group.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/group.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/group.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/utilities.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/utilities.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/utilities.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/view.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/view.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/view.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/screenshot.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/screenshot.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/screenshot.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/messages.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/messages.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/messages.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/pick.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/pick.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/pick.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/widget.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/widget.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/widget.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/render/engine.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/render/engine.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/render/engine.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/render/color_maps.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/render/color_maps.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/render/color_maps.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/render/ground_plane.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/render/ground_plane.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/render/ground_plane.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/render/materials.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/render/materials.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/render/materials.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/render/initialize_backend.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/render/initialize_backend.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/render/initialize_backend.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/render/shader_builder.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/render/shader_builder.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/render/shader_builder.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/render/managed_buffer.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/render/managed_buffer.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/render/managed_buffer.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/render/templated_buffers.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/render/templated_buffers.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/render/templated_buffers.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/disjoint_sets.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/disjoint_sets.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/disjoint_sets.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/file_helpers.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/file_helpers.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/file_helpers.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/camera_parameters.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/camera_parameters.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/camera_parameters.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/histogram.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/histogram.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/histogram.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/persistent_value.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/persistent_value.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/persistent_value.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/color_management.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/color_management.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/color_management.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/transformation_gizmo.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/transformation_gizmo.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/transformation_gizmo.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/slice_plane.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/slice_plane.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/slice_plane.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/weak_handle.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/weak_handle.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/weak_handle.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/marching_cubes.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/marching_cubes.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/marching_cubes.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/point_cloud.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/point_cloud.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/point_cloud.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/point_cloud_color_quantity.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/point_cloud_color_quantity.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/point_cloud_color_quantity.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/point_cloud_scalar_quantity.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/point_cloud_scalar_quantity.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/point_cloud_scalar_quantity.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/point_cloud_vector_quantity.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/point_cloud_vector_quantity.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/point_cloud_vector_quantity.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/point_cloud_parameterization_quantity.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/point_cloud_parameterization_quantity.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/point_cloud_parameterization_quantity.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/surface_mesh.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/surface_mesh.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/surface_mesh.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/surface_color_quantity.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/surface_color_quantity.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/surface_color_quantity.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/surface_scalar_quantity.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/surface_scalar_quantity.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/surface_scalar_quantity.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/surface_vector_quantity.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/surface_vector_quantity.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/surface_vector_quantity.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/surface_parameterization_quantity.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/surface_parameterization_quantity.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/surface_parameterization_quantity.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/curve_network.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/curve_network.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/curve_network.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/curve_network_color_quantity.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/curve_network_color_quantity.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/curve_network_color_quantity.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/curve_network_scalar_quantity.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/curve_network_scalar_quantity.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/curve_network_scalar_quantity.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/curve_network_vector_quantity.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/curve_network_vector_quantity.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/curve_network_vector_quantity.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/volume_mesh.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/volume_mesh.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/volume_mesh.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/volume_mesh_color_quantity.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/volume_mesh_color_quantity.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/volume_mesh_color_quantity.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/volume_mesh_scalar_quantity.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/volume_mesh_scalar_quantity.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/volume_mesh_scalar_quantity.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/volume_mesh_vector_quantity.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/volume_mesh_vector_quantity.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/volume_mesh_vector_quantity.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/volume_grid.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/volume_grid.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/volume_grid.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/volume_grid_scalar_quantity.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/volume_grid_scalar_quantity.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/volume_grid_scalar_quantity.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/camera_view.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/camera_view.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/camera_view.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/simple_triangle_mesh.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/simple_triangle_mesh.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/simple_triangle_mesh.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/floating_quantity_structure.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/floating_quantity_structure.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/floating_quantity_structure.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/floating_quantity.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/floating_quantity.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/floating_quantity.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/image_quantity_base.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/image_quantity_base.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/image_quantity_base.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/scalar_image_quantity.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/scalar_image_quantity.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/scalar_image_quantity.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/color_image_quantity.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/color_image_quantity.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/color_image_quantity.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/render_image_quantity_base.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/render_image_quantity_base.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/render_image_quantity_base.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/depth_render_image_quantity.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/depth_render_image_quantity.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/depth_render_image_quantity.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/color_render_image_quantity.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/color_render_image_quantity.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/color_render_image_quantity.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/scalar_render_image_quantity.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/scalar_render_image_quantity.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/scalar_render_image_quantity.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/raw_color_render_image_quantity.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/raw_color_render_image_quantity.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/raw_color_render_image_quantity.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/raw_color_alpha_render_image_quantity.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/raw_color_alpha_render_image_quantity.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/raw_color_alpha_render_image_quantity.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/imgui_config.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/imgui_config.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/imgui_config.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/fullscreen_artist.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/fullscreen_artist.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/fullscreen_artist.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/render/bindata/bindata_font_lato_regular.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/render/bindata/bindata_font_lato_regular.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/render/bindata/bindata_font_lato_regular.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/render/bindata/bindata_font_cousine_regular.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/render/bindata/bindata_font_cousine_regular.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/render/bindata/bindata_font_cousine_regular.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/render/bindata/concrete_seamless.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/render/bindata/concrete_seamless.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/render/bindata/concrete_seamless.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/render/bindata/bindata_clay.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/render/bindata/bindata_clay.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/render/bindata/bindata_clay.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/render/bindata/bindata_wax.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/render/bindata/bindata_wax.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/render/bindata/bindata_wax.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/render/bindata/bindata_candy.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/render/bindata/bindata_candy.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/render/bindata/bindata_candy.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/render/bindata/bindata_flat.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/render/bindata/bindata_flat.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/render/bindata/bindata_flat.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/render/bindata/bindata_mud.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/render/bindata/bindata_mud.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/render/bindata/bindata_mud.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/render/bindata/bindata_ceramic.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/render/bindata/bindata_ceramic.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/render/bindata/bindata_ceramic.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/render/bindata/bindata_jade.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/render/bindata/bindata_jade.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/render/bindata/bindata_jade.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/render/bindata/bindata_normal.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/render/bindata/bindata_normal.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/render/bindata/bindata_normal.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/render/opengl/gl_engine.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/render/opengl/gl_engine.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/render/opengl/gl_engine.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/render/opengl/gl_engine_glfw.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/render/opengl/gl_engine_glfw.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/render/opengl/gl_engine_glfw.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/render/opengl/gl_engine_egl.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/render/opengl/gl_engine_egl.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/render/opengl/gl_engine_egl.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/render/mock_opengl/mock_gl_engine.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/render/mock_opengl/mock_gl_engine.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/render/mock_opengl/mock_gl_engine.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/render/opengl/shaders/texture_draw_shaders.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/render/opengl/shaders/texture_draw_shaders.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/render/opengl/shaders/texture_draw_shaders.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/render/opengl/shaders/lighting_shaders.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/render/opengl/shaders/lighting_shaders.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/render/opengl/shaders/lighting_shaders.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/render/opengl/shaders/grid_shaders.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/render/opengl/shaders/grid_shaders.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/render/opengl/shaders/grid_shaders.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/render/opengl/shaders/ground_plane_shaders.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/render/opengl/shaders/ground_plane_shaders.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/render/opengl/shaders/ground_plane_shaders.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/render/opengl/shaders/gizmo_shaders.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/render/opengl/shaders/gizmo_shaders.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/render/opengl/shaders/gizmo_shaders.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/render/opengl/shaders/histogram_shaders.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/render/opengl/shaders/histogram_shaders.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/render/opengl/shaders/histogram_shaders.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/render/opengl/shaders/surface_mesh_shaders.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/render/opengl/shaders/surface_mesh_shaders.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/render/opengl/shaders/surface_mesh_shaders.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/render/opengl/shaders/volume_mesh_shaders.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/render/opengl/shaders/volume_mesh_shaders.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/render/opengl/shaders/volume_mesh_shaders.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/render/opengl/shaders/vector_shaders.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/render/opengl/shaders/vector_shaders.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/render/opengl/shaders/vector_shaders.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/render/opengl/shaders/sphere_shaders.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/render/opengl/shaders/sphere_shaders.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/render/opengl/shaders/sphere_shaders.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/render/opengl/shaders/ribbon_shaders.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/render/opengl/shaders/ribbon_shaders.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/render/opengl/shaders/ribbon_shaders.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/render/opengl/shaders/cylinder_shaders.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/render/opengl/shaders/cylinder_shaders.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/render/opengl/shaders/cylinder_shaders.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/render/opengl/shaders/rules.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/render/opengl/shaders/rules.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/render/opengl/shaders/rules.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/polyscope/src",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -DNOMINMAX -DPOLYSCOPE_BACKEND_OPENGL3_EGL_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_ENABLED -DPOLYSCOPE_BACKEND_OPENGL3_GLFW_ENABLED -DPOLYSCOPE_BACKEND_OPENGL_MOCK_ENABLED -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/stb/. -I/home/truntaler/dev/test/BA/external/polyscope/deps/json/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/MarchingCubeCpp/include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -fPIC -std=c++11 -o CMakeFiles/polyscope.dir/render/opengl/shaders/common.cpp.o -c /home/truntaler/dev/test/BA/external/polyscope/src/render/opengl/shaders/common.cpp",
+  "file": "/home/truntaler/dev/test/BA/external/polyscope/src/render/opengl/shaders/common.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/googletest/googlemock",
+  "command": "/usr/bin/c++  -I/home/truntaler/dev/test/BA/external/googletest/googlemock/include -I/home/truntaler/dev/test/BA/external/googletest/googlemock -isystem /home/truntaler/dev/test/BA/external/googletest/googletest/include -isystem /home/truntaler/dev/test/BA/external/googletest/googletest -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -Wall -Wshadow -Wundef -Wno-error=dangling-else -DGTEST_HAS_PTHREAD=1 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -std=c++20 -o CMakeFiles/gmock.dir/src/gmock-all.cc.o -c /home/truntaler/dev/test/BA/external/googletest/googlemock/src/gmock-all.cc",
+  "file": "/home/truntaler/dev/test/BA/external/googletest/googlemock/src/gmock-all.cc"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/googletest/googlemock",
+  "command": "/usr/bin/c++  -isystem /home/truntaler/dev/test/BA/external/googletest/googlemock/include -isystem /home/truntaler/dev/test/BA/external/googletest/googlemock -isystem /home/truntaler/dev/test/BA/external/googletest/googletest/include -isystem /home/truntaler/dev/test/BA/external/googletest/googletest -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -Wall -Wshadow -Wundef -Wno-error=dangling-else -DGTEST_HAS_PTHREAD=1 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -std=c++20 -o CMakeFiles/gmock_main.dir/src/gmock_main.cc.o -c /home/truntaler/dev/test/BA/external/googletest/googlemock/src/gmock_main.cc",
+  "file": "/home/truntaler/dev/test/BA/external/googletest/googlemock/src/gmock_main.cc"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/googletest/googletest",
+  "command": "/usr/bin/c++  -I/home/truntaler/dev/test/BA/external/googletest/googletest/include -I/home/truntaler/dev/test/BA/external/googletest/googletest -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -Wall -Wshadow -Wundef -Wno-error=dangling-else -DGTEST_HAS_PTHREAD=1 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -std=c++20 -o CMakeFiles/gtest.dir/src/gtest-all.cc.o -c /home/truntaler/dev/test/BA/external/googletest/googletest/src/gtest-all.cc",
+  "file": "/home/truntaler/dev/test/BA/external/googletest/googletest/src/gtest-all.cc"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild/external/googletest/googletest",
+  "command": "/usr/bin/c++  -isystem /home/truntaler/dev/test/BA/external/googletest/googletest/include -isystem /home/truntaler/dev/test/BA/external/googletest/googletest -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -Wall -Wshadow -Wundef -Wno-error=dangling-else -DGTEST_HAS_PTHREAD=1 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -std=c++20 -o CMakeFiles/gtest_main.dir/src/gtest_main.cc.o -c /home/truntaler/dev/test/BA/external/googletest/googletest/src/gtest_main.cc",
+  "file": "/home/truntaler/dev/test/BA/external/googletest/googletest/src/gtest_main.cc"
+}
+]
