@@ -1,0 +1,5 @@
+if(EXISTS "/home/truntaler/dev/test/BA/sbuild/GraphicsProject_tests[1]_tests.cmake")
+  include("/home/truntaler/dev/test/BA/sbuild/GraphicsProject_tests[1]_tests.cmake")
+else()
+  add_test(GraphicsProject_tests_NOT_BUILT GraphicsProject_tests_NOT_BUILT)
+endif()

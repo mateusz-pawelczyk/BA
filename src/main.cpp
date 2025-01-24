@@ -20,6 +20,7 @@
 #include "core/flat_model.hpp"
 #include "models/ols.hpp"
 #include "models/affine_fit.hpp"
+#include "models/median_sdf.hpp"
 #include "Definitions.h"
 #include "visualization/visualizer.h"
 
@@ -116,11 +117,10 @@ void visualizeFittingPlane()
     Eigen::VectorXd Y = hyperplanePoints.col(d);
 
     // std::unique_ptr<Model> singleBestModel = ransac.run(X, Y, model.get(), loss_fn, metric_fn);
-
-    std::unique_ptr<FlatModel> averagedBestModel = ransac.run2(hyperplanePoints, (FlatModel *)model.get(), average_contributions);
-
-    AffineFit *tmpModel = new AffineFit(2, 3);
-    std::unique_ptr<FlatModel> lineAveragedBestModel = ransac.run_slow(hyperplanePoints, tmpModel, average_contributions);
+    MedianSDF *averager = new MedianSDF(d, n);
+    std::unique_ptr<FlatModel> averagedBestModel = ransac.run2(hyperplanePoints, (FlatModel *)model.get(), average_contributions, averager);
+    averager->reset();
+    std::unique_ptr<FlatModel> lineAveragedBestModel = ransac.run_slow(hyperplanePoints, (FlatModel *)model.get(), average_contributions, averager);
 
     // if (singleBestModel == nullptr)
     // {
@@ -135,8 +135,8 @@ void visualizeFittingPlane()
     FlatModel *lineAveragedBestModel_ptr = (FlatModel *)lineAveragedBestModel.get();
 
     // double singleBestModelMSE = singleBestModel_ptr->MSE(X, Y);
-    double averagedBestModelMSE = averagedBestModel_ptr->MSE(X, Y);
-    double lineAveragedBestModelMSE = lineAveragedBestModel_ptr->MSE(X, Y);
+    double averagedBestModelMSE = averagedBestModel_ptr->quadratic_loss(hyperplanePoints).mean();
+    double lineAveragedBestModelMSE = lineAveragedBestModel_ptr->quadratic_loss(hyperplanePoints).mean();
 
     // std::cout << "Single Best Model performance: " << singleBestModelMSE << std::endl;
     std::cout << "Averaged Best Model performance: " << averagedBestModelMSE << std::endl;

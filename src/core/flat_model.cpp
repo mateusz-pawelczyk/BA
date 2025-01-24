@@ -5,6 +5,109 @@
 #include <iostream>
 #include <optional>
 
+#include "polyscope/polyscope.h"
+#include "polyscope/point_cloud.h"
+#include <polyscope/surface_mesh.h>
+#include <polyscope/curve_network.h>
+
+// Attention: X and Y will merge into a single data matrix `D` and the model will be fit to `D`!
+void FlatModel::fit(const Eigen::MatrixXd &X, const Eigen::VectorXd &Y)
+{
+    if (n != d + 1)
+    {
+        throw std::runtime_error("FlatModel::fit(X, Y): This method is only valid for hyperplanes (n = d + 1).");
+    }
+    if (X.cols() != d)
+    {
+        throw std::runtime_error("FlatModel::fit(X, Y): Dimension mismatch between X.cols() = " + std::to_string(X.cols()) + " and d = " + std::to_string(d));
+    }
+    if (Y.size() != X.rows())
+    {
+        throw std::runtime_error("FlatModel::fit(X, Y): Dimension mismatch between Y.size() = " + std::to_string(Y.size()) + " and X.rows() = " + std::to_string(X.rows()));
+    }
+
+    Eigen::MatrixXd D(X.rows(), X.cols() + 1);
+    D << X, Y;
+    fit(D);
+};
+
+double FlatModel::predict(const Eigen::VectorXd &x) const
+{
+    if (n != d + 1)
+    {
+        throw std::runtime_error("AffineFit::predict(x): This method is only valid for hyperplanes (n = d + 1).");
+    }
+    if (x.size() != d)
+    {
+        throw std::runtime_error("AffineFit::predict(x): Dimension mismatch between x (" + std::to_string(x.size()) + ") and d (" + std::to_string(d) + ")");
+    }
+    // TODO: If w or b is not set, try to compute them
+
+    return w->dot(x) + (*b);
+}
+
+Eigen::VectorXd FlatModel::predict(const Eigen::MatrixXd &X) const
+{
+    if (n != d + 1)
+    {
+        throw std::runtime_error("AffineFit::predict(X): This method is only valid for hyperplanes (n = d + 1).");
+    }
+    if (X.cols() != d)
+    {
+        throw std::runtime_error("AffineFit::predict(X): Dimension mismatch between X (" + std::to_string(X.cols()) + ") and d (" + std::to_string(d) + ")");
+    }
+    // TODO: If w or b is not set, try to compute them
+
+    Eigen::VectorXd one = Eigen::VectorXd::Ones(X.rows());
+    return X * (*w) + (*b) * one;
+}
+
+void FlatModel::visualize(const std::string &name, double sideLen, double lineRadius, float flatAlpha)
+{
+    if (d < 1 || d > 2)
+        return;
+    constexpr int numPoints = 2;
+    Eigen::MatrixXd vertices;
+    Eigen::MatrixXi faces;
+    double halfSideLen = sideLen / 2.0;
+
+    if (d == 1)
+    {
+        orthonormalize();
+        get_parametric_repr();
+
+        Eigen::VectorXd x = Eigen::VectorXd::LinSpaced(numPoints, -halfSideLen, halfSideLen);
+        vertices = Eigen::MatrixXd::Zero(4, 3);
+
+        vertices = x * A->transpose() + b_vec->transpose().replicate(2, 1);
+
+        faces.resize(numPoints - 1, 2);
+        faces.col(0) = Eigen::VectorXi::LinSpaced(numPoints - 1, 0, numPoints - 2);
+        faces.col(1) = faces.col(0).array() + 1;
+
+        polyscope::registerCurveNetwork(name, vertices, faces)->setRadius(lineRadius);
+    }
+    else
+    {
+        orthonormalize();
+        get_parametric_repr();
+
+        Eigen::Matrix<double, 4, 2> xy;
+        xy << -halfSideLen, -halfSideLen,
+            halfSideLen, -halfSideLen,
+            -halfSideLen, halfSideLen,
+            halfSideLen, halfSideLen;
+
+        vertices = Eigen::MatrixXd::Zero(4, 3);
+        vertices = xy * A->transpose() + b_vec->transpose().replicate(4, 1);
+
+        faces.resize(1, 4);
+        faces << 0, 1, 3, 2;
+
+        polyscope::registerSurfaceMesh(name, vertices, faces)->setTransparency(flatAlpha);
+    }
+}
+
 // ============================================================================
 // SVD-based helper for computing the orthogonal complement of the column-space.
 // ============================================================================

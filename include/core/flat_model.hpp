@@ -5,24 +5,24 @@
 #include <optional>
 #include <tuple>
 
-class FlatModel : public Model { 
+class FlatModel : public Model
+{
 protected:
-    std::optional<Eigen::MatrixXd> A;           // (n x d) Matrix with direction-vectors in the columns
-    std::optional<Eigen::VectorXd> b_vec;       // Bias- (or offset-) n-vector
+    std::optional<Eigen::MatrixXd> A;     // (n x d) Matrix with direction-vectors in the columns
+    std::optional<Eigen::VectorXd> b_vec; // Bias- (or offset-) n-vector
 
-    std::optional<Eigen::VectorXd> w;           // (d - 1) weight vector 
-    std::optional<double> b;                    // bias
+    std::optional<Eigen::VectorXd> w; // (d - 1) weight vector
+    std::optional<double> b;          // bias
 
-    std::optional<Eigen::MatrixXd> N;           // ((n - d) x n) Matrix with the normal vectors of the flat in the rows
-    std::optional<Eigen::VectorXd> c;           // offset n-vector of normal form
+    std::optional<Eigen::MatrixXd> N; // ((n - d) x n) Matrix with the normal vectors of the flat in the rows
+    std::optional<Eigen::VectorXd> c; // offset n-vector of normal form
 
-    std::optional<Eigen::MatrixXd> Q;           // (n x n) Matrix with the orthogonal complement of A
-    std::optional<Eigen::VectorXd> r;           // offset n-vector of the orthogonal complement of A
+    std::optional<Eigen::MatrixXd> Q; // (n x n) Matrix with the orthogonal complement of A
+    std::optional<Eigen::VectorXd> r; // offset n-vector of the orthogonal complement of A
 
-    int d;                       // Dimension of the flat
-    int n;                       // Ambient space dimension
+    int d; // Dimension of the flat
+    int n; // Ambient space dimension
     bool orthonormalized = false;
-
 
     void parametric_to_implicit();
     void implicit_to_parametric();
@@ -37,23 +37,22 @@ protected:
 
     void compute_QR();
 
-
 public:
-    virtual ~FlatModel() = default;  
+    virtual ~FlatModel() = default;
 
     FlatModel(int d, int n) : d(d), n(n) {}
 
-    virtual void fit(const Eigen::MatrixXd& X, const Eigen::VectorXd& Y) override = 0;
-    virtual void fit(const Eigen::MatrixXd& D) override = 0;
+    void fit(const Eigen::MatrixXd &X, const Eigen::VectorXd &Y) override;
+    virtual void fit(const Eigen::MatrixXd &D) override = 0;
 
-    virtual double predict(const Eigen::VectorXd& point) const override = 0;
-    virtual Eigen::VectorXd predict(const Eigen::MatrixXd& data) const override = 0;
+    virtual double predict(const Eigen::VectorXd &point) const override;
+    virtual Eigen::VectorXd predict(const Eigen::MatrixXd &data) const override;
 
     // Cloning
     virtual std::unique_ptr<Model> clone() const override = 0;
 
     // Visualize
-    virtual void visualize(const std::string& name, double sideLen, double lineRadius, float flatAlpha) override = 0;
+    virtual void visualize(const std::string &name, double sideLen, double lineRadius, float flatAlpha) override;
 
     std::pair<Eigen::MatrixXd, Eigen::VectorXd> get_implicit_repr();
     std::pair<Eigen::VectorXd, double> get_explicit_repr();
@@ -61,10 +60,10 @@ public:
 
     int get_dimension();
     int get_ambient_dimension();
-    
-    void override_parametric(const Eigen::MatrixXd& Anew, const Eigen::VectorXd& bnew);
-    void override_implicit(const Eigen::MatrixXd& Nnew, const Eigen::VectorXd& cnew);
-    void override_explicit(const Eigen::VectorXd& wnew, double bnew);
+
+    void override_parametric(const Eigen::MatrixXd &Anew, const Eigen::VectorXd &bnew);
+    void override_implicit(const Eigen::MatrixXd &Nnew, const Eigen::VectorXd &cnew);
+    void override_explicit(const Eigen::VectorXd &wnew, double bnew);
 
     void orthonormalize();
     bool is_orthonormalized() { return orthonormalized; }
@@ -72,8 +71,7 @@ public:
     std::pair<Eigen::MatrixXd, Eigen::VectorXd> get_QR();
 
     double quadratic_loss(const Eigen::VectorXd point);
-    Eigen::VectorXd quadratic_loss(const Eigen::MatrixXd& points);
+    Eigen::VectorXd quadratic_loss(const Eigen::MatrixXd &points);
 
     void reset();
-
 };

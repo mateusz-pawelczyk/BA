@@ -36,6 +36,11 @@
 },
 {
   "directory": "/home/truntaler/dev/test/BA/fbuild",
+  "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -I/home/truntaler/dev/test/BA/include -I/home/truntaler/dev/test/BA/external/polyscope/include -I/home/truntaler/dev/test/BA/external/eigen -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -std=c++20 -o CMakeFiles/GraphicsProjectLib.dir/src/models/median_sdf.cpp.o -c /home/truntaler/dev/test/BA/src/models/median_sdf.cpp",
+  "file": "/home/truntaler/dev/test/BA/src/models/median_sdf.cpp"
+},
+{
+  "directory": "/home/truntaler/dev/test/BA/fbuild",
   "command": "/usr/bin/c++ -DGLM_ENABLE_EXPERIMENTAL -I/home/truntaler/dev/test/BA/include -I/home/truntaler/dev/test/BA/external/polyscope/include -I/home/truntaler/dev/test/BA/external/eigen -I/home/truntaler/dev/test/BA/external/polyscope/src/../include -I/home/truntaler/dev/test/BA/external/polyscope/deps/imgui/imgui -I/home/truntaler/dev/test/BA/external/polyscope/deps/glm -I/home/truntaler/dev/test/BA/external/polyscope/deps/glfw/include -I/home/truntaler/dev/test/BA/external/polyscope/deps/glad/src/../include -O3 -march=native -flto -funroll-loops -O3 -DNDEBUG -std=c++20 -o CMakeFiles/GraphicsProjectLib.dir/src/models/ols.cpp.o -c /home/truntaler/dev/test/BA/src/models/ols.cpp",
   "file": "/home/truntaler/dev/test/BA/src/models/ols.cpp"
 },

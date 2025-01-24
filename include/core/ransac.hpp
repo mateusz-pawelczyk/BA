@@ -7,30 +7,38 @@
 
 #include "core/model.hpp"
 #include "core/flat_model.hpp"
-
+#include "models/median_sdf.hpp"
 
 // different metrics (aws ENUM or something)
-enum class MetricType {
-    R2,   // R^2
-    RSS,  // Residual Sum of Squares
-    MSE,  // Mean Squared Error
+enum class MetricType
+{
+    R2,  // R^2
+    RSS, // Residual Sum of Squares
+    MSE, // Mean Squared Error
     RMSE // Root Mean Squared Error
 };
 
 using FlatModelEntry = std::pair<double, std::unique_ptr<FlatModel>>;
 
-class RANSAC {
+class RANSAC
+{
 public:
     RANSAC(int max_iterations, double threshold, double train_data_percenatge, int min_inliners, MetricType metric = MetricType::R2);
-    std::unique_ptr<Model> run(const Eigen::MatrixXd& X, const Eigen::VectorXd& Y, Model* model, std::function<Eigen::VectorXd(Eigen::VectorXd, Eigen::VectorXd)> loss_fn, std::function<double(Eigen::VectorXd, Eigen::VectorXd)> metric_fn);
+    std::unique_ptr<Model> run(const Eigen::MatrixXd &X, const Eigen::VectorXd &Y, Model *model, std::function<Eigen::VectorXd(Eigen::VectorXd, Eigen::VectorXd)> loss_fn, std::function<double(Eigen::VectorXd, Eigen::VectorXd)> metric_fn);
 
-    std::unique_ptr<FlatModel> run(const Eigen::MatrixXd& D, FlatModel* model, int best_model_count, std::function<Eigen::VectorXd(Eigen::VectorXd, Eigen::VectorXd)> loss_fn, std::function<double(Eigen::VectorXd, Eigen::VectorXd)> metric_fn) const;
-    std::unique_ptr<FlatModel> run2(const Eigen::MatrixXd& D, FlatModel* model, int best_model_count=1) const;
-    std::unique_ptr<FlatModel> run_slow(const Eigen::MatrixXd &D, 
-                                        FlatModel *model, 
-                                        int best_model_count) const;
+    std::unique_ptr<FlatModel> run(const Eigen::MatrixXd &D, FlatModel *model, int best_model_count, std::function<Eigen::VectorXd(Eigen::VectorXd, Eigen::VectorXd)> loss_fn, std::function<double(Eigen::VectorXd, Eigen::VectorXd)> metric_fn, MedianSDF *averager) const;
+    std::unique_ptr<FlatModel> run2(const Eigen::MatrixXd &D,
+                                    FlatModel *model,
+                                    int best_model_count,
+                                    MedianSDF *averager) const;
+
+    std::unique_ptr<FlatModel> run_slow(const Eigen::MatrixXd &D,
+                                        FlatModel *model,
+                                        int best_model_count,
+                                        MedianSDF *averager) const;
+
 private:
-    Eigen::VectorXd getInliner(const Eigen::VectorXd& Y, const Eigen::VectorXd& Y_pred) const;
+    Eigen::VectorXd getInliner(const Eigen::VectorXd &Y, const Eigen::VectorXd &Y_pred) const;
     int max_iterations;
     double threshold;
     double train_data_percentage;
@@ -38,10 +46,10 @@ private:
 
     // Eigen::VectorXd (*loss_fn)(Eigen::VectorXd, Eigen::VectorXd);
     // double (*metric_fn)(Eigen::VectorXd, Eigen::VectorXd);
-    std::function<double(Eigen::MatrixXd, FlatModel*)> metric_fn2;
+    std::function<double(Eigen::MatrixXd, FlatModel *)> metric_fn2;
 
     // MedianSDF
-    std::unique_ptr<FlatModel> medianSDF(std::vector<std::unique_ptr<FlatModel>>& models, int k, std::vector<double>* errors = nullptr) const;
+    std::unique_ptr<FlatModel> medianSDF(std::vector<std::unique_ptr<FlatModel>> &models, int k, std::vector<double> *errors = nullptr) const;
 
     // === Evaluation Metrics ===
     // double r2_metric(Eigen::MatrixXd D, FlatModel *model) const;
@@ -49,24 +57,22 @@ private:
     // double mse_metric(Eigen::MatrixXd D, FlatModel *model) const;
     // double rmse_metric(Eigen::MatrixXd D, FlatModel *model) const;
 
-
     // === helper methods for RANSAC ===
 
     // Helper function to cast Model -> FlatModel in a safe way
     std::unique_ptr<FlatModel> castToModel(std::unique_ptr<Model> basePtr) const;
 
-   
-    void sampleRandomSubset(const Eigen::MatrixXd &X, 
+    void sampleRandomSubset(const Eigen::MatrixXd &X,
                             const Eigen::VectorXd &Y,
-                            Eigen::MatrixXd &X_subset, 
+                            Eigen::MatrixXd &X_subset,
                             Eigen::VectorXd &Y_subset,
                             std::vector<int> &indices,
                             std::mt19937 &g) const;
 
     void sampleRandomSubset(const Eigen::MatrixXd &D,
-                                Eigen::MatrixXd &D_subset,
-                                std::vector<int> &indices, 
-                                std::mt19937 &g) const;
+                            Eigen::MatrixXd &D_subset,
+                            std::vector<int> &indices,
+                            std::mt19937 &g) const;
 
     std::vector<int> findInliers(const Eigen::VectorXd &loss_values, double threshold) const;
 
@@ -74,35 +80,23 @@ private:
     template <typename Comparator>
     void gatherTopModels(
         std::priority_queue<
-            FlatModelEntry, 
+            FlatModelEntry,
             std::vector<FlatModelEntry>,
-            Comparator
-        > &heap,
-        std::vector<std::unique_ptr<FlatModel>> &models, 
-        std::vector<double> &errors
-    ) const;
+            Comparator> &heap,
+        std::vector<std::unique_ptr<FlatModel>> &models,
+        std::vector<double> &errors) const;
 
     // Helper function to merge local heaps into the global heap
     template <typename Comparator>
     void mergeLocalHeap(
         std::priority_queue<
-            FlatModelEntry, 
+            FlatModelEntry,
             std::vector<FlatModelEntry>,
-            Comparator
-        > &local_heap,
+            Comparator> &local_heap,
         std::priority_queue<
-            FlatModelEntry, 
+            FlatModelEntry,
             std::vector<FlatModelEntry>,
-            Comparator
-        > &heap
-    ) const;
-
-
-    // === Helper methods for MedianSDF ===
-    std::vector<double> getWeights(std::vector<double>* errors) const;
-
-    std::pair<int, int> validateAndGetFlatDimensions(const std::vector<std::unique_ptr<FlatModel>>& models) const;
-
+            Comparator> &heap) const;
 };
 
-    #include "core/ransac.tpp"
+#include "core/ransac.tpp"
