@@ -1,5 +1,0 @@
-iteration,maxIt,threshold,trainPct,minInliers,bestModelCount,numPoints,n,d,noise,outlierRatio,outlierStrength,saltAndPepper,metric,variation,weighted_average,r2,mse,timeMs
-1,100,0.1,0.2,100,1,1000,5,1,0.5,0,5,1,0,1,1,0.383745,1.21245,1936.58
-1,100,0.1,0.2,100,1,1000,5,1,0.5,0,5,1,0,2,1,0.824364,0.345553,1527.78
-2,100,0.1,0.2,100,1,1000,5,1,0.5,0,5,1,0,1,0,0.380166,1.25664,1714.37
-2,100,0.1,0.2,100,1,1000,5,1,0.5,0,5,1,0,2,0,0.871766,0.259978,1514.42

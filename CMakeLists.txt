@@ -48,6 +48,7 @@ list(FILTER PROJECT_SOURCES EXCLUDE REGEX ".*src/main.cpp$")
 
 # Find OpenCV package
 find_package(OpenCV REQUIRED)
+find_package(Ceres REQUIRED)
 
 add_library(GraphicsProjectLib ${PROJECT_SOURCES})
 
@@ -65,6 +66,7 @@ target_link_libraries(GraphicsProjectLib
     PRIVATE
     polyscope
     ${OpenCV_LIBS}
+    Ceres::ceres
 )
 
 # ------------------------------------------------------------------------------
@@ -78,6 +80,7 @@ target_link_libraries(${PROJECT_NAME}
     PRIVATE
     GraphicsProjectLib
     polyscope
+    Ceres::ceres
 )
 
 # ------------------------------------------------------------------------------

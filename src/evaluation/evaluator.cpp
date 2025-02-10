@@ -13,6 +13,7 @@
 #include <models/ols.hpp>
 #include <models/mean_sdf.hpp>
 #include <models/median_sdf.hpp>
+#include <models/huber_regression.hpp>
 
 /**
  * @brief Utility for measuring the milliseconds elapsed while running a function.
@@ -111,7 +112,7 @@ namespace Evaluator
             results.push_back(rec);
         }
 
-        // 1) Variation 2: MedianSDF
+        // 2) Variation 2: MedianSDF
         {
             MedianSDF *averager = new MedianSDF(n - 1, n, median_err_tol, median_max_iter);
 
@@ -139,6 +140,38 @@ namespace Evaluator
             rec.mse = mse;
             rec.elapsedMilliseconds = elapsedMs;
             rec.variation = 2;
+
+            results.push_back(rec);
+        }
+
+        // 3) Variation 3: Huber Regression
+        {
+
+            auto localFlatModel = flatModelFactory(d, n);
+            auto ransacObject = ransacFactory(maxIt, threshold, trainDataPct, minInl, metric);
+
+            double elapsedMs = 0.0;
+            // bestFlat is huber directly
+            std::unique_ptr<FlatModel> bestFlat = std::make_unique<HuberRegression>(n - 1, n);
+            {
+                elapsedMs = timeFunctionMS([&]()
+                                           { bestFlat->fit(D); });
+            }
+
+            double r2 = bestFlat ? bestFlat->R2(D) : 999999.0;
+            double mse = bestFlat ? computeMSE_FlatModel(bestFlat.get(), D) : 999999.0;
+
+            EvaluationRecord rec;
+            rec.iterationIndex = iterationIndex;
+            rec.maxIterations = maxIt;
+            rec.threshold = threshold;
+            rec.trainDataPercentage = trainDataPct;
+            rec.minInliers = minInl;
+            rec.bestModelCount = bestModelCount;
+            rec.r2 = r2;
+            rec.mse = mse;
+            rec.elapsedMilliseconds = elapsedMs;
+            rec.variation = 3;
 
             results.push_back(rec);
         }

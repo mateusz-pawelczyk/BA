@@ -22,6 +22,7 @@
 #include "models/affine_fit.hpp"
 #include "models/median_sdf.hpp"
 #include "models/mean_sdf.hpp"
+#include "models/huber_regression.hpp"
 #include "Definitions.h"
 #include "visualization/visualizer.h"
 #include "evaluation/evaluator.hpp"
@@ -164,6 +165,9 @@ void visualizeFittingPlane()
         std::unique_ptr<FlatModel> averagedBestModel = ransac.run2(hyperplanePoints, (FlatModel *)model.get(), average_contributions, averager);
         averager->reset();
         std::unique_ptr<FlatModel> lineAveragedBestModel = ransac.run_slow(hyperplanePoints, (FlatModel *)model.get(), average_contributions, averager);
+
+        HuberRegression *huber = new HuberRegression(n - 1, n);
+        huber->fit(hyperplanePoints);
         // if (singleBestModel == nullptr)
         // {
         //     std::cout << "No good Model with these parameters could be found." << std::endl;
@@ -177,11 +181,23 @@ void visualizeFittingPlane()
         // double singleBestModelMSE = singleBestModel_ptr->MSE(X, Y);
         double averagedBestModelMSE = averagedBestModel_ptr->quadratic_loss(hyperplanePoints).mean();
         double lineAveragedBestModelMSE = lineAveragedBestModel_ptr->quadratic_loss(hyperplanePoints).mean();
+        double huberMSE = huber->quadratic_loss(hyperplanePoints).mean();
 
-        // std::cout << "Single Best Model performance: " << singleBestModelMSE << std::endl;
-        std::cout << "Averaged Best Model performance: " << averagedBestModelMSE << std::endl;
-        std::cout << "Line-Averaged Best Flat performance: " << lineAveragedBestModelMSE << std::endl;
-        // std::cout << "Single Best Model outperformed by: " << (averagedBestModelMSE - singleBestModelMSE) / (averagedBestModelMSE + singleBestModelMSE) << std::endl;
+        std::cout << "[PERFORMANCE:MSE]" << std::endl;
+        std::cout << "Averaged Best Model [1]: " << averagedBestModelMSE << std::endl;
+        std::cout << "Averaged Best Model [2]: " << lineAveragedBestModelMSE << std::endl;
+        std::cout << "Huber Regression: " << huberMSE << std::endl;
+
+        double averagedBestModelR2 = averagedBestModel_ptr->R2(hyperplanePoints);
+        double lineAveragedBestModelR2 = lineAveragedBestModel_ptr->R2(hyperplanePoints);
+        double huberR2 = huber->R2(hyperplanePoints);
+
+        std::cout << "[PERFORMANCE:R2]" << std::endl;
+        std::cout << "Averaged Best Model [1]: " << averagedBestModelR2 << std::endl;
+        std::cout << "Averaged Best Model [2]: " << lineAveragedBestModelR2 << std::endl;
+        std::cout << "Huber Regression: " << huberR2 << std::endl;
+
+        std::cout << "--------------------------------" << std::endl;
 
         float pointRadius = calculatePointRadius();
         Visualizer::plotPoints(hyperplanePoints, "Hyperplane Point Cloud", sphereRepr ? "Sphere" : "Quad", pointRadius);
@@ -189,6 +205,7 @@ void visualizeFittingPlane()
         // singleBestModel_ptr->visualize("Single Best Flat", 6.0, pointRadius / 2.0, 0.6);
         averagedBestModel_ptr->visualize("Averaged Best Flat", 6.0, pointRadius / 2.0, 0.6);
         lineAveragedBestModel_ptr->visualize("Line-Averaged Best Flat", 6.0, pointRadius / 2.0, 0.6);
+        huber->visualize("Huber Flat", 6.0, pointRadius / 2.0, 0.6);
     }
 }
 
@@ -444,8 +461,8 @@ void evaluate()
 
     DataParameterGrid dataGrid;
     dataGrid.numPoints = {500};
-    dataGrid.subspaceDimentions = {1, 2, 4, 9, 19, 49, 99};
-    dataGrid.ambientDimentions = {2, 3, 5, 10, 20, 50, 100};
+    dataGrid.subspaceDimentions = {1, 2, 4, 9, 19, 49};
+    dataGrid.ambientDimentions = {2, 3, 5, 10, 20, 50};
     dataGrid.noiseLevels = {0.0, 0.1, 0.2, 0.3, 0.4, 0.5};
     dataGrid.outlierRatios = {0.0, 0.1, 0.2, 0.3, 0.4, 0.5};
     dataGrid.outlierStrengths = {2.5};
