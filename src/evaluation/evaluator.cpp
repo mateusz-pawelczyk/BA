@@ -11,6 +11,8 @@
 #include <core/model.hpp>
 #include <models/affine_fit.hpp>
 #include <models/ols.hpp>
+#include <models/mean_sdf.hpp>
+#include <models/median_sdf.hpp>
 
 /**
  * @brief Utility for measuring the milliseconds elapsed while running a function.
@@ -26,7 +28,7 @@ static double timeFunctionMS(const std::function<void()> &fn)
 }
 
 /**
- * @brief Compute MSE for Variation 1 (Model*).
+ * @brief Compute mse for Variation 1 (Model*).
  *
  * You likely have something similar in your own code (e.g., model->MSE(X, Y)).
  */
@@ -42,13 +44,9 @@ static double computeMSE_Model(Model *model, const Eigen::MatrixXd &X, const Eig
  */
 static double computeMSE_FlatModel(FlatModel *fmodel, const Eigen::MatrixXd &D)
 {
-    // For Variation 2 & 3, the last col of D is Y, first columns are X
-    int d = D.cols() - 1;
-    Eigen::MatrixXd X = D.leftCols(d);
-    Eigen::VectorXd Y = D.col(d);
 
     // If your FlatModel implements MSE(X, Y), do:
-    return fmodel->MSE(X, Y);
+    return fmodel->quadratic_loss(D).mean();
 }
 
 namespace Evaluator
@@ -61,12 +59,16 @@ namespace Evaluator
         double trainDataPct,
         int minInl,
         int bestModelCount,
+        bool weighted_average,
+        double median_err_tol,
+        int median_max_iter,
         const Eigen::MatrixXd &D,
         int n,
         int d,
+        MetricType metric,
         std::function<std::unique_ptr<Model>(int, int)> modelFactory,
         std::function<std::unique_ptr<FlatModel>(int, int)> flatModelFactory,
-        std::function<RANSAC(int, double, double, int)> ransacFactory)
+        std::function<RANSAC(int, double, double, int, MetricType)> ransacFactory)
     {
         std::vector<EvaluationRecord> results;
         Eigen::MatrixXd X = D.leftCols(D.cols() - 1);
@@ -77,89 +79,66 @@ namespace Evaluator
         auto metric_fn = [](Eigen::VectorXd Y_true, Eigen::VectorXd Y_pred)
         { return (Y_true - Y_pred).squaredNorm() / Y_true.size(); };
 
-        MedianSDF *averager = new MedianSDF(d, n);
-
-        // 1) Variation 1: run(X, Y, Model*)
-        if (n == d + 1)
+        // 1) Variation 1: MeanSDF
         {
-            auto localModel = modelFactory(d, n); // new instance each time
-            auto ransacObject = ransacFactory(maxIt, threshold, trainDataPct, minInl);
+            MeanSDF *averager = new MeanSDF(n - 1, n);
 
-            double elapsedMs = 0.0;
-            std::unique_ptr<Model> bestModel;
-            {
-                elapsedMs = timeFunctionMS([&]()
-                                           { bestModel = ransacObject.run(X, Y, localModel.get(), loss_fn, metric_fn); });
-            }
-            double mse = bestModel ? computeMSE_Model(bestModel.get(), X, Y) : 999999.0;
-
-            EvaluationRecord rec;
-            rec.iterationIndex = iterationIndex;
-            rec.variationIndex = 1;
-            rec.maxIterations = maxIt;
-            rec.threshold = threshold;
-            rec.trainDataPercentage = trainDataPct;
-            rec.minInliers = minInl;
-            rec.bestModelCount = bestModelCount; // not used in Variation 1, but we store it anyway
-            rec.mse = mse;
-            rec.elapsedMilliseconds = elapsedMs;
-
-            results.push_back(rec);
-        }
-
-        // 2) Variation 2: run(D, FlatModel*, best_model_count)
-        if (n == d + 1)
-        {
             auto localFlatModel = flatModelFactory(d, n);
-            auto ransacObject = ransacFactory(maxIt, threshold, trainDataPct, minInl);
+            auto ransacObject = ransacFactory(maxIt, threshold, trainDataPct, minInl, metric);
 
             double elapsedMs = 0.0;
             std::unique_ptr<FlatModel> bestFlat;
             {
                 elapsedMs = timeFunctionMS([&]()
-                                           { bestFlat = ransacObject.run(D, localFlatModel.get(), bestModelCount, loss_fn, metric_fn, averager); });
+                                           { bestFlat = ransacObject.run2(D, localFlatModel.get(), bestModelCount, averager, weighted_average); });
             }
 
+            double r2 = bestFlat ? bestFlat->R2(D) : 999999.0;
             double mse = bestFlat ? computeMSE_FlatModel(bestFlat.get(), D) : 999999.0;
 
             EvaluationRecord rec;
             rec.iterationIndex = iterationIndex;
-            rec.variationIndex = 2;
             rec.maxIterations = maxIt;
             rec.threshold = threshold;
             rec.trainDataPercentage = trainDataPct;
             rec.minInliers = minInl;
             rec.bestModelCount = bestModelCount;
+            rec.r2 = r2;
             rec.mse = mse;
             rec.elapsedMilliseconds = elapsedMs;
+            rec.variation = 1;
 
             results.push_back(rec);
         }
 
-        // 3) Variation 3: run2(D, FlatModel*, best_model_count)
+        // 1) Variation 2: MedianSDF
         {
+            MedianSDF *averager = new MedianSDF(n - 1, n, median_err_tol, median_max_iter);
+
             auto localFlatModel = flatModelFactory(d, n);
-            auto ransacObject = ransacFactory(maxIt, threshold, trainDataPct, minInl);
+            auto ransacObject = ransacFactory(maxIt, threshold, trainDataPct, minInl, metric);
 
             double elapsedMs = 0.0;
             std::unique_ptr<FlatModel> bestFlat;
             {
                 elapsedMs = timeFunctionMS([&]()
-                                           { bestFlat = ransacObject.run2(D, localFlatModel.get(), bestModelCount, averager); });
+                                           { bestFlat = ransacObject.run_slow(D, localFlatModel.get(), bestModelCount, averager, weighted_average); });
             }
 
+            double r2 = bestFlat ? bestFlat->R2(D) : 999999.0;
             double mse = bestFlat ? computeMSE_FlatModel(bestFlat.get(), D) : 999999.0;
 
             EvaluationRecord rec;
             rec.iterationIndex = iterationIndex;
-            rec.variationIndex = 3;
             rec.maxIterations = maxIt;
             rec.threshold = threshold;
             rec.trainDataPercentage = trainDataPct;
             rec.minInliers = minInl;
             rec.bestModelCount = bestModelCount;
+            rec.r2 = r2;
             rec.mse = mse;
             rec.elapsedMilliseconds = elapsedMs;
+            rec.variation = 2;
 
             results.push_back(rec);
         }
@@ -167,37 +146,35 @@ namespace Evaluator
         return results;
     }
 
+#include <memory>
+#include <sstream>
+
     void evaluateAllParamCombinations(
         const RansacParameterGrid &grid,
         const DataParameterGrid &dataGrid,
         std::function<std::unique_ptr<Model>(int, int)> modelFactory,
         std::function<std::unique_ptr<FlatModel>(int, int)> flatModelFactory,
-        std::function<RANSAC(int, double, double, int)> ransacFactory,
+        std::function<RANSAC(int, double, double, int, MetricType)> ransacFactory,
         const std::string &outputCsvPath)
     {
-        // Open the CSV in append mode (so if you crash, partial results remain).
-        // If you want to overwrite each time, use std::ios::out instead.
         std::ofstream ofs(outputCsvPath, std::ios::app);
         if (!ofs.is_open())
         {
             throw std::runtime_error("Could not open output CSV file: " + outputCsvPath);
         }
 
-        // If file is empty, write a header row
-        // (You might want a more robust check if file already has data).
         ofs.seekp(0, std::ios::end);
         if (ofs.tellp() == 0)
         {
-            // old: ofs << "iteration,variation,maxIt,threshold,trainPct,minInliers,bestModelCount,mse,timeMs\n";
-            ofs << "iteration,variation,maxIt,threshold,trainPct,minInliers,bestModelCount,numPoints,n,d,noise,outlierRatio,outlierStrength,saltAndPepper,mse,timeMs\n";
+            ofs << "iteration,maxIt,threshold,trainPct,minInliers,bestModelCount,numPoints,n,d,noise,outlierRatio,outlierStrength,saltAndPepper,metric,variation,weighted_average,r2,mse,timeMs\n";
         }
         ofs.flush();
 
         int iterationCounter = 0;
-
         double progress = 0.0;
-        double totalIterations = grid.maxIterations.size() * grid.thresholds.size() * grid.trainDataPercentages.size() * grid.minInliers.size() * grid.bestModelCounts.size() * dataGrid.numPoints.size() * dataGrid.ambientDimentions.size() * dataGrid.noiseLevels.size() * dataGrid.outlierRatios.size() * dataGrid.outlierStrengths.size() * dataGrid.saltAndPepper.size();
+        double totalIterations = grid.maxIterations.size() * grid.thresholds.size() * grid.trainDataPercentages.size() * grid.minInliers.size() * grid.bestModelCounts.size() * dataGrid.numPoints.size() * dataGrid.ambientDimentions.size() * dataGrid.subspaceDimentions.size() * dataGrid.noiseLevels.size() * dataGrid.outlierRatios.size() * dataGrid.outlierStrengths.size() * dataGrid.saltAndPepper.size() * grid.metrics.size() * grid.weightedAverages.size();
         std::cout << "Total iterations: " << totalIterations << std::endl;
+
         for (int maxIt : grid.maxIterations)
         {
             for (double thresh : grid.thresholds)
@@ -212,7 +189,7 @@ namespace Evaluator
                             {
                                 for (int n : dataGrid.ambientDimentions)
                                 {
-                                    for (int d = 1; d < n; ++d)
+                                    for (int d : dataGrid.subspaceDimentions)
                                     {
                                         for (double noise : dataGrid.noiseLevels)
                                         {
@@ -222,55 +199,88 @@ namespace Evaluator
                                                 {
                                                     for (bool saltAndPepper : dataGrid.saltAndPepper)
                                                     {
-                                                        if (inl > numPoints * tdp)
+                                                        for (MetricType metric : grid.metrics)
                                                         {
-                                                            continue; // skip impossible cases
-                                                        }
+                                                            for (bool weighted_average : grid.weightedAverages)
+                                                            {
+                                                                progress++;
+                                                                int metricInt = static_cast<int>(metric);
+                                                                if (inl > numPoints * tdp || d >= n || numPoints <= d + 1 || n <= 1 || d <= 0 || noise < 0.0 || outlierRatio < 0.0 || outlierStrength < 0.0 || outlierRatio > 1.0 || numPoints <= 0 || (noise > 0.3 && n <= 3))
+                                                                {
+                                                                    continue;
+                                                                }
 
-                                                        // Create the data matrix D
-                                                        AffineFit *m = new AffineFit(d, n);
-                                                        Eigen::MatrixXd A = Eigen::MatrixXd::Random(n, d);
-                                                        Eigen::VectorXd b = Eigen::VectorXd::Random(n);
+                                                                try
+                                                                {
+                                                                    auto m = std::make_unique<AffineFit>(n - 1, n);
+                                                                    Eigen::MatrixXd A = Eigen::MatrixXd::Random(n, d);
+                                                                    Eigen::VectorXd b = Eigen::VectorXd::Random(n);
 
-                                                        m->override_parametric(A, b);
-                                                        Eigen::MatrixXd D = FlatSampler::sampleFlat(*m, numPoints, noise, outlierRatio, outlierStrength, 1.0, saltAndPepper);
+                                                                    m->override_parametric(A, b);
+                                                                    Eigen::MatrixXd D = FlatSampler::sampleFlat(*m, numPoints, noise, outlierRatio, outlierStrength, saltAndPepper);
 
-                                                        // Increment the iteration counter
-                                                        iterationCounter++;
-                                                        progress += 1.0;
-                                                        std::cout << "Progress: " << (progress / totalIterations) * 100 << "%" << std::endl;
+                                                                    iterationCounter++;
 
-                                                        // Evaluate one combination: run all 3 variations
-                                                        auto records = evaluateSingleCombo(
-                                                            iterationCounter,
-                                                            maxIt, thresh, tdp, inl, bmc,
-                                                            D,
-                                                            n, d,
-                                                            modelFactory,
-                                                            flatModelFactory,
-                                                            ransacFactory);
+                                                                    std::cout << "\rProgress: " << std::fixed << std::setprecision(2) << (progress / totalIterations) * 100 << "%" << std::flush;
 
-                                                        // Write them to CSV (3 lines, one per variation)
-                                                        for (auto &rec : records)
-                                                        {
-                                                            ofs << rec.iterationIndex << ","
-                                                                << rec.variationIndex << ","
-                                                                << rec.maxIterations << ","
-                                                                << rec.threshold << ","
-                                                                << rec.trainDataPercentage << ","
-                                                                << rec.minInliers << ","
-                                                                << rec.bestModelCount << ","
-                                                                << numPoints << ","
-                                                                << n << ","
-                                                                << d << ","
-                                                                << noise << ","
-                                                                << outlierRatio << ","
-                                                                << outlierStrength << ","
-                                                                << saltAndPepper << ","
-                                                                << rec.mse << ","
-                                                                << rec.elapsedMilliseconds
-                                                                << "\n";
-                                                            ofs.flush(); // ensure each line is written
+                                                                    auto records = evaluateSingleCombo(
+                                                                        iterationCounter,
+                                                                        maxIt, thresh, tdp, inl, bmc, weighted_average,
+                                                                        0.01, 1000,
+                                                                        D,
+                                                                        n, d, metric,
+                                                                        modelFactory,
+                                                                        flatModelFactory,
+                                                                        ransacFactory);
+
+                                                                    for (auto &rec : records)
+                                                                    {
+                                                                        ofs << rec.iterationIndex << ","
+                                                                            << rec.maxIterations << ","
+                                                                            << rec.threshold << ","
+                                                                            << rec.trainDataPercentage << ","
+                                                                            << rec.minInliers << ","
+                                                                            << rec.bestModelCount << ","
+                                                                            << numPoints << ","
+                                                                            << n << ","
+                                                                            << d << ","
+                                                                            << noise << ","
+                                                                            << outlierRatio << ","
+                                                                            << outlierStrength << ","
+                                                                            << saltAndPepper << ","
+                                                                            << static_cast<int>(metric) << ","
+                                                                            << rec.variation << ","
+                                                                            << weighted_average << ","
+                                                                            << rec.r2 << ","
+                                                                            << rec.mse << ","
+                                                                            << rec.elapsedMilliseconds
+                                                                            << "\n";
+                                                                        ofs.flush();
+                                                                    }
+                                                                }
+                                                                catch (const std::exception &e)
+                                                                {
+                                                                    std::ostringstream oss;
+                                                                    oss << "Error encountered during evaluation:\n"
+                                                                        << "Parameters:\n"
+                                                                        << "  maxIt: " << maxIt << "\n"
+                                                                        << "  thresh: " << thresh << "\n"
+                                                                        << "  tdp: " << tdp << "\n"
+                                                                        << "  inl: " << inl << "\n"
+                                                                        << "  bmc: " << bmc << "\n"
+                                                                        << "  numPoints: " << numPoints << "\n"
+                                                                        << "  n: " << n << "\n"
+                                                                        << "  d: " << d << "\n"
+                                                                        << "  noise: " << noise << "\n"
+                                                                        << "  outlierRatio: " << outlierRatio << "\n"
+                                                                        << "  outlierStrength: " << outlierStrength << "\n"
+                                                                        << "  saltAndPepper: " << (saltAndPepper ? "true" : "false") << "\n"
+                                                                        << "  metric: " << static_cast<int>(metric) << "\n"
+                                                                        << "  weighted_average: " << (weighted_average ? "true" : "false") << "\n"
+                                                                        << "Error message: " << e.what() << "\n\n";
+                                                                    std::cerr << oss.str() << std::endl;
+                                                                }
+                                                            }
                                                         }
                                                     }
                                                 }
@@ -284,7 +294,7 @@ namespace Evaluator
                 }
             }
         }
-
+        std::cout << std::endl;
         ofs.close();
     }
 

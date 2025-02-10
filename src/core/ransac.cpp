@@ -212,7 +212,7 @@ std::vector<int> RANSAC::findInliers(const Eigen::VectorXd &loss_values, double 
     return inliers;
 }
 
-std::unique_ptr<FlatModel> RANSAC::run(const Eigen::MatrixXd &D, FlatModel *model, int best_model_count, std::function<Eigen::VectorXd(Eigen::VectorXd, Eigen::VectorXd)> loss_fn, std::function<double(Eigen::VectorXd, Eigen::VectorXd)> metric_fn, MedianSDF *averager) const
+std::unique_ptr<FlatModel> RANSAC::run(const Eigen::MatrixXd &D, FlatModel *model, int best_model_count, std::function<Eigen::VectorXd(Eigen::VectorXd, Eigen::VectorXd)> loss_fn, std::function<double(Eigen::VectorXd, Eigen::VectorXd)> metric_fn, FlatAverager *averager) const
 {
     if (model == nullptr)
     {
@@ -338,7 +338,8 @@ std::unique_ptr<FlatModel> RANSAC::run(const Eigen::MatrixXd &D, FlatModel *mode
 std::unique_ptr<FlatModel> RANSAC::run2(const Eigen::MatrixXd &D,
                                         FlatModel *model,
                                         int best_model_count,
-                                        MedianSDF *averager) const
+                                        FlatAverager *averager,
+                                        bool weighted_average) const
 {
     if (model == nullptr)
     {
@@ -409,7 +410,7 @@ std::unique_ptr<FlatModel> RANSAC::run2(const Eigen::MatrixXd &D,
 
                 // 5. Extract inliers
                 std::vector<int> inliers = findInliers(loss, threshold);
-                if (inliers.size() < min_inliners)
+                if (inliers.size() < std::max(min_inliners, d + 1))
                 {
                     continue; // not enough inliers, skip
                 }
@@ -467,7 +468,7 @@ std::unique_ptr<FlatModel> RANSAC::run2(const Eigen::MatrixXd &D,
         if (heap.empty())
         {
             threshold *= 1.25;
-            std::cout << "[FAST/AVERAGED] No good d-flat found. Running again with higher threshold: " << threshold << std::endl;
+            // std::cout << "[FAST/AVERAGED] No good d-flat found. Running again with higher threshold: " << threshold << std::endl;
         }
     }
 
@@ -477,15 +478,23 @@ std::unique_ptr<FlatModel> RANSAC::run2(const Eigen::MatrixXd &D,
     models.reserve(best_model_count);
     errors.reserve(best_model_count);
     gatherTopModels(heap, models, errors);
-    averager->fit(models, errors);
-    std::unique_ptr<FlatModel> fm = castToModel(averager->clone());
-    return fm;
+    if (models.size() > 1)
+    {
+        averager->fit(models, weighted_average ? errors : std::vector<double>());
+        std::unique_ptr<FlatModel> fm = castToModel(averager->clone());
+        return fm;
+    }
+    else
+    {
+        return std::move(models[0]);
+    }
 }
 
 std::unique_ptr<FlatModel> RANSAC::run_slow(const Eigen::MatrixXd &D,
                                             FlatModel *model,
                                             int best_model_count,
-                                            MedianSDF *averager) const
+                                            FlatAverager *averager,
+                                            bool weighted_average) const
 {
     if (model == nullptr)
     {
@@ -550,7 +559,7 @@ std::unique_ptr<FlatModel> RANSAC::run_slow(const Eigen::MatrixXd &D,
 
             // 5. Extract inliers
             std::vector<int> inliers = findInliers(loss, threshold);
-            if (inliers.size() < min_inliners)
+            if (inliers.size() < std::max(min_inliners, d + 1))
             {
                 continue; // not enough inliers, skip
             }
@@ -591,7 +600,7 @@ std::unique_ptr<FlatModel> RANSAC::run_slow(const Eigen::MatrixXd &D,
         if (heap.empty())
         {
             threshold *= 1.25;
-            std::cout << "[SLOW] No good d-flat found. Running again with higher threshold: " << threshold << std::endl;
+            // std::cout << "[SLOW] No good d-flat found. Running again with higher threshold: " << threshold << std::endl;
         }
     }
 
@@ -601,7 +610,7 @@ std::unique_ptr<FlatModel> RANSAC::run_slow(const Eigen::MatrixXd &D,
     models.reserve(best_model_count);
     errors.reserve(best_model_count);
     gatherTopModels(heap, models, errors);
-    averager->fit(models, errors);
+    averager->fit(models, weighted_average ? errors : std::vector<double>());
     std::unique_ptr<FlatModel> fm = castToModel(averager->clone());
     return fm;
 }

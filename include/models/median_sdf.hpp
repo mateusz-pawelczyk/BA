@@ -1,19 +1,25 @@
 #pragma once
 
-#include "core/flat_model.hpp"
+#include "core/flat_averager.hpp"
 
-class MedianSDF : public FlatModel
+class MedianSDF : public FlatAverager
 {
 public:
-    MedianSDF(int d, int n) : FlatModel(d, n) {}
-
-    void fit(const Eigen::MatrixXd &D) override;
-    void fit(const std::vector<std::unique_ptr<FlatModel>> &models, const std::vector<double> &errors = std::vector<double>());
+    MedianSDF(int d, int n, double err_tol, double max_it) : FlatAverager(d, n), err_tol(err_tol), max_it(max_it) {}
 
     std::unique_ptr<Model> clone() const override;
 
+protected:
+    void computeAggregatedQr(const std::vector<Eigen::MatrixXd> &Q_list,
+                             const std::vector<Eigen::VectorXd> &r_list,
+                             Eigen::MatrixXd &Q_star,
+                             Eigen::VectorXd &r_star,
+                             const std::vector<double> &weights = {}) const override;
+
 private:
-    Eigen::MatrixXd pseudoInverse(const Eigen::MatrixXd &A, double tolerance = 1e-6);
-    std::vector<double> getWeights(const std::vector<double> &errors, int model_count) const;
-    void validateFlatDimensions(const std::vector<std::unique_ptr<FlatModel>> &models) const;
+    double err_tol;
+    double max_it;
+
+    void computeMedianQ(Eigen::MatrixXd &Q_star, std::vector<Eigen::MatrixXd> Q_list, const std::vector<double> &weights) const;
+    void computeMedianR(Eigen::VectorXd &r_star, std::vector<Eigen::VectorXd> r_list, const std::vector<double> &weights) const;
 };

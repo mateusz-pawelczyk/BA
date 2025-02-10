@@ -7,7 +7,7 @@
 
 #include "core/model.hpp"
 #include "core/flat_model.hpp"
-#include "models/median_sdf.hpp"
+#include "models/mean_sdf.hpp"
 
 // different metrics (aws ENUM or something)
 enum class MetricType
@@ -26,16 +26,18 @@ public:
     RANSAC(int max_iterations, double threshold, double train_data_percenatge, int min_inliners, MetricType metric = MetricType::R2);
     std::unique_ptr<Model> run(const Eigen::MatrixXd &X, const Eigen::VectorXd &Y, Model *model, std::function<Eigen::VectorXd(Eigen::VectorXd, Eigen::VectorXd)> loss_fn, std::function<double(Eigen::VectorXd, Eigen::VectorXd)> metric_fn);
 
-    std::unique_ptr<FlatModel> run(const Eigen::MatrixXd &D, FlatModel *model, int best_model_count, std::function<Eigen::VectorXd(Eigen::VectorXd, Eigen::VectorXd)> loss_fn, std::function<double(Eigen::VectorXd, Eigen::VectorXd)> metric_fn, MedianSDF *averager) const;
+    std::unique_ptr<FlatModel> run(const Eigen::MatrixXd &D, FlatModel *model, int best_model_count, std::function<Eigen::VectorXd(Eigen::VectorXd, Eigen::VectorXd)> loss_fn, std::function<double(Eigen::VectorXd, Eigen::VectorXd)> metric_fn, FlatAverager *averager) const;
     std::unique_ptr<FlatModel> run2(const Eigen::MatrixXd &D,
                                     FlatModel *model,
                                     int best_model_count,
-                                    MedianSDF *averager) const;
+                                    FlatAverager *averager,
+                                    bool weighted_average = false) const;
 
     std::unique_ptr<FlatModel> run_slow(const Eigen::MatrixXd &D,
                                         FlatModel *model,
                                         int best_model_count,
-                                        MedianSDF *averager) const;
+                                        FlatAverager *averager,
+                                        bool weighted_average = false) const;
 
 private:
     Eigen::VectorXd getInliner(const Eigen::VectorXd &Y, const Eigen::VectorXd &Y_pred) const;
@@ -48,8 +50,8 @@ private:
     // double (*metric_fn)(Eigen::VectorXd, Eigen::VectorXd);
     std::function<double(Eigen::MatrixXd, FlatModel *)> metric_fn2;
 
-    // MedianSDF
-    std::unique_ptr<FlatModel> medianSDF(std::vector<std::unique_ptr<FlatModel>> &models, int k, std::vector<double> *errors = nullptr) const;
+    // FlatAverager
+    // std::unique_ptr<FlatModel> FlatAverager(std::vector<std::unique_ptr<FlatModel>> &models, int k, std::vector<double> *errors = nullptr) const;
 
     // === Evaluation Metrics ===
     // double r2_metric(Eigen::MatrixXd D, FlatModel *model) const;

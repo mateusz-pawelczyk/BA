@@ -11,163 +11,133 @@ std::unique_ptr<Model> MedianSDF::clone() const
     return std::make_unique<MedianSDF>(*this);
 }
 
-void MedianSDF::fit(const Eigen::MatrixXd &D)
+void MedianSDF::computeAggregatedQr(const std::vector<Eigen::MatrixXd> &Q_list, const std::vector<Eigen::VectorXd> &r_list, Eigen::MatrixXd &Q_star, Eigen::VectorXd &r_star, const std::vector<double> &weights) const
 {
-}
-void MedianSDF::fit(const std::vector<std::unique_ptr<FlatModel>> &models, const std::vector<double> &errors)
-{
-    int model_count = models.size();
-
-    // Validate input sizes
-    if (model_count == 0)
-    {
-        throw std::runtime_error("At least one flat must be provided.");
-    }
-    std::vector<double> weights = getWeights(errors, model_count);
-
-    // Throw an error if the dimensions are inconsistent
-    validateFlatDimensions(models);
+    int model_count = Q_list.size();
 
     // Initialize Q_star and r_star
-    Eigen::MatrixXd Q_star = Eigen::MatrixXd::Zero(n, n);
-    Eigen::VectorXd r_star = Eigen::VectorXd::Zero(n);
-    // Accumulate Q_i and r_i from all input flats
-    for (size_t i = 0; i < model_count; ++i)
-    {
-        models[i]->orthonormalize();
-        auto [A, b] = models[i]->get_parametric_repr();
-        auto [Q, r] = models[i]->get_QR();
+    Q_star = Eigen::MatrixXd::Zero(n, n);
+    r_star = Eigen::VectorXd::Zero(n);
 
-        Q_star += Q * weights[i];
-        r_star -= r * weights[i]; // Careful: In the paper it's the POSITIVE sum, but that is wrong!
+    std::vector<double> new_weights = weights;
+    if (weights.empty())
+    {
+        double model_count_inv = 1.0 / static_cast<double>(model_count);
+
+        new_weights = std::vector<double>(model_count, model_count_inv);
     }
 
-    // eigen-decomposition on Q_star
-    Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> eigensolver(Q_star);
-    if (eigensolver.info() != Eigen::Success)
+    computeMedianQ(Q_star, Q_list, new_weights);
+    computeMedianR(r_star, r_list, new_weights);
+
+    // If Q_star has nan values, print Q_list and r_list
+    if (Q_star.hasNaN())
     {
-        throw std::runtime_error("Eigen decomposition of Q_star failed.");
-    }
-
-    Eigen::VectorXd eigenvalues = eigensolver.eigenvalues(); // Sorted in ascending order
-    Eigen::MatrixXd U = eigensolver.eigenvectors();          // Columns are eigenvectors
-    // Select the first k eigenvectors corresponding to the smallest k eigenvalues
-    A = Eigen::MatrixXd(n, d);
-    if (d > 0)
-    {
-        A = U.leftCols(d); // n x k matrix
-    }
-    else
-    {
-        A = Eigen::MatrixXd::Zero(n, 0); // Empty matrix for k=0
-    }
-
-    Eigen::MatrixXd Q_star_pseudo_inv = pseudoInverse(Q_star);
-
-    // I - A A^T (From the formular in the paper)
-    Eigen::MatrixXd projection = Eigen::MatrixXd::Identity(n, n) - A.value() * A->transpose();
-
-    // b = (I - A A^T) * Q_star^+ * r_star
-    b_vec = projection * Q_star_pseudo_inv * r_star;
-
-    // Verify that b is orthogonal to the subspace spanned by A
-    Eigen::VectorXd check = A->transpose() * b_vec.value();
-    if (check.norm() > 1e-6)
-    {
-        throw std::runtime_error("b is not orthogonal to the subspace spanned by A.");
+        std::cout << "Q_star has NaN values. Printing Q_list and r_list:\n";
+        for (int i = 0; i < model_count; i++)
+        {
+            std::cout << "Q_list[" << i << "]:\n"
+                      << Q_list[i] << std::endl;
+            std::cout << "r_list[" << i << "]:\n"
+                      << r_list[i] << std::endl;
+        }
     }
 }
 
-Eigen::MatrixXd MedianSDF::pseudoInverse(const Eigen::MatrixXd &A, double tolerance)
+void MedianSDF::computeMedianQ(Eigen::MatrixXd &Q_star, std::vector<Eigen::MatrixXd> Q_list, const std::vector<double> &weights) const
 {
-    Eigen::JacobiSVD<Eigen::MatrixXd> svd(A, Eigen::ComputeThinU | Eigen::ComputeThinV);
+    int n = Q_list.size();
+    int r = Q_list[0].rows();
+    int c = Q_list[0].cols();
 
-    const Eigen::MatrixXd &U = svd.matrixU();
-    const Eigen::MatrixXd &V = svd.matrixV();
-    const Eigen::VectorXd &S = svd.singularValues();
+    Eigen::MatrixXd prev(r, c);
+    Eigen::MatrixXd curr(r, c);
 
-    Eigen::MatrixXd S_inv = Eigen::MatrixXd::Zero(S.size(), S.size());
+    curr.setOnes();
+    prev.setZero();
 
-    // Invert non-zero singular values
-    for (int i = 0; i < S.size(); ++i)
+    // Initialize coefficients with normalized weights
+    Eigen::ArrayXd coefs(n);
+    double sum_weights = 0.0;
+    for (double w : weights)
+        sum_weights += w;
+    for (int i = 0; i < n; ++i)
     {
-        if (S(i) > tolerance)
-        { // Threshold to handle numerical precision issues
-            S_inv(i, i) = 1.0 / S(i);
-        }
+        coefs(i) = weights[i] / sum_weights;
     }
 
-    // pseudo-inverse: V * S_inv * U^T
-    return V * S_inv * U.transpose();
+    const double epsilon = 1e-10; // prevent division by zero
+    int it = 0;
+
+    Eigen::Map<const Eigen::ArrayXd> weights_array(weights.data(), n);
+
+    while (it < max_it && (curr - prev).norm() > err_tol)
+    {
+        prev = curr;
+        curr.setZero();
+        for (int i = 0; i < n; i++)
+        {
+            curr += coefs(i) * Q_list[i];
+        }
+
+        for (int i = 0; i < n; i++)
+        {
+            coefs(i) = (curr - Q_list[i]).norm() + epsilon;
+        }
+        coefs = weights_array / coefs;
+        coefs /= coefs.sum();
+
+        it++;
+    }
+
+    Q_star = curr;
 }
 
-std::vector<double> MedianSDF::getWeights(const std::vector<double> &errors, int model_count) const
+void MedianSDF::computeMedianR(Eigen::VectorXd &r_star, std::vector<Eigen::VectorXd> r_list, const std::vector<double> &weights) const
 {
-    // If no models are provided, no weights can be computed
-    if (model_count <= 0)
+    int n = r_list.size();
+    int r = r_list[0].rows();
+    int c = r_list[0].cols();
+
+    Eigen::MatrixXd prev(r, c);
+    Eigen::MatrixXd curr(r, c);
+
+    curr.setOnes();
+    prev.setZero();
+
+    // Initialize coefficients with normalized weights
+    Eigen::ArrayXd coefs(n);
+    double sum_weights = 0.0;
+    for (double w : weights)
+        sum_weights += w;
+    for (int i = 0; i < n; ++i)
     {
-        return std::vector<double>();
+        coefs(i) = weights[i] / sum_weights;
     }
 
-    std::vector<double> weights(model_count);
+    const double epsilon = 1e-10; // prevent division by zero
+    int it = 0;
 
-    if (!errors.empty() && errors.size() == static_cast<size_t>(model_count))
+    Eigen::Map<const Eigen::ArrayXd> weights_array(weights.data(), n);
+
+    while (it < max_it && (curr - prev).norm() > err_tol)
     {
-        std::vector<double> modified_errors = errors;
-
-        // Add 1.0 to each error in the copied vector (for R^2 metric, to ensure starting with 0)
-        for (size_t i = 0; i < modified_errors.size(); ++i)
+        prev = curr;
+        curr.setZero();
+        for (int i = 0; i < n; i++)
         {
-            modified_errors[i] += 1.0;
+            curr += coefs(i) * r_list[i];
         }
 
-        const double epsilon = 1e-15;
-
-        const double error_sum = std::accumulate(modified_errors.begin(), modified_errors.end(), 0.0) + 1.0 + epsilon;
-
-        // initial weights
-        for (size_t i = 0; i < modified_errors.size(); ++i)
+        for (int i = 0; i < n; i++)
         {
-            const double numerator = modified_errors[i] + epsilon;
-            weights[i] = 1.0 - (numerator / error_sum);
+            coefs(i) = (curr - r_list[i]).norm() + epsilon;
         }
+        coefs = weights_array / coefs;
+        coefs /= coefs.sum();
 
-        double weight_sum = std::accumulate(weights.begin(), weights.end(), 0.0);
-
-        // fall back to uniform distribution when errors are invalid
-        if (weight_sum <= 0.0)
-        {
-            std::fill(weights.begin(), weights.end(), 1.0 / model_count);
-        }
-        else
-        {
-            // Normalize weights
-            for (auto &w : weights)
-            {
-                w /= weight_sum;
-            }
-        }
-    }
-    else
-    {
-        // Fallback to uniform weights if errors are invalid
-        std::cout << "Errors were not provided or size mismatch. Assuming uniform distribution." << std::endl;
-        std::fill(weights.begin(), weights.end(), 1.0 / model_count);
+        it++;
     }
 
-    return weights;
-}
-
-void MedianSDF::validateFlatDimensions(const std::vector<std::unique_ptr<FlatModel>> &models) const
-{
-    int n = models[0]->get_ambient_dimension(); // Space dimension
-
-    for (size_t i = 1; i < models.size(); ++i)
-    {
-        // Here, the parametric representation is also computed for every model. No need to do it later
-        if (models[i]->get_ambient_dimension() != n)
-        {
-            throw std::runtime_error("MedianSDF: All models must live in the same ambient space.");
-        }
-    }
+    r_star = curr;
 }

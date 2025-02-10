@@ -38,7 +38,7 @@ protected:
     void compute_QR();
 
 public:
-    virtual ~FlatModel() = default;
+    virtual ~FlatModel() noexcept = default;
 
     FlatModel(int d, int n) : d(d), n(n) {}
 
@@ -74,4 +74,6 @@ public:
     Eigen::VectorXd quadratic_loss(const Eigen::MatrixXd &points);
 
     void reset();
+
+    double R2(const Eigen::MatrixXd &D);
 };

@@ -64,28 +64,47 @@ Eigen::VectorXd FlatModel::predict(const Eigen::MatrixXd &X) const
 
 void FlatModel::visualize(const std::string &name, double sideLen, double lineRadius, float flatAlpha)
 {
-    if (d < 1 || d > 2)
+    if (d < 0 || d > 2 || n <= 0 || n > 3)
         return;
     constexpr int numPoints = 2;
     Eigen::MatrixXd vertices;
     Eigen::MatrixXi faces;
-    double halfSideLen = sideLen / 2.0;
 
-    if (d == 1)
+    double halfSideLen = sideLen / 2.0;
+    if (d == 0)
+    {
+        get_parametric_repr();
+        Eigen::MatrixXd points = Eigen::MatrixXd(1, 3);
+        points << b_vec->transpose();
+
+        std::vector<glm::vec3> glmPoints;
+        for (const auto &v : points.rowwise())
+        {
+            glmPoints.push_back({v.coeff(0), v.coeff(1), v.size() >= 3 ? v.coeff(2) : 0.0});
+        }
+
+        polyscope::PointRenderMode renderMode = polyscope::PointRenderMode::Sphere;
+
+        polyscope::registerPointCloud(name, glmPoints)->setPointRenderMode(renderMode)->setPointRadius(lineRadius);
+    }
+    else if (d == 1)
     {
         orthonormalize();
         get_parametric_repr();
 
         Eigen::VectorXd x = Eigen::VectorXd::LinSpaced(numPoints, -halfSideLen, halfSideLen);
-        vertices = Eigen::MatrixXd::Zero(4, 3);
+        vertices = Eigen::MatrixXd::Zero(numPoints, n);
 
-        vertices = x * A->transpose() + b_vec->transpose().replicate(2, 1);
+        vertices = x * A->transpose() + b_vec->transpose().replicate(numPoints, 1);
 
         faces.resize(numPoints - 1, 2);
         faces.col(0) = Eigen::VectorXi::LinSpaced(numPoints - 1, 0, numPoints - 2);
         faces.col(1) = faces.col(0).array() + 1;
 
-        polyscope::registerCurveNetwork(name, vertices, faces)->setRadius(lineRadius);
+        Eigen::MatrixXd vertices3D = Eigen::MatrixXd::Zero(numPoints, 3);
+        vertices3D.block(0, 0, numPoints, n) = vertices;
+
+        polyscope::registerCurveNetwork(name, vertices3D, faces)->setRadius(lineRadius);
     }
     else
     {
@@ -145,6 +164,8 @@ void FlatModel::parametric_to_implicit()
     Eigen::FullPivLU<Eigen::MatrixXd> lu(*A);
     if (lu.rank() < A->cols())
     {
+        std::cout << "A:\n"
+                  << *A << std::endl;
         throw std::invalid_argument("parametric_to_implicit: Matrix A does not have full column rank.");
     }
 
@@ -501,6 +522,15 @@ void FlatModel::reset()
     Q.reset();
     r.reset();
     orthonormalized = false;
+}
+
+double FlatModel::R2(const Eigen::MatrixXd &D)
+{
+    Eigen::VectorXd mean = D.colwise().mean();
+    double ss_res = quadratic_loss(D).sum();
+    double ss_tot = (D.rowwise() - mean.transpose()).squaredNorm();
+
+    return 1.0 - ss_res / ss_tot;
 }
 
 void FlatModel::override_parametric(const Eigen::MatrixXd &Anew, const Eigen::VectorXd &bnew)

@@ -45,6 +45,10 @@ include(cmake/Dependencies.cmake)
 file(GLOB_RECURSE PROJECT_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
 list(FILTER PROJECT_SOURCES EXCLUDE REGEX ".*src/main.cpp$")
 
+
+# Find OpenCV package
+find_package(OpenCV REQUIRED)
+
 add_library(GraphicsProjectLib ${PROJECT_SOURCES})
 
 # Include directories for the library
@@ -53,12 +57,14 @@ target_include_directories(GraphicsProjectLib
     "${CMAKE_CURRENT_SOURCE_DIR}/include"
     "${CMAKE_CURRENT_SOURCE_DIR}/external/polyscope/include"  # Polyscope includes
     "${EIGEN_INCLUDE_DIR}"  # Eigen includes
+    "${OpenCV_INCLUDE_DIRS}"  # OpenCV includes
 )
 
 # Link external dependencies
 target_link_libraries(GraphicsProjectLib
     PRIVATE
     polyscope
+    ${OpenCV_LIBS}
 )
 
 # ------------------------------------------------------------------------------
@@ -102,6 +108,8 @@ target_link_libraries(${PROJECT_NAME}_tests
 # Automatically discover and register tests
 include(GoogleTest)
 gtest_discover_tests(${PROJECT_NAME}_tests)
+
+
 
 # ------------------------------------------------------------------------------
 # End of File
