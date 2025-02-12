@@ -13,8 +13,8 @@ public:
     virtual void fit(const Eigen::MatrixXd &X, const Eigen::VectorXd &Y) = 0; // No const at the end, because fit will override the model parameter
     virtual void fit(const Eigen::MatrixXd &D) = 0;
 
-    virtual double predict(const Eigen::VectorXd &point) const = 0;
-    virtual Eigen::VectorXd predict(const Eigen::MatrixXd &data) const = 0; // const at the end to signal that no member variable will be overriden
+    virtual double predict(const Eigen::VectorXd &point) = 0;
+    virtual Eigen::VectorXd predict(const Eigen::MatrixXd &data) = 0; // const at the end to signal that no member variable will be overriden
 
     virtual double MSE(const Eigen::MatrixXd &X_true, const Eigen::VectorXd &Y_true);
 

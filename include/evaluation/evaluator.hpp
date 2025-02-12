@@ -61,7 +61,8 @@ struct EvaluationRecord
     double trainDataPercentage;
     int minInliers;
     int bestModelCount;
-    double r2;                  ///< Computed r2
+    double r2; ///< Computed r2
+    double r2_orthogonal;
     double mse;                 ///< Computed MSE
     double elapsedMilliseconds; ///< Timing for that RANSAC run
     int variation;              ///< 1, 2

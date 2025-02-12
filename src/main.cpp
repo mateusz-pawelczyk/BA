@@ -197,6 +197,17 @@ void visualizeFittingPlane()
         std::cout << "Averaged Best Model [2]: " << lineAveragedBestModelR2 << std::endl;
         std::cout << "Huber Regression: " << huberR2 << std::endl;
 
+        Eigen::MatrixXd X = hyperplanePoints.leftCols(d);
+        Eigen::VectorXd Y = hyperplanePoints.col(d);
+        double averagedBestModelR2Regression = averagedBestModel_ptr->R2(X, Y);
+        double lineAveragedBestModelR2Regression = lineAveragedBestModel_ptr->R2(X, Y);
+        double huberR2Regression = huber->R2(X, Y);
+
+        std::cout << "[PERFORMANCE:R2 Regression]" << std::endl;
+        std::cout << "Averaged Best Model [1]: " << averagedBestModelR2Regression << std::endl;
+        std::cout << "Averaged Best Model [2]: " << lineAveragedBestModelR2Regression << std::endl;
+        std::cout << "Huber Regression: " << huberR2Regression << std::endl;
+
         std::cout << "--------------------------------" << std::endl;
 
         float pointRadius = calculatePointRadius();
@@ -455,16 +466,16 @@ void evaluate()
     grid.thresholds = {0.1};
     grid.trainDataPercentages = {0.2};
     grid.minInliers = {100};
-    grid.bestModelCounts = {1, 500};
-    grid.metrics = {MetricType::R2};
+    grid.bestModelCounts = {1, 100};
+    grid.metrics = {MetricType::R2, MetricType::MSE};
     grid.weightedAverages = {false};
 
     DataParameterGrid dataGrid;
     dataGrid.numPoints = {500};
-    dataGrid.subspaceDimentions = {1, 2, 4, 9, 19, 49};
-    dataGrid.ambientDimentions = {2, 3, 5, 10, 20, 50};
-    dataGrid.noiseLevels = {0.0, 0.1, 0.2, 0.3, 0.4, 0.5};
-    dataGrid.outlierRatios = {0.0, 0.1, 0.2, 0.3, 0.4, 0.5};
+    dataGrid.subspaceDimentions = {1, 3, 7, 15, 31};
+    dataGrid.ambientDimentions = {2, 4, 8, 16, 32};
+    dataGrid.noiseLevels = {0.0, 0.1, 0.3, 0.5};
+    dataGrid.outlierRatios = {0.0, 0.1, 0.3, 0.5};
     dataGrid.outlierStrengths = {2.5};
     dataGrid.saltAndPepper = {true, false};
 

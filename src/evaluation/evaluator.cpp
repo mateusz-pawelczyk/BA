@@ -80,22 +80,25 @@ namespace Evaluator
         auto metric_fn = [](Eigen::VectorXd Y_true, Eigen::VectorXd Y_pred)
         { return (Y_true - Y_pred).squaredNorm() / Y_true.size(); };
 
+        std::unique_ptr localFlatModel = std::make_unique<AffineFit>(d, n);
+
         // 1) Variation 1: MeanSDF
         {
             MeanSDF *averager = new MeanSDF(n - 1, n);
 
-            auto localFlatModel = flatModelFactory(d, n);
+            std::unique_ptr localFlatModel = std::make_unique<AffineFit>(d, n);
             auto ransacObject = ransacFactory(maxIt, threshold, trainDataPct, minInl, metric);
 
             double elapsedMs = 0.0;
             std::unique_ptr<FlatModel> bestFlat;
             {
                 elapsedMs = timeFunctionMS([&]()
-                                           { bestFlat = ransacObject.run2(D, localFlatModel.get(), bestModelCount, averager, weighted_average); });
+                                           { bestFlat = ransacObject.run_slow(D, localFlatModel.get(), bestModelCount, averager, weighted_average); });
             }
 
-            double r2 = bestFlat ? bestFlat->R2(D) : 999999.0;
-            double mse = bestFlat ? computeMSE_FlatModel(bestFlat.get(), D) : 999999.0;
+            double r2 = bestFlat ? bestFlat->R2(X, Y) : 999999.0;
+            double mse = bestFlat ? bestFlat->MSE(X, Y) : 999999.0;
+            double r2_orthogonal = bestFlat ? bestFlat->R2(D) : 999999.0;
 
             EvaluationRecord rec;
             rec.iterationIndex = iterationIndex;
@@ -105,6 +108,7 @@ namespace Evaluator
             rec.minInliers = minInl;
             rec.bestModelCount = bestModelCount;
             rec.r2 = r2;
+            rec.r2_orthogonal = r2_orthogonal;
             rec.mse = mse;
             rec.elapsedMilliseconds = elapsedMs;
             rec.variation = 1;
@@ -116,7 +120,7 @@ namespace Evaluator
         {
             MedianSDF *averager = new MedianSDF(n - 1, n, median_err_tol, median_max_iter);
 
-            auto localFlatModel = flatModelFactory(d, n);
+            std::unique_ptr localFlatModel = std::make_unique<AffineFit>(d, n);
             auto ransacObject = ransacFactory(maxIt, threshold, trainDataPct, minInl, metric);
 
             double elapsedMs = 0.0;
@@ -126,8 +130,9 @@ namespace Evaluator
                                            { bestFlat = ransacObject.run_slow(D, localFlatModel.get(), bestModelCount, averager, weighted_average); });
             }
 
-            double r2 = bestFlat ? bestFlat->R2(D) : 999999.0;
-            double mse = bestFlat ? computeMSE_FlatModel(bestFlat.get(), D) : 999999.0;
+            double r2 = bestFlat ? bestFlat->R2(X, Y) : 999999.0;
+            double mse = bestFlat ? bestFlat->MSE(X, Y) : 999999.0;
+            double r2_orthogonal = bestFlat ? bestFlat->R2(D) : 999999.0;
 
             EvaluationRecord rec;
             rec.iterationIndex = iterationIndex;
@@ -137,6 +142,7 @@ namespace Evaluator
             rec.minInliers = minInl;
             rec.bestModelCount = bestModelCount;
             rec.r2 = r2;
+            rec.r2_orthogonal = r2_orthogonal;
             rec.mse = mse;
             rec.elapsedMilliseconds = elapsedMs;
             rec.variation = 2;
@@ -147,7 +153,7 @@ namespace Evaluator
         // 3) Variation 3: Huber Regression
         {
 
-            auto localFlatModel = flatModelFactory(d, n);
+            std::unique_ptr localFlatModel = std::make_unique<AffineFit>(d, n);
             auto ransacObject = ransacFactory(maxIt, threshold, trainDataPct, minInl, metric);
 
             double elapsedMs = 0.0;
@@ -158,8 +164,9 @@ namespace Evaluator
                                            { bestFlat->fit(D); });
             }
 
-            double r2 = bestFlat ? bestFlat->R2(D) : 999999.0;
-            double mse = bestFlat ? computeMSE_FlatModel(bestFlat.get(), D) : 999999.0;
+            double r2 = bestFlat ? bestFlat->R2(X, Y) : 999999.0;
+            double r2_orthogonal = bestFlat ? bestFlat->R2(D) : 999999.0;
+            double mse = bestFlat ? bestFlat->MSE(X, Y) : 999999.0;
 
             EvaluationRecord rec;
             rec.iterationIndex = iterationIndex;
@@ -169,6 +176,7 @@ namespace Evaluator
             rec.minInliers = minInl;
             rec.bestModelCount = bestModelCount;
             rec.r2 = r2;
+            rec.r2_orthogonal = r2_orthogonal;
             rec.mse = mse;
             rec.elapsedMilliseconds = elapsedMs;
             rec.variation = 3;
@@ -199,7 +207,7 @@ namespace Evaluator
         ofs.seekp(0, std::ios::end);
         if (ofs.tellp() == 0)
         {
-            ofs << "iteration,maxIt,threshold,trainPct,minInliers,bestModelCount,numPoints,n,d,noise,outlierRatio,outlierStrength,saltAndPepper,metric,variation,weighted_average,r2,mse,timeMs\n";
+            ofs << "iteration,maxIt,threshold,trainPct,minInliers,bestModelCount,numPoints,n,d,noise,outlierRatio,outlierStrength,saltAndPepper,metric,variation,weighted_average,r2,r2_orthogonal,mse,timeMs\n";
         }
         ofs.flush();
 
@@ -285,6 +293,7 @@ namespace Evaluator
                                                                             << rec.variation << ","
                                                                             << weighted_average << ","
                                                                             << rec.r2 << ","
+                                                                            << rec.r2_orthogonal << ","
                                                                             << rec.mse << ","
                                                                             << rec.elapsedMilliseconds
                                                                             << "\n";

@@ -31,7 +31,7 @@ void FlatModel::fit(const Eigen::MatrixXd &X, const Eigen::VectorXd &Y)
     fit(D);
 };
 
-double FlatModel::predict(const Eigen::VectorXd &x) const
+double FlatModel::predict(const Eigen::VectorXd &x)
 {
     if (n != d + 1)
     {
@@ -41,12 +41,12 @@ double FlatModel::predict(const Eigen::VectorXd &x) const
     {
         throw std::runtime_error("AffineFit::predict(x): Dimension mismatch between x (" + std::to_string(x.size()) + ") and d (" + std::to_string(d) + ")");
     }
-    // TODO: If w or b is not set, try to compute them
+    get_explicit_repr();
 
     return w->dot(x) + (*b);
 }
 
-Eigen::VectorXd FlatModel::predict(const Eigen::MatrixXd &X) const
+Eigen::VectorXd FlatModel::predict(const Eigen::MatrixXd &X)
 {
     if (n != d + 1)
     {
@@ -56,10 +56,10 @@ Eigen::VectorXd FlatModel::predict(const Eigen::MatrixXd &X) const
     {
         throw std::runtime_error("AffineFit::predict(X): Dimension mismatch between X (" + std::to_string(X.cols()) + ") and d (" + std::to_string(d) + ")");
     }
-    // TODO: If w or b is not set, try to compute them
+    auto [w_local, b_local] = get_explicit_repr();
 
     Eigen::VectorXd one = Eigen::VectorXd::Ones(X.rows());
-    return X * (*w) + (*b) * one;
+    return X * w_local + b_local * one;
 }
 
 void FlatModel::visualize(const std::string &name, double sideLen, double lineRadius, float flatAlpha)
@@ -531,6 +531,19 @@ double FlatModel::R2(const Eigen::MatrixXd &D)
     double ss_tot = (D.rowwise() - mean.transpose()).squaredNorm();
 
     return 1.0 - ss_res / ss_tot;
+}
+
+double FlatModel::R2(const Eigen::MatrixXd &X, const Eigen::VectorXd &Y)
+{
+    Eigen::VectorXd Y_hat = predict(X);
+
+    double Y_mean = Y.mean();
+    double ss_tot = (Y.array() - Y_mean).square().sum();
+
+    double ss_res = (Y - Y_hat).squaredNorm();
+
+    double R2 = 1.0 - (ss_res / ss_tot);
+    return R2;
 }
 
 void FlatModel::override_parametric(const Eigen::MatrixXd &Anew, const Eigen::VectorXd &bnew)

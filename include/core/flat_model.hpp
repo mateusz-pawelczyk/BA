@@ -45,8 +45,8 @@ public:
     void fit(const Eigen::MatrixXd &X, const Eigen::VectorXd &Y) override;
     virtual void fit(const Eigen::MatrixXd &D) override = 0;
 
-    virtual double predict(const Eigen::VectorXd &point) const override;
-    virtual Eigen::VectorXd predict(const Eigen::MatrixXd &data) const override;
+    virtual double predict(const Eigen::VectorXd &point) override;
+    virtual Eigen::VectorXd predict(const Eigen::MatrixXd &data) override;
 
     // Cloning
     virtual std::unique_ptr<Model> clone() const override = 0;
@@ -76,4 +76,5 @@ public:
     void reset();
 
     double R2(const Eigen::MatrixXd &D);
+    double R2(const Eigen::MatrixXd &X, const Eigen::VectorXd &Y);
 };
