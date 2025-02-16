@@ -31,35 +31,29 @@ void FlatModel::fit(const Eigen::MatrixXd &X, const Eigen::VectorXd &Y)
     fit(D);
 };
 
-double FlatModel::predict(const Eigen::VectorXd &x)
+Eigen::VectorXd FlatModel::predict(const Eigen::VectorXd &x)
 {
-    if (n != d + 1)
-    {
-        throw std::runtime_error("AffineFit::predict(x): This method is only valid for hyperplanes (n = d + 1).");
-    }
     if (x.size() != d)
     {
         throw std::runtime_error("AffineFit::predict(x): Dimension mismatch between x (" + std::to_string(x.size()) + ") and d (" + std::to_string(d) + ")");
     }
     get_explicit_repr();
+    auto [W_ref, B_ref] = get_explicit_repr();
 
-    return w->dot(x) + (*b);
+    return W_ref.transpose() * x + B_ref;
 }
 
-Eigen::VectorXd FlatModel::predict(const Eigen::MatrixXd &X)
+Eigen::MatrixXd FlatModel::predict(const Eigen::MatrixXd &X)
 {
-    if (n != d + 1)
-    {
-        throw std::runtime_error("AffineFit::predict(X): This method is only valid for hyperplanes (n = d + 1).");
-    }
     if (X.cols() != d)
     {
         throw std::runtime_error("AffineFit::predict(X): Dimension mismatch between X (" + std::to_string(X.cols()) + ") and d (" + std::to_string(d) + ")");
     }
-    auto [w_local, b_local] = get_explicit_repr();
+    auto [W_ref, B_ref] = get_explicit_repr();
+    int N = X.rows();
+    Eigen::MatrixXd B_expanded = B_ref.replicate(N, 1);
 
-    Eigen::VectorXd one = Eigen::VectorXd::Ones(X.rows());
-    return X * w_local + b_local * one;
+    return X * W_ref + B_ref.transpose().replicate(N, 1);
 }
 
 void FlatModel::visualize(const std::string &name, double sideLen, double lineRadius, float flatAlpha)
@@ -223,10 +217,6 @@ void FlatModel::implicit_to_parametric()
     }
 }
 
-// ============================================================================
-// Parametric -> Explicit  (Hyperplane case: dimension is n-1)
-//    x = A*y + b_vec   ==>   x_{n-1} = w^T x_{0..n-2} + b
-// ============================================================================
 void FlatModel::parametric_to_explicit()
 {
     if (!A.has_value() || !b_vec.has_value())
@@ -236,59 +226,45 @@ void FlatModel::parametric_to_explicit()
     const Eigen::MatrixXd &Aref = *A;
     const Eigen::VectorXd &bref = *b_vec;
 
-    // Must be a hyperplane => d = n-1
     const int n = Aref.rows();
     const int d_local = Aref.cols();
-    if (d_local != n - 1)
+
+    Eigen::MatrixXd A_top = Aref.topRows(d);        // d x d
+    Eigen::MatrixXd A_bot = Aref.bottomRows(n - d); // (n - d) x d
+
+    Eigen::MatrixXd W_local; // will hold the solution (d x (n-d))
+    bool solved = false;
+
+    // Attempt a QR decomposition first (fast and robust if A_top is full rank).
     {
-        throw std::runtime_error("parametric_to_explicit: Only valid if subspace dimension = n-1 (hyperplane). You have d = " + std::to_string(d_local) + ", n = " + std::to_string(n));
-    }
-
-    //// TODO: Explain better what to do
-    // We want:
-    //    For i = 0..n-2:  x_i = b_vec(i) + A(i,:) * y
-    //    For i = n-1:    x_{n-1} = b_vec(n-1) + A(n-1,:) * y
-    //
-    //  And in "explicit" form we want:
-    //    x_{n-1} = w^T x_{0..n-2} + b
-    //
-    // Matching for all y:
-    //    b_vec(n-1) + A(n-1,:) * y  ==  w^T [ b_vec(0..n-2) + A(0..n-2,:) * y ] + b
-    //
-    // => A(n-1,:) = w^T * A(0..n-2,:)
-    // => b_vec(n-1) = w^T * b_vec(0..n-2) + b
-
-    Eigen::MatrixXd A_top = Aref.topRows(n - 1); // (n-1) x (n-1)
-    // bottomRow = A(n-1, :), dimension: 1 x (n-1)
-    Eigen::RowVectorXd A_bot = Aref.row(n - 1);
-
-    // Solve bottomRow^T = topBlock^T * w
-    // => w = (topBlock^T)^{-1} * bottomRow^T, if invertible
-    // More robustly, we use a pseudo-inverse or direct solve:
-    Eigen::VectorXd wLocal;
-    {
-        Eigen::FullPivLU<Eigen::MatrixXd> lu2(A_top.transpose());
-        if (lu2.isInvertible())
+        // Note: we work with A_top.transpose() since our system is
+        //   A_top^T * W = A_bot^T.
+        auto qr = A_top.transpose().colPivHouseholderQr();
+        if (qr.rank() == A_top.cols()) // full rank check
         {
-            wLocal = lu2.solve(A_bot.transpose());
-        }
-        else
-        {
-            std::cout << "Warning: A^T is not invertible. Using SVD-based pseudo-inverse." << std::endl;
-            // fallback to SVD-based pseudo-inverse
-            wLocal = A_top.transpose()
-                         .jacobiSvd(Eigen::ComputeThinU | Eigen::ComputeThinV)
-                         .solve(A_bot.transpose());
+            // Solve for W, note that the right-hand side is A_bot^T.
+            // Then the solution W satisfies A_top^T * W = A_bot^T.
+            W_local = qr.solve(A_bot.transpose());
+            solved = true;
         }
     }
 
-    // b = b_vec(n-1) - w^T * b_vec(0..n-2)
-    Eigen::VectorXd b_top = bref.head(n - 1); // b_vec(0..n-2)
-    double bLocal = bref(n - 1) - wLocal.dot(b_top);
+    // Fallback: if QR did not work (e.g. A_top is nearly singular),
+    // use a FullPivLU decomposition.
+    if (!solved)
+    {
+        auto lu = A_top.transpose().fullPivLu();
+        if (!lu.isInvertible())
+            throw std::runtime_error("A_top^T is singular, cannot solve for W.");
+        W_local = lu.solve(A_bot.transpose());
+    }
 
-    // Store in the optional fields: w, b
-    w = wLocal; // an (n-1)-vector
-    this->b = bLocal;
+    Eigen::VectorXd B_top = bref.head(d);
+    Eigen::VectorXd B_bot = bref.tail(n - d);
+    Eigen::VectorXd B_local = B_bot - W_local.transpose() * B_top;
+
+    W = W_local;
+    B = B_local;
 
     if (orthonormalized)
     {
@@ -296,44 +272,30 @@ void FlatModel::parametric_to_explicit()
     }
 }
 
-// ============================================================================
-// Explicit -> Parametric  (Hyperplane case: x_{n-1} = w^T x_{0..n-2} + b)
-//    => x = A*y + b_vec
-//    We pick y = x_{0..n-2}, so dimension d = n-1
-// ============================================================================
 void FlatModel::explicit_to_parametric()
 {
-    if (!w.has_value() || !b.has_value())
+
+    const Eigen::MatrixXd &W_ref = *W;
+    const Eigen::VectorXd &B_ref = *B;
+
+    int m = W_ref.cols(); // Number of dependent variables (m = n - d)
+    if (B_ref.size() != m || n != d + m)
     {
-        throw std::runtime_error("explicit_to_parametric: w and b must be set!");
+        throw std::runtime_error("explicit_to_parametric: B has incorrect dimension.");
     }
 
-    const Eigen::VectorXd &wref = *w; // (n-1)-vector
-    double b_scal = *this->b;
+    // Construct A matrix: [I; W^T]
+    Eigen::MatrixXd A_new = Eigen::MatrixXd::Zero(n, d);
+    A_new.topLeftCorner(d, d).setIdentity();
+    A_new.bottomRows(m) = W_ref.transpose();
 
-    // Construct A as n x (n-1):
-    //   The top (n-1) rows = Identity_(n-1)
-    //   The last row = w^T
-    //
-    // Construct b_vec:
-    //   The top (n-1) entries = 0
-    //   The last entry = b
+    // Construct B vector: [0; B]
+    Eigen::VectorXd b_new(n);
+    b_new.head(d).setZero();
+    b_new.tail(m) = B_ref;
 
-    int n = static_cast<int>(wref.size()) + 1; // since w is size (n-1)
-    Eigen::MatrixXd Anew = Eigen::MatrixXd::Zero(n, n - 1);
-    // top block = Identity
-    Anew.topLeftCorner(n - 1, n - 1).setIdentity();
-    // last row = w^T
-    Anew.row(n - 1) = wref.transpose();
-
-    // b_vec:
-    Eigen::VectorXd bvecNew(n);
-    bvecNew.setZero();
-    bvecNew(n - 1) = b_scal;
-
-    // Store in .A and .b_vec
-    A = Anew;
-    b_vec = bvecNew;
+    A = A_new;
+    b_vec = b_new;
 
     if (orthonormalized)
     {
@@ -341,51 +303,45 @@ void FlatModel::explicit_to_parametric()
     }
 }
 
-// ============================================================================
-// Implicit -> Explicit  (Single linear equation => 1 x n => a hyperplane)
-//    N*x + c = 0, with N in R^{1 x n}, c in R
-//    => x_{n-1} = w^T x_{0..n-2} + b
-// ============================================================================
 void FlatModel::implicit_to_explicit()
 {
     if (!N.has_value() || !c.has_value())
     {
         throw std::runtime_error("implicit_to_explicit: N and c must be set!");
     }
-    // Must have exactly 1 row => hyperplane
-    if (N->rows() != 1)
+    // n: ambient dimension, d: free dimension, so m = n-d.
+    const int m = n - d;
+    if (N->cols() != n)
     {
-        throw std::runtime_error("implicit_to_explicit: Only valid if we have a single linear equation (N is 1 x n).");
+        throw std::runtime_error("implicit_to_explicit: N->cols() must equal n (the ambient dimension).");
+    }
+    if (N->rows() != m)
+    {
+        throw std::runtime_error("implicit_to_explicit: N->rows() must equal n-d.");
     }
 
-    const Eigen::RowVectorXd &Nrow = N->row(0); // dimension n
-    double cval = (*c)(0);                      // single scalar c
+    // Partition N into N_left (first d columns) and N_right (last m columns).
+    const Eigen::MatrixXd &Nmat = *N;
+    Eigen::MatrixXd N_left = Nmat.block(0, 0, m, d);
+    Eigen::MatrixXd N_right = Nmat.block(0, d, m, m);
 
-    int n = Nrow.size();
-    // We want x_{n-1} = w^T x_{0..n-2} + b.
-    // Original eq: Nrow * x + cval = 0 => sum_{i=0..n-1} (Nrow_i * x_i) + cval = 0.
-    // Typically we isolate x_{n-1}. So we require Nrow(n-1) != 0, or we do some check.
-    double alpha = Nrow(n - 1);
-    if (std::abs(alpha) < 1e-15)
+    // Check that N_right is invertible.
+    Eigen::FullPivLU<Eigen::MatrixXd> luN_right(N_right);
+    if (luN_right.rank() < m)
     {
-        throw std::runtime_error("implicit_to_explicit: Can't solve for x_{n-1}, coefficient is 0. "
-                                 "Try reordering or a different explicit coordinate.");
+        throw std::runtime_error("implicit_to_explicit: The dependent block of N is singular.");
     }
 
-    // => Nrow(n-1)*x_{n-1} = -cval - sum_{i=0..n-2}(Nrow_i * x_i)
-    // => x_{n-1} = -1/alpha * cval - (1/alpha)*sum_{i=0..n-2}( Nrow_i * x_i )
-    // => x_{n-1} = b + w^T x_{0..n-2},
-    //    where w_i = -(Nrow_i / Nrow(n-1)),  b = -(cval / Nrow(n-1)).
+    // Compute W^T = -N_right^{-1} * N_left, then transpose.
+    Eigen::MatrixXd W_transpose = -luN_right.solve(N_left);
+    Eigen::MatrixXd W_local = W_transpose.transpose(); // Now W_local is d x (n-d)
 
-    double bLocal = -cval / alpha;
-    Eigen::VectorXd wLocal(n - 1); // for the first (n-1) coords
-    for (int i = 0; i < n - 1; ++i)
-    {
-        wLocal(i) = -(Nrow(i) / alpha);
-    }
+    // Compute B = -N_right^{-1} * c.
+    Eigen::VectorXd B_local = -luN_right.solve(*c);
 
-    w = wLocal;
-    this->b = bLocal;
+    // Save the explicit representation.
+    W = W_local;
+    B = B_local;
 
     if (orthonormalized)
     {
@@ -393,44 +349,31 @@ void FlatModel::implicit_to_explicit()
     }
 }
 
-// ============================================================================
-// Explicit -> Implicit
-//    x_{n-1} = w^T x_{0..n-2} + b
-//    => x_{n-1} - w^T x_{0..n-2} - b = 0
-//    => [ -w^T, 1 ] * x + (-b) = 0
-// ============================================================================
 void FlatModel::explicit_to_implicit()
 {
-    if (!w.has_value() || !b.has_value())
+    if (!W.has_value() || !B.has_value())
     {
-        throw std::runtime_error("explicit_to_implicit: w and b must be set!");
+        throw std::runtime_error("explicit_to_implicit: W and B must be set!");
     }
-    const Eigen::VectorXd &wref = *w;
-    double bval = *this->b;
-
-    // Let's define:
-    //   N(0, 0..n-2) = -w^T
-    //   N(0, n-1)    = 1
-    //   c(0)         = -b
-    // So we get N * x + c = 0
-    int n = static_cast<int>(wref.size()) + 1;
-    Eigen::MatrixXd Nnew(1, n);
-    Nnew.setZero();
-
-    // Fill: N = [ -w^T, 1 ]
-    for (int i = 0; i < n - 1; ++i)
+    const Eigen::MatrixXd &Wmat = *W; // Expected size: d x m, where m = n-d.
+    const Eigen::VectorXd &Bvec = *B; // Expected size: m.
+    const int m = Wmat.cols();
+    if (Bvec.size() != m || n != d + m)
     {
-        Nnew(0, i) = -wref(i);
+        throw std::runtime_error("explicit_to_implicit: Dimension mismatch between W, B, and ambient dimension.");
     }
-    Nnew(0, n - 1) = 1.0;
 
-    // c = [ -b ]
-    Eigen::VectorXd cnew(1);
-    cnew(0) = -bval;
+    // Build N = [ -W^T, I ] which has size (n-d) x n.
+    Eigen::MatrixXd N_local(m, n);
+    N_local.block(0, 0, m, d) = -Wmat.transpose();               // -W^T (m x d)
+    N_local.block(0, d, m, m) = Eigen::MatrixXd::Identity(m, m); // I (m x m)
 
-    // Store in .N and .c
-    N = Nnew;
-    c = cnew;
+    // Compute c = -B (since B in the explicit form is [0;B]).
+    Eigen::VectorXd c_local = -Bvec;
+
+    // Save the implicit representation.
+    N = N_local;
+    c = c_local;
 
     if (orthonormalized)
     {
@@ -447,7 +390,7 @@ std::pair<Eigen::MatrixXd, Eigen::VectorXd> FlatModel::get_implicit_repr()
     {
         parametric_to_implicit();
     }
-    else if (w.has_value() && b.has_value())
+    else if (W.has_value() && B.has_value())
     {
         explicit_to_implicit();
     }
@@ -459,9 +402,9 @@ std::pair<Eigen::MatrixXd, Eigen::VectorXd> FlatModel::get_implicit_repr()
     return std::pair<Eigen::MatrixXd, Eigen::VectorXd>{*N, *c};
 }
 
-std::pair<Eigen::VectorXd, double> FlatModel::get_explicit_repr()
+std::pair<Eigen::MatrixXd, Eigen::VectorXd> FlatModel::get_explicit_repr()
 {
-    if (w.has_value() && b.has_value())
+    if (W.has_value() && B.has_value())
     {
     }
     else if (A.has_value() && b_vec.has_value())
@@ -477,7 +420,7 @@ std::pair<Eigen::VectorXd, double> FlatModel::get_explicit_repr()
         throw std::runtime_error("Model wasn't fitted yet. Cannot get explicit representation.");
     }
 
-    return std::pair<Eigen::VectorXd, double>{*w, *b};
+    return std::pair<Eigen::MatrixXd, Eigen::VectorXd>{*W, *B};
 }
 
 std::pair<Eigen::MatrixXd, Eigen::VectorXd> FlatModel::get_parametric_repr()
@@ -489,7 +432,7 @@ std::pair<Eigen::MatrixXd, Eigen::VectorXd> FlatModel::get_parametric_repr()
     {
         implicit_to_parametric();
     }
-    else if (w.has_value() && b.has_value())
+    else if (W.has_value() && B.has_value())
     {
         explicit_to_parametric();
     }
@@ -517,8 +460,8 @@ void FlatModel::reset()
     b_vec.reset();
     N.reset();
     c.reset();
-    w.reset();
-    b.reset();
+    W.reset();
+    B.reset();
     Q.reset();
     r.reset();
     orthonormalized = false;
@@ -533,17 +476,31 @@ double FlatModel::R2(const Eigen::MatrixXd &D)
     return 1.0 - ss_res / ss_tot;
 }
 
-double FlatModel::R2(const Eigen::MatrixXd &X, const Eigen::VectorXd &Y)
+double FlatModel::R2(const Eigen::MatrixXd &X, const Eigen::MatrixXd &Y)
 {
-    Eigen::VectorXd Y_hat = predict(X);
+    Eigen::MatrixXd Y_hat = predict(X);
+    Eigen::MatrixXd residuals = Y - Y_hat;
+    Eigen::MatrixXd mean_Y = Y.colwise().mean().replicate(Y.rows(), 1);
+    Eigen::MatrixXd total_variance = Y - mean_Y;
 
-    double Y_mean = Y.mean();
-    double ss_tot = (Y.array() - Y_mean).square().sum();
+    double SS_res = (residuals.array().square().sum());
+    double SS_tot = (total_variance.array().square().sum());
 
-    double ss_res = (Y - Y_hat).squaredNorm();
+    return 1.0 - (SS_res / SS_tot);
+}
 
-    double R2 = 1.0 - (ss_res / ss_tot);
-    return R2;
+double FlatModel::MSE(const Eigen::MatrixXd &D)
+{
+    return quadratic_loss(D).mean();
+}
+
+double FlatModel::MSE(const Eigen::MatrixXd &X, const Eigen::MatrixXd &Y)
+{
+    Eigen::MatrixXd Y_hat = predict(X);
+    Eigen::MatrixXd residuals = Y - Y_hat;
+
+    double mse = (residuals.array().square().sum()) / Y.rows();
+    return mse;
 }
 
 void FlatModel::override_parametric(const Eigen::MatrixXd &Anew, const Eigen::VectorXd &bnew)
@@ -556,11 +513,7 @@ void FlatModel::override_parametric(const Eigen::MatrixXd &Anew, const Eigen::Ve
     n = Anew.rows();
     d = Anew.cols();
 
-    if (n == d + 1)
-    {
-        parametric_to_explicit();
-    }
-
+    parametric_to_explicit();
     parametric_to_implicit();
 
     if (Q.has_value() || r.has_value())
@@ -579,10 +532,7 @@ void FlatModel::override_implicit(const Eigen::MatrixXd &Nnew, const Eigen::Vect
     n = Nnew.cols();
     d = n - Nnew.rows();
 
-    if (n == d + 1)
-    {
-        implicit_to_explicit();
-    }
+    implicit_to_explicit();
     implicit_to_parametric();
 
     if (Q.has_value() || r.has_value())
@@ -591,15 +541,15 @@ void FlatModel::override_implicit(const Eigen::MatrixXd &Nnew, const Eigen::Vect
     }
 }
 
-void FlatModel::override_explicit(const Eigen::VectorXd &wnew, double bnew)
+void FlatModel::override_explicit(const Eigen::MatrixXd &Wnew, const Eigen::VectorXd &Bnew)
 {
     reset();
 
-    w = wnew;
-    b = bnew;
+    W = Wnew;
+    B = Bnew;
 
-    d = wnew.size();
-    n = d + 1;
+    d = Wnew.rows();
+    n = d + Bnew.size();
 
     explicit_to_implicit();
     explicit_to_parametric();
@@ -620,11 +570,11 @@ void FlatModel::orthonormalize()
     {
         orthonormalize_implicit();
     }
-    if (w.has_value())
+    if (W.has_value())
     {
         orthonormalize_explicit();
     }
-    if (!A.has_value() && !N.has_value() && !w.has_value())
+    if (!A.has_value() && !N.has_value() && !W.has_value())
     {
         throw std::runtime_error("Model wasn't fitted yet. Cannot orthogonalize.");
     }
@@ -717,7 +667,7 @@ std::pair<Eigen::MatrixXd, Eigen::VectorXd> FlatModel::get_QR()
     return std::pair<Eigen::MatrixXd, Eigen::VectorXd>{Q.value(), r.value()};
 }
 
-double FlatModel::quadratic_loss(const Eigen::VectorXd point)
+double FlatModel::quadratic_loss(const Eigen::VectorXd &point)
 {
     if (!Q.has_value() || !r.has_value())
     {

@@ -1,0 +1,13 @@
+OrthonormalizationTest.Parametric_is_orthonormal 15 0.00110423
+OrthonormalizationTest.Parametric_is_same_subspace 15 0.00166155
+OrthonormalizationTest.Implicit_is_orthonormal 15 0.00115113
+OrthonormalizationTest.Implicit_is_orthonormal_to_A 15 0.0011556
+OrthonormalizationTest.Implicit_is_same_subspace 15 0.00149408
+ConversionTest.ExplicitToParametric_PointSatisfyability 7 0.00971568
+ConversionTest.ParametricToExplicit_PointSatisfyability 11 0.0120929
+ConversionTest.ExplicitToImplicit_PointSatisfyability 2 0.0242621
+ConversionTest.ImplicitToExplicit_PointSatisfyability 2 0.063123
+ConversionTest.ParametricToImplicit_PointSatisfyability 15 0.00925606
+ConversionTest.ImplicitToParametric_PointSatisfyability 15 0.00855835
+ConversionTest.OverrideParametric_ImplicitConversion 15 0.0129682
+---

@@ -73,7 +73,7 @@ namespace Evaluator
     {
         std::vector<EvaluationRecord> results;
         Eigen::MatrixXd X = D.leftCols(D.cols() - 1);
-        Eigen::VectorXd Y = D.col(D.cols() - 1);
+        Eigen::MatrixXd Y = D.rightCols(1);
 
         auto loss_fn = [](Eigen::VectorXd Y_true, Eigen::VectorXd Y_pred)
         { return Eigen::VectorXd((Y_true - Y_pred).array().square().matrix()); };
@@ -96,9 +96,10 @@ namespace Evaluator
                                            { bestFlat = ransacObject.run_slow(D, localFlatModel.get(), bestModelCount, averager, weighted_average); });
             }
 
-            double r2 = bestFlat ? bestFlat->R2(X, Y) : 999999.0;
-            double mse = bestFlat ? bestFlat->MSE(X, Y) : 999999.0;
+            double r2_regression = bestFlat ? bestFlat->R2(X, Y) : 999999.0;
+            double mse_regression = bestFlat ? bestFlat->MSE(X, Y) : 999999.0;
             double r2_orthogonal = bestFlat ? bestFlat->R2(D) : 999999.0;
+            double mse_orthogonal = bestFlat ? bestFlat->MSE(D) : 999999.0;
 
             EvaluationRecord rec;
             rec.iterationIndex = iterationIndex;
@@ -107,9 +108,10 @@ namespace Evaluator
             rec.trainDataPercentage = trainDataPct;
             rec.minInliers = minInl;
             rec.bestModelCount = bestModelCount;
-            rec.r2 = r2;
+            rec.r2_regression = r2_regression;
             rec.r2_orthogonal = r2_orthogonal;
-            rec.mse = mse;
+            rec.mse_regression = mse_regression;
+            rec.mse_orthogonal = mse_orthogonal;
             rec.elapsedMilliseconds = elapsedMs;
             rec.variation = 1;
 
@@ -130,9 +132,10 @@ namespace Evaluator
                                            { bestFlat = ransacObject.run_slow(D, localFlatModel.get(), bestModelCount, averager, weighted_average); });
             }
 
-            double r2 = bestFlat ? bestFlat->R2(X, Y) : 999999.0;
-            double mse = bestFlat ? bestFlat->MSE(X, Y) : 999999.0;
+            double r2_regression = bestFlat ? bestFlat->R2(X, Y) : 999999.0;
+            double mse_regression = bestFlat ? bestFlat->MSE(X, Y) : 999999.0;
             double r2_orthogonal = bestFlat ? bestFlat->R2(D) : 999999.0;
+            double mse_orthogonal = bestFlat ? bestFlat->MSE(D) : 999999.0;
 
             EvaluationRecord rec;
             rec.iterationIndex = iterationIndex;
@@ -141,9 +144,10 @@ namespace Evaluator
             rec.trainDataPercentage = trainDataPct;
             rec.minInliers = minInl;
             rec.bestModelCount = bestModelCount;
-            rec.r2 = r2;
+            rec.r2_regression = r2_regression;
             rec.r2_orthogonal = r2_orthogonal;
-            rec.mse = mse;
+            rec.mse_regression = mse_regression;
+            rec.mse_orthogonal = mse_orthogonal;
             rec.elapsedMilliseconds = elapsedMs;
             rec.variation = 2;
 
@@ -164,9 +168,10 @@ namespace Evaluator
                                            { bestFlat->fit(D); });
             }
 
-            double r2 = bestFlat ? bestFlat->R2(X, Y) : 999999.0;
+            double r2_regression = bestFlat ? bestFlat->R2(X, Y) : 999999.0;
+            double mse_regression = bestFlat ? bestFlat->MSE(X, Y) : 999999.0;
             double r2_orthogonal = bestFlat ? bestFlat->R2(D) : 999999.0;
-            double mse = bestFlat ? bestFlat->MSE(X, Y) : 999999.0;
+            double mse_orthogonal = bestFlat ? bestFlat->MSE(D) : 999999.0;
 
             EvaluationRecord rec;
             rec.iterationIndex = iterationIndex;
@@ -175,9 +180,10 @@ namespace Evaluator
             rec.trainDataPercentage = trainDataPct;
             rec.minInliers = minInl;
             rec.bestModelCount = bestModelCount;
-            rec.r2 = r2;
+            rec.r2_regression = r2_regression;
             rec.r2_orthogonal = r2_orthogonal;
-            rec.mse = mse;
+            rec.mse_regression = mse_regression;
+            rec.mse_orthogonal = mse_orthogonal;
             rec.elapsedMilliseconds = elapsedMs;
             rec.variation = 3;
 
@@ -207,7 +213,7 @@ namespace Evaluator
         ofs.seekp(0, std::ios::end);
         if (ofs.tellp() == 0)
         {
-            ofs << "iteration,maxIt,threshold,trainPct,minInliers,bestModelCount,numPoints,n,d,noise,outlierRatio,outlierStrength,saltAndPepper,metric,variation,weighted_average,r2,r2_orthogonal,mse,timeMs\n";
+            ofs << "iteration,maxIt,threshold,trainPct,minInliers,bestModelCount,numPoints,n,d,noise,outlierRatio,outlierStrength,saltAndPepper,metric,variation,weighted_average,r2_regression,r2_orthogonal,mse_regression,mse_orthogonal,timeMs\n";
         }
         ofs.flush();
 
@@ -292,9 +298,10 @@ namespace Evaluator
                                                                             << static_cast<int>(metric) << ","
                                                                             << rec.variation << ","
                                                                             << weighted_average << ","
-                                                                            << rec.r2 << ","
+                                                                            << rec.r2_regression << ","
                                                                             << rec.r2_orthogonal << ","
-                                                                            << rec.mse << ","
+                                                                            << rec.mse_regression << ","
+                                                                            << rec.mse_orthogonal << ","
                                                                             << rec.elapsedMilliseconds
                                                                             << "\n";
                                                                         ofs.flush();

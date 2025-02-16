@@ -11,35 +11,66 @@
 #include <Eigen/Eigenvalues>
 #include <Eigen/Dense>
 
-double r2_metric(Eigen::MatrixXd D, FlatModel *model)
+double r2_orthogonal_metric(const Eigen::MatrixXd &D, FlatModel *model)
 {
-    Eigen::VectorXd mean = D.colwise().mean();
-    double ss_res = model->quadratic_loss(D).sum();
-    double ss_tot = (D.rowwise() - mean.transpose()).squaredNorm();
+    double R2 = model->R2(D);
 
-    return -(1.0 - ss_res / ss_tot);
+    return -R2;
 }
 
-double rss_metric(Eigen::MatrixXd D, FlatModel *model)
+double r2_regression_metric(const Eigen::MatrixXd &D, FlatModel *model)
 {
-    return model->quadratic_loss(D).sum();
+    int d = model->get_dimension();
+    int n = model->get_ambient_dimension();
+
+    Eigen::MatrixXd X = D.leftCols(d);
+    Eigen::MatrixXd Y = D.rightCols(n - d);
+
+    double R2 = model->R2(X, Y);
+
+    return -R2;
 }
 
-double mse_metric(Eigen::MatrixXd D, FlatModel *model)
+double mse_orthogonal_metric(Eigen::MatrixXd D, FlatModel *model)
 {
-    return model->quadratic_loss(D).mean();
+    double MSE = model->MSE(D);
+    return MSE;
 }
 
-double rmse_metric(Eigen::MatrixXd D, FlatModel *model)
+double mse_regression_metric(Eigen::MatrixXd D, FlatModel *model)
 {
-    return std::sqrt(mse_metric(D, model));
+    int d = model->get_dimension();
+    int n = model->get_ambient_dimension();
+
+    Eigen::MatrixXd X = D.leftCols(d);
+    Eigen::MatrixXd Y = D.rightCols(n - d);
+
+    double MSE = model->MSE(X, Y);
+    return MSE;
+}
+
+Eigen::VectorXd regression_loss(Eigen::MatrixXd D, FlatModel *model)
+{
+    int d = model->get_dimension();
+    int n = model->get_ambient_dimension();
+    Eigen::MatrixXd X = D.leftCols(d);
+    Eigen::MatrixXd Y = D.rightCols(n - d);
+
+    Eigen::MatrixXd Y_true = model->predict(X);
+
+    return (Y_true - Y).rowwise().squaredNorm();
+}
+
+Eigen::VectorXd orthogonal_loss(Eigen::MatrixXd D, FlatModel *model)
+{
+    return model->quadratic_loss(D);
 }
 
 RANSAC::RANSAC(int max_iterations, double threshold, double train_data_percenatge, int min_inliners, MetricType metric)
     : max_iterations(max_iterations), threshold(threshold), train_data_percentage(train_data_percenatge), min_inliners(min_inliners)
 {
     // Validate the metric
-    if (metric != MetricType::R2 && metric != MetricType::RSS && metric != MetricType::MSE && metric != MetricType::RMSE)
+    if (metric != MetricType::R2_Orthogonal && metric != MetricType::R2_Regression && metric != MetricType::MSE_Orthogonal && metric != MetricType::MSE_Regression)
     {
         throw std::runtime_error("Invalid metric type.");
     }
@@ -47,98 +78,102 @@ RANSAC::RANSAC(int max_iterations, double threshold, double train_data_percenatg
     // Set the metric
     switch (metric)
     {
-    case MetricType::R2:
-        metric_fn2 = &r2_metric;
+    case MetricType::R2_Orthogonal:
+        metric_fn2 = &r2_orthogonal_metric;
+        loss_fn = &orthogonal_loss;
         break;
-    case MetricType::RSS:
-        metric_fn2 = &rss_metric;
+    case MetricType::R2_Regression:
+        metric_fn2 = &r2_regression_metric;
+        loss_fn = &regression_loss;
         break;
-    case MetricType::MSE:
-        metric_fn2 = &mse_metric;
+    case MetricType::MSE_Orthogonal:
+        metric_fn2 = &mse_orthogonal_metric;
+        loss_fn = &orthogonal_loss;
         break;
-    case MetricType::RMSE:
-        metric_fn2 = &rmse_metric;
+    case MetricType::MSE_Regression:
+        metric_fn2 = &mse_regression_metric;
+        loss_fn = &regression_loss;
         break;
     }
 }
 
-// Careful: Can return nullptr
-std::unique_ptr<Model> RANSAC::run(const Eigen::MatrixXd &X, const Eigen::VectorXd &Y, Model *model, std::function<Eigen::VectorXd(Eigen::VectorXd, Eigen::VectorXd)> loss_fn, std::function<double(Eigen::VectorXd, Eigen::VectorXd)> metric_fn)
-{
-    if (model == nullptr)
-    {
-        throw std::runtime_error("Model can't be `nullptr`.");
-    }
+// // Careful: Can return nullptr
+// std::unique_ptr<Model> RANSAC::run(const Eigen::MatrixXd &X, const Eigen::VectorXd &Y, Model *model, std::function<Eigen::VectorXd(Eigen::VectorXd, Eigen::VectorXd)> loss_fn, std::function<double(Eigen::VectorXd, Eigen::VectorXd)> metric_fn)
+// {
+//     if (model == nullptr)
+//     {
+//         throw std::runtime_error("Model can't be `nullptr`.");
+//     }
 
-    int N = X.rows();
-    int d = X.cols();
-    int subset_size = static_cast<int>(std::ceil(train_data_percentage * N));
+//     int N = X.rows();
+//     int d = X.cols();
+//     int subset_size = static_cast<int>(std::ceil(train_data_percentage * N));
 
-    std::unique_ptr<Model> bestModel;
-    double bestModelError = INFINITY;
+//     std::unique_ptr<Model> bestModel;
+//     double bestModelError = INFINITY;
 
-    while (bestModel == nullptr)
-    {
-#pragma omp parallel for
-        for (int iter = 0; iter < max_iterations; ++iter)
-        {
-            // Thread-local resources
-            std::vector<int> local_indices(N);
-            std::iota(local_indices.begin(), local_indices.end(), 0);
-            std::random_device rd;
-            std::mt19937 local_g(rd());
-            Eigen::MatrixXd X_subset(subset_size, d);
-            Eigen::VectorXd Y_subset(subset_size);
-            auto local_model = model->clone(); // Clone model for this thread
+//     while (bestModel == nullptr)
+//     {
+// #pragma omp parallel for
+//         for (int iter = 0; iter < max_iterations; ++iter)
+//         {
+//             // Thread-local resources
+//             std::vector<int> local_indices(N);
+//             std::iota(local_indices.begin(), local_indices.end(), 0);
+//             std::random_device rd;
+//             std::mt19937 local_g(rd());
+//             Eigen::MatrixXd X_subset(subset_size, d);
+//             Eigen::VectorXd Y_subset(subset_size);
+//             auto local_model = model->clone(); // Clone model for this thread
 
-            // 1. Sample subset using local resources
-            sampleRandomSubset(X, Y, X_subset, Y_subset, local_indices, local_g);
+//             // 1. Sample subset using local resources
+//             sampleRandomSubset(X, Y, X_subset, Y_subset, local_indices, local_g);
 
-            // 2. Fit the local model
-            local_model->fit(X_subset, Y_subset);
+//             // 2. Fit the local model
+//             local_model->fit(X_subset, Y_subset);
 
-            // 3. Compute loss for all data
-            Eigen::VectorXd Y_pred = local_model->predict(X);
-            Eigen::VectorXd loss = loss_fn(Y, Y_pred);
+//             // 3. Compute loss for all data
+//             Eigen::VectorXd Y_pred = local_model->predict(X);
+//             Eigen::VectorXd loss = loss_fn(Y, Y_pred);
 
-            // 4. Extract inliers
-            std::vector<int> inliers = findInliers(loss, threshold);
-            if (inliers.size() < min_inliners)
-                continue;
+//             // 4. Extract inliers
+//             std::vector<int> inliers = findInliers(loss, threshold);
+//             if (inliers.size() < min_inliners)
+//                 continue;
 
-            // 5. Refit on inliers
-            Eigen::MatrixXd X_inliers(inliers.size(), d);
-            Eigen::VectorXd Y_inliers(inliers.size());
-            for (size_t i = 0; i < inliers.size(); ++i)
-            {
-                X_inliers.row(i) = X.row(inliers[i]);
-                Y_inliers[i] = Y[inliers[i]];
-            }
-            local_model->fit(X_inliers, Y_inliers);
+//             // 5. Refit on inliers
+//             Eigen::MatrixXd X_inliers(inliers.size(), d);
+//             Eigen::VectorXd Y_inliers(inliers.size());
+//             for (size_t i = 0; i < inliers.size(); ++i)
+//             {
+//                 X_inliers.row(i) = X.row(inliers[i]);
+//                 Y_inliers[i] = Y[inliers[i]];
+//             }
+//             local_model->fit(X_inliers, Y_inliers);
 
-            // 6. Evaluate the model
-            Eigen::VectorXd Y_pred_inliers = local_model->predict(X_inliers);
-            double error = metric_fn(Y_inliers, Y_pred_inliers);
+//             // 6. Evaluate the model
+//             Eigen::VectorXd Y_pred_inliers = local_model->predict(X_inliers);
+//             double error = metric_fn(Y_inliers, Y_pred_inliers);
 
-#pragma omp critical
-            {
-                if (error < bestModelError)
-                {
-                    bestModel = local_model->clone();
-                    bestModelError = error;
-                }
-            }
-        }
+// #pragma omp critical
+//             {
+//                 if (error < bestModelError)
+//                 {
+//                     bestModel = local_model->clone();
+//                     bestModelError = error;
+//                 }
+//             }
+//         }
 
-        if (!bestModel)
-        {
-            threshold *= 1.25;
-            std::cout << "Increased threshold to " << threshold << std::endl;
-        }
-    }
+//         if (!bestModel)
+//         {
+//             threshold *= 1.25;
+//             std::cout << "Increased threshold to " << threshold << std::endl;
+//         }
+//     }
 
-    return bestModel;
-}
+//     return bestModel;
+// }
 
 std::unique_ptr<FlatModel> RANSAC::castToModel(std::unique_ptr<Model> basePtr) const
 {
@@ -212,128 +247,128 @@ std::vector<int> RANSAC::findInliers(const Eigen::VectorXd &loss_values, double 
     return inliers;
 }
 
-std::unique_ptr<FlatModel> RANSAC::run(const Eigen::MatrixXd &D, FlatModel *model, int best_model_count, std::function<Eigen::VectorXd(Eigen::VectorXd, Eigen::VectorXd)> loss_fn, std::function<double(Eigen::VectorXd, Eigen::VectorXd)> metric_fn, FlatAverager *averager) const
-{
-    if (model == nullptr)
-    {
-        throw std::runtime_error("Model can't be `nullptr`.");
-    }
-    int N = D.rows();
-    int d = D.cols() - 1;
+// std::unique_ptr<FlatModel> RANSAC::run(const Eigen::MatrixXd &D, FlatModel *model, int best_model_count, std::function<Eigen::VectorXd(Eigen::VectorXd, Eigen::VectorXd)> loss_fn, std::function<double(Eigen::VectorXd, Eigen::VectorXd)> metric_fn, FlatAverager *averager) const
+// {
+//     if (model == nullptr)
+//     {
+//         throw std::runtime_error("Model can't be `nullptr`.");
+//     }
+//     int N = D.rows();
+//     int d = D.cols() - 1;
 
-    Eigen::MatrixXd X = D.leftCols(d);
-    Eigen::VectorXd Y = D.col(d);
+//     Eigen::MatrixXd X = D.leftCols(d);
+//     Eigen::VectorXd Y = D.col(d);
 
-    int subset_size = static_cast<int>(std::ceil(train_data_percentage * N));
+//     int subset_size = static_cast<int>(std::ceil(train_data_percentage * N));
 
-    std::vector<int> indices(N);
-    std::iota(indices.begin(), indices.end(), 0); // Fill indices with 0,1,2,...
+//     std::vector<int> indices(N);
+//     std::iota(indices.begin(), indices.end(), 0); // Fill indices with 0,1,2,...
 
-    // Minheap based on error
-    // using ModelEntry = std::pair<double, std::unique_ptr<FlatModel>>;
-    auto compare = [](const FlatModelEntry &a, const FlatModelEntry &b)
-    {
-        return a.first < b.first;
-    };
+//     // Minheap based on error
+//     // using ModelEntry = std::pair<double, std::unique_ptr<FlatModel>>;
+//     auto compare = [](const FlatModelEntry &a, const FlatModelEntry &b)
+//     {
+//         return a.first < b.first;
+//     };
 
-    std::priority_queue<FlatModelEntry, std::vector<FlatModelEntry>, decltype(compare)> heap(compare);
+//     std::priority_queue<FlatModelEntry, std::vector<FlatModelEntry>, decltype(compare)> heap(compare);
 
-    Eigen::MatrixXd X_subset(subset_size, d);
-    Eigen::VectorXd Y_subset(subset_size);
+//     Eigen::MatrixXd X_subset(subset_size, d);
+//     Eigen::VectorXd Y_subset(subset_size);
 
-    double threshold = this->threshold;
+//     double threshold = this->threshold;
 
-    while (heap.empty())
-    {
-#pragma omp parallel
-        {
-            // Each thread has its own random engine:
-            std::random_device rd_thread;
-            std::mt19937 g(rd_thread());
+//     while (heap.empty())
+//     {
+// #pragma omp parallel
+//         {
+//             // Each thread has its own random engine:
+//             std::random_device rd_thread;
+//             std::mt19937 g(rd_thread());
 
-            // Local heap for thread safety because multiple threads shouldn't access the same heap
-            decltype(heap) local_heap(compare);
+//             // Local heap for thread safety because multiple threads shouldn't access the same heap
+//             decltype(heap) local_heap(compare);
 
-#pragma omp for
-            for (int iter = 0; iter < max_iterations; ++iter)
-            {
-                // 1. Randomly sample a subset
-                sampleRandomSubset(X, Y, X_subset, Y_subset, indices, g);
+// #pragma omp for
+//             for (int iter = 0; iter < max_iterations; ++iter)
+//             {
+//                 // 1. Randomly sample a subset
+//                 sampleRandomSubset(X, Y, X_subset, Y_subset, indices, g);
 
-                // 2. Fit the model to the random subset
-                model->reset();
-                model->fit(X_subset, Y_subset);
+//                 // 2. Fit the model to the random subset
+//                 model->reset();
+//                 model->fit(X_subset, Y_subset);
 
-                // 3. Compute loss for ALL data
-                Eigen::VectorXd Y_pred = model->predict(X);
-                Eigen::VectorXd loss = loss_fn(Y, Y_pred);
+//                 // 3. Compute loss for ALL data
+//                 Eigen::VectorXd Y_pred = model->predict(X);
+//                 Eigen::VectorXd loss = loss_fn(Y, Y_pred);
 
-                // 4. Extract inliers based on the loss threshold
-                std::vector<int> inliers = findInliers(loss, threshold);
-                if (inliers.size() < min_inliners)
-                    continue; // Skip if inliers are less than the threshold
+//                 // 4. Extract inliers based on the loss threshold
+//                 std::vector<int> inliers = findInliers(loss, threshold);
+//                 if (inliers.size() < min_inliners)
+//                     continue; // Skip if inliers are less than the threshold
 
-                // 5. Refit the model using inliers
-                Eigen::MatrixXd X_inliers(inliers.size(), d);
-                Eigen::VectorXd Y_inliers(inliers.size());
-                for (size_t i = 0; i < inliers.size(); ++i)
-                {
-                    X_inliers.row(i) = X.row(inliers[i]);
-                    Y_inliers[i] = Y[inliers[i]];
-                }
-                model->fit(X_inliers, Y_inliers);
+//                 // 5. Refit the model using inliers
+//                 Eigen::MatrixXd X_inliers(inliers.size(), d);
+//                 Eigen::VectorXd Y_inliers(inliers.size());
+//                 for (size_t i = 0; i < inliers.size(); ++i)
+//                 {
+//                     X_inliers.row(i) = X.row(inliers[i]);
+//                     Y_inliers[i] = Y[inliers[i]];
+//                 }
+//                 model->fit(X_inliers, Y_inliers);
 
-                // 6. Evaluate the model
-                Eigen::VectorXd Y_pred_inliers = model->predict(X_inliers);
-                double error = metric_fn(Y_inliers, Y_pred_inliers);
+//                 // 6. Evaluate the model
+//                 Eigen::VectorXd Y_pred_inliers = model->predict(X_inliers);
+//                 double error = metric_fn(Y_inliers, Y_pred_inliers);
 
-                // 7. Store into local (thread safe) heap
-                local_heap.emplace(error, castToModel(model->clone()));
-                if (local_heap.size() > best_model_count)
-                {
-                    // Pop the worst model (and maintain the `best_model_count` models)
-                    local_heap.pop();
-                }
-            }
+//                 // 7. Store into local (thread safe) heap
+//                 local_heap.emplace(error, castToModel(model->clone()));
+//                 if (local_heap.size() > best_model_count)
+//                 {
+//                     // Pop the worst model (and maintain the `best_model_count` models)
+//                     local_heap.pop();
+//                 }
+//             }
 
-// Merge local heaps into global heap (Done once per thread)
-#pragma omp critical
-            {
-                while (!local_heap.empty())
-                {
-                    // FIX: Pop from local_heap into a local variable,
-                    //      then emplace into the global heap
-                    auto topVal = std::move(const_cast<FlatModelEntry &>(local_heap.top()));
-                    local_heap.pop();
+// // Merge local heaps into global heap (Done once per thread)
+// #pragma omp critical
+//             {
+//                 while (!local_heap.empty())
+//                 {
+//                     // FIX: Pop from local_heap into a local variable,
+//                     //      then emplace into the global heap
+//                     auto topVal = std::move(const_cast<FlatModelEntry &>(local_heap.top()));
+//                     local_heap.pop();
 
-                    heap.emplace(std::move(topVal));
-                    if (heap.size() > best_model_count)
-                    {
-                        heap.pop();
-                    }
-                }
-            }
-        } // end parallel region
-        if (heap.empty())
-        {
-            // run again with 25% higher threshold
-            threshold *= 1.25;
-            std::cout << "No good model found. Running again with higher threshold: " << threshold << std::endl;
-        }
-    }
+//                     heap.emplace(std::move(topVal));
+//                     if (heap.size() > best_model_count)
+//                     {
+//                         heap.pop();
+//                     }
+//                 }
+//             }
+//         } // end parallel region
+//         if (heap.empty())
+//         {
+//             // run again with 25% higher threshold
+//             threshold *= 1.25;
+//             std::cout << "No good model found. Running again with higher threshold: " << threshold << std::endl;
+//         }
+//     }
 
-    // Get the top models and their errors from the heap
-    std::vector<std::unique_ptr<FlatModel>> models;
-    std::vector<double> errors;
-    models.reserve(best_model_count);
-    errors.reserve(best_model_count);
+//     // Get the top models and their errors from the heap
+//     std::vector<std::unique_ptr<FlatModel>> models;
+//     std::vector<double> errors;
+//     models.reserve(best_model_count);
+//     errors.reserve(best_model_count);
 
-    // Gather the top models from the heap and sort them by error
-    gatherTopModels(heap, models, errors);
-    averager->fit(models, errors);
-    std::unique_ptr<FlatModel> fm = castToModel(averager->clone());
-    return fm;
-}
+//     // Gather the top models from the heap and sort them by error
+//     gatherTopModels(heap, models, errors);
+//     averager->fit(models, errors);
+//     std::unique_ptr<FlatModel> fm = castToModel(averager->clone());
+//     return fm;
+// }
 
 std::unique_ptr<FlatModel> RANSAC::run2(const Eigen::MatrixXd &D,
                                         FlatModel *model,
@@ -555,7 +590,7 @@ std::unique_ptr<FlatModel> RANSAC::run_slow(const Eigen::MatrixXd &D,
             model->fit(D_subset);
 
             // 4. Compute loss for ALL data
-            Eigen::VectorXd loss = model->quadratic_loss(D);
+            Eigen::VectorXd loss = loss_fn(D, model);
 
             // 5. Extract inliers
             std::vector<int> inliers = findInliers(loss, threshold);

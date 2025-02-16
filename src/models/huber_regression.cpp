@@ -49,7 +49,8 @@ void HuberRegression::fit(const Eigen::MatrixXd &D)
     {
         w_new(j) = parameters[j];
     }
-    double b_new = parameters[num_features];
+    Eigen::VectorXd b_new(1);
+    b_new << parameters[num_features];
 
     // Update the model’s explicit representation.
     override_explicit(w_new, b_new);

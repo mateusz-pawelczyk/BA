@@ -12,10 +12,10 @@
 // different metrics (aws ENUM or something)
 enum class MetricType
 {
-    R2,  // R^2
-    RSS, // Residual Sum of Squares
-    MSE, // Mean Squared Error
-    RMSE // Root Mean Squared Error
+    R2_Orthogonal,
+    R2_Regression,
+    MSE_Orthogonal,
+    MSE_Regression
 };
 
 using FlatModelEntry = std::pair<double, std::unique_ptr<FlatModel>>;
@@ -23,7 +23,7 @@ using FlatModelEntry = std::pair<double, std::unique_ptr<FlatModel>>;
 class RANSAC
 {
 public:
-    RANSAC(int max_iterations, double threshold, double train_data_percenatge, int min_inliners, MetricType metric = MetricType::R2);
+    RANSAC(int max_iterations, double threshold, double train_data_percenatge, int min_inliners, MetricType metric = MetricType::R2_Orthogonal);
     std::unique_ptr<Model> run(const Eigen::MatrixXd &X, const Eigen::VectorXd &Y, Model *model, std::function<Eigen::VectorXd(Eigen::VectorXd, Eigen::VectorXd)> loss_fn, std::function<double(Eigen::VectorXd, Eigen::VectorXd)> metric_fn);
 
     std::unique_ptr<FlatModel> run(const Eigen::MatrixXd &D, FlatModel *model, int best_model_count, std::function<Eigen::VectorXd(Eigen::VectorXd, Eigen::VectorXd)> loss_fn, std::function<double(Eigen::VectorXd, Eigen::VectorXd)> metric_fn, FlatAverager *averager) const;
@@ -49,6 +49,7 @@ private:
     // Eigen::VectorXd (*loss_fn)(Eigen::VectorXd, Eigen::VectorXd);
     // double (*metric_fn)(Eigen::VectorXd, Eigen::VectorXd);
     std::function<double(Eigen::MatrixXd, FlatModel *)> metric_fn2;
+    std::function<Eigen::VectorXd(Eigen::MatrixXd, FlatModel *)> loss_fn;
 
     // FlatAverager
     // std::unique_ptr<FlatModel> FlatAverager(std::vector<std::unique_ptr<FlatModel>> &models, int k, std::vector<double> *errors = nullptr) const;

@@ -48,7 +48,7 @@ int d = 2; // Hyperplane Dimensions
 int n = 3; // Ambient Space Dimensions
 int average_contributions = 10;
 bool saltAndPepper = false;
-MetricType metric = MetricType::MSE;
+MetricType metric = MetricType::MSE_Regression;
 
 int ransac_max_iterations = 50;
 double ransac_threshold = 0.0001;
@@ -455,9 +455,9 @@ void evaluate()
     // 2) Prepare data for Variation 2 & 3
     //    Nx(D+1), last col is label
     AffineFit *m = new AffineFit(n - 1, n);
-    w = Eigen::VectorXd::Random(d);
-    b = Eigen::VectorXd::Random(1)[0];
-    m->override_explicit(w, b);
+    w = Eigen::MatrixXd::Random(n - 1, 1);
+    b = Eigen::VectorXd::Random(1)(0);
+    m->override_explicit(w, Eigen::VectorXd::Random(1));
 
     Eigen::MatrixXd D = FlatSampler::sampleFlat(*m, points, noise, outlierRatio, outlierStrength, saltAndPepper);
 
@@ -467,7 +467,7 @@ void evaluate()
     grid.trainDataPercentages = {0.2};
     grid.minInliers = {100};
     grid.bestModelCounts = {1, 100};
-    grid.metrics = {MetricType::R2, MetricType::MSE};
+    grid.metrics = {MetricType::R2_Regression, MetricType::MSE_Regression, MetricType::R2_Orthogonal, MetricType::MSE_Orthogonal};
     grid.weightedAverages = {false};
 
     DataParameterGrid dataGrid;
