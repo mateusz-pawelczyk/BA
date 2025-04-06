@@ -70,7 +70,7 @@ RANSAC::RANSAC(int max_iterations, double threshold, double train_data_percenatg
     : max_iterations(max_iterations), threshold(threshold), train_data_percentage(train_data_percenatge), min_inliners(min_inliners)
 {
     // Validate the metric
-    if (metric != MetricType::R2_Orthogonal && metric != MetricType::R2_Regression && metric != MetricType::MSE_Orthogonal && metric != MetricType::MSE_Regression)
+    if (metric != MetricType::R2 && metric != MetricType::MSE)
     {
         throw std::runtime_error("Invalid metric type.");
     }
@@ -78,22 +78,15 @@ RANSAC::RANSAC(int max_iterations, double threshold, double train_data_percenatg
     // Set the metric
     switch (metric)
     {
-    case MetricType::R2_Orthogonal:
+    case MetricType::R2:
         metric_fn2 = &r2_orthogonal_metric;
         loss_fn = &orthogonal_loss;
         break;
-    case MetricType::R2_Regression:
-        metric_fn2 = &r2_regression_metric;
-        loss_fn = &regression_loss;
-        break;
-    case MetricType::MSE_Orthogonal:
+    case MetricType::MSE:
         metric_fn2 = &mse_orthogonal_metric;
         loss_fn = &orthogonal_loss;
         break;
-    case MetricType::MSE_Regression:
-        metric_fn2 = &mse_regression_metric;
-        loss_fn = &regression_loss;
-        break;
+
     }
 }
 
@@ -456,7 +449,7 @@ std::unique_ptr<FlatModel> RANSAC::run2(const Eigen::MatrixXd &D,
                 {
                     D_inliers.row(i) = D.row(inliers[i]);
                 }
-                // Print top 2 inliers for debugging
+
                 model->fit(D_inliers);
 
                 // 7. Evaluate the model and push onto local heap
@@ -465,10 +458,9 @@ std::unique_ptr<FlatModel> RANSAC::run2(const Eigen::MatrixXd &D,
                 // check if error is nan or infinity
                 if (std::isnan(error) || std::isinf(error))
                 {
-                    // Print some debugging information to identify the exact parameter causing the issue
                     std::cout << "=====================" << std::endl;
                     std::cout << "Error: " << error << std::endl;
-                    // Print the data matrix
+
                     std::cout << "Data matrix:\n"
                               << std::endl;
                     std::cout << D_inliers << std::endl;

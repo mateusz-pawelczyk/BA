@@ -61,6 +61,10 @@ struct EvaluationRecord
     double trainDataPercentage;
     int minInliers;
     int bestModelCount;
+    double r2_regression_inlier;
+    double r2_orthogonal_inlier;
+    double mse_regression_inlier;
+    double mse_orthogonal_inlier;
     double r2_regression;
     double r2_orthogonal;
     double mse_regression;
@@ -93,7 +97,8 @@ namespace Evaluator
         bool weighted_average,
         double median_err_tol,
         int median_max_iter,
-        const Eigen::MatrixXd &D, // for Variation 2 & 3 (last col is Y)
+        const Eigen::MatrixXd &D_inlier, // for Variation 2 & 3 (last col is Y)
+        const Eigen::MatrixXd &D_outlier, // for Variation 2 & 3 (last col is Y)
         int n,                    // ambient dimension
         int d,                    // flat dimension
         MetricType metric,

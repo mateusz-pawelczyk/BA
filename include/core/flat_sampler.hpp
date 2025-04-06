@@ -8,6 +8,7 @@ namespace FlatSampler
     // FlatMode -> Points
     Eigen::MatrixXd sampleFlat(FlatModel &model, int N, double noise = 0.0, double outlierRatio = 0.0, double outlierStrength = 1.0, bool saltAndPepper = false);
     std::vector<std::unique_ptr<FlatModel>> sampleFlat2(FlatModel &model, int N, int k, double noise = 0.0, double outlierRatio = 0.0, double outlierStrength = 1.0, bool saltAndPepper = false);
+    std::pair<Eigen::MatrixXd, Eigen::MatrixXd> sampleFlatSeparated(FlatModel &model, int N, double noise = 0.0, double outlierRatio = 0.0, double outlierStrength = 1.0, bool saltAndPepper = false);
 
     // === Helper Functions ===
     Eigen::MatrixXd sampleGaussianPoints(int N, int d);

@@ -50,6 +50,49 @@ static double computeMSE_FlatModel(FlatModel *fmodel, const Eigen::MatrixXd &D)
     return fmodel->quadratic_loss(D).mean();
 }
 
+Eigen::MatrixXd mergeAndShuffleEval(const Eigen::MatrixXd &mat1, const Eigen::MatrixXd &mat2, std::mt19937 &gen)
+{
+    // Ensure both matrices have the same number of columns.
+    if (mat1.cols() != mat2.cols())
+    {
+        throw std::runtime_error("Matrices must have the same number of columns to merge.");
+    }
+
+    if (mat1.rows() == 0) {
+        if (mat2.rows() == 0) {
+            throw std::runtime_error("Both matrices are empty.");
+        }
+        return mat2;
+    }
+    if (mat2.rows() == 0) {
+        return mat1;
+    }
+    
+    int totalRows = mat1.rows() + mat2.rows();
+    int cols = mat1.cols();
+
+    // Concatenate matrices vertically.
+    Eigen::MatrixXd merged(totalRows, cols);
+    merged << mat1, mat2;
+
+    // Create an index vector for the rows.
+    std::vector<int> indices(totalRows);
+    std::iota(indices.begin(), indices.end(), 0);
+
+    // Shuffle the indices.
+    std::shuffle(indices.begin(), indices.end(), gen);
+
+    // Build the output matrix using the shuffled indices.
+    Eigen::MatrixXd shuffled(totalRows, cols);
+    for (int i = 0; i < totalRows; ++i)
+    {
+        shuffled.row(i) = merged.row(indices[i]);
+    }
+
+
+    return shuffled;
+}
+
 namespace Evaluator
 {
 
@@ -63,7 +106,8 @@ namespace Evaluator
         bool weighted_average,
         double median_err_tol,
         int median_max_iter,
-        const Eigen::MatrixXd &D,
+        const Eigen::MatrixXd &D_inlier,
+        const Eigen::MatrixXd &D_outlier,
         int n,
         int d,
         MetricType metric,
@@ -72,8 +116,16 @@ namespace Evaluator
         std::function<RANSAC(int, double, double, int, MetricType)> ransacFactory)
     {
         std::vector<EvaluationRecord> results;
-        Eigen::MatrixXd X = D.leftCols(D.cols() - 1);
-        Eigen::MatrixXd Y = D.rightCols(1);
+
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        Eigen::MatrixXd D = mergeAndShuffleEval(D_inlier, D_outlier, gen);
+
+        Eigen::MatrixXd X_inlier = D_inlier.leftCols(n - 1);
+        Eigen::VectorXd Y_inlier = D_inlier.col(n - 1);
+
+        Eigen::MatrixXd X = D.leftCols(n - 1);
+        Eigen::VectorXd Y = D.col(n - 1);
 
         auto loss_fn = [](Eigen::VectorXd Y_true, Eigen::VectorXd Y_pred)
         { return Eigen::VectorXd((Y_true - Y_pred).array().square().matrix()); };
@@ -96,10 +148,17 @@ namespace Evaluator
                                            { bestFlat = ransacObject.run_slow(D, localFlatModel.get(), bestModelCount, averager, weighted_average); });
             }
 
+            double r2_regression_inlier = bestFlat ? bestFlat->R2(X_inlier, Y_inlier) : 999999.0;
+            double mse_regression_inlier = bestFlat ? bestFlat->MSE(X_inlier, Y_inlier) : 999999.0;
+            double r2_orthogonal_inlier = bestFlat ? bestFlat->R2(D_inlier) : 999999.0;
+            double mse_orthogonal_inlier = bestFlat ? bestFlat->MSE(D_inlier) : 999999.0;
+
             double r2_regression = bestFlat ? bestFlat->R2(X, Y) : 999999.0;
             double mse_regression = bestFlat ? bestFlat->MSE(X, Y) : 999999.0;
             double r2_orthogonal = bestFlat ? bestFlat->R2(D) : 999999.0;
             double mse_orthogonal = bestFlat ? bestFlat->MSE(D) : 999999.0;
+
+            
 
             EvaluationRecord rec;
             rec.iterationIndex = iterationIndex;
@@ -108,6 +167,10 @@ namespace Evaluator
             rec.trainDataPercentage = trainDataPct;
             rec.minInliers = minInl;
             rec.bestModelCount = bestModelCount;
+            rec.r2_regression_inlier = r2_regression_inlier;
+            rec.r2_orthogonal_inlier = r2_orthogonal_inlier;
+            rec.mse_regression_inlier = mse_regression_inlier;
+            rec.mse_orthogonal_inlier = mse_orthogonal_inlier;
             rec.r2_regression = r2_regression;
             rec.r2_orthogonal = r2_orthogonal;
             rec.mse_regression = mse_regression;
@@ -132,6 +195,11 @@ namespace Evaluator
                                            { bestFlat = ransacObject.run_slow(D, localFlatModel.get(), bestModelCount, averager, weighted_average); });
             }
 
+            double r2_regression_inlier = bestFlat ? bestFlat->R2(X_inlier, Y_inlier) : 999999.0;
+            double mse_regression_inlier = bestFlat ? bestFlat->MSE(X_inlier, Y_inlier) : 999999.0;
+            double r2_orthogonal_inlier = bestFlat ? bestFlat->R2(D_inlier) : 999999.0;
+            double mse_orthogonal_inlier = bestFlat ? bestFlat->MSE(D_inlier) : 999999.0;
+
             double r2_regression = bestFlat ? bestFlat->R2(X, Y) : 999999.0;
             double mse_regression = bestFlat ? bestFlat->MSE(X, Y) : 999999.0;
             double r2_orthogonal = bestFlat ? bestFlat->R2(D) : 999999.0;
@@ -144,6 +212,10 @@ namespace Evaluator
             rec.trainDataPercentage = trainDataPct;
             rec.minInliers = minInl;
             rec.bestModelCount = bestModelCount;
+            rec.r2_regression_inlier = r2_regression_inlier;
+            rec.r2_orthogonal_inlier = r2_orthogonal_inlier;
+            rec.mse_regression_inlier = mse_regression_inlier;
+            rec.mse_orthogonal_inlier = mse_orthogonal_inlier;
             rec.r2_regression = r2_regression;
             rec.r2_orthogonal = r2_orthogonal;
             rec.mse_regression = mse_regression;
@@ -168,6 +240,11 @@ namespace Evaluator
                                            { bestFlat->fit(D); });
             }
 
+            double r2_regression_inlier = bestFlat ? bestFlat->R2(X_inlier, Y_inlier) : 999999.0;
+            double mse_regression_inlier = bestFlat ? bestFlat->MSE(X_inlier, Y_inlier) : 999999.0;
+            double r2_orthogonal_inlier = bestFlat ? bestFlat->R2(D_inlier) : 999999.0;
+            double mse_orthogonal_inlier = bestFlat ? bestFlat->MSE(D_inlier) : 999999.0;
+
             double r2_regression = bestFlat ? bestFlat->R2(X, Y) : 999999.0;
             double mse_regression = bestFlat ? bestFlat->MSE(X, Y) : 999999.0;
             double r2_orthogonal = bestFlat ? bestFlat->R2(D) : 999999.0;
@@ -180,6 +257,10 @@ namespace Evaluator
             rec.trainDataPercentage = trainDataPct;
             rec.minInliers = minInl;
             rec.bestModelCount = bestModelCount;
+            rec.r2_regression_inlier = r2_regression_inlier;
+            rec.r2_orthogonal_inlier = r2_orthogonal_inlier;
+            rec.mse_regression_inlier = mse_regression_inlier;
+            rec.mse_orthogonal_inlier = mse_orthogonal_inlier;
             rec.r2_regression = r2_regression;
             rec.r2_orthogonal = r2_orthogonal;
             rec.mse_regression = mse_regression;
@@ -213,7 +294,7 @@ namespace Evaluator
         ofs.seekp(0, std::ios::end);
         if (ofs.tellp() == 0)
         {
-            ofs << "iteration,maxIt,threshold,trainPct,minInliers,bestModelCount,numPoints,n,d,noise,outlierRatio,outlierStrength,saltAndPepper,metric,variation,weighted_average,r2_regression,r2_orthogonal,mse_regression,mse_orthogonal,timeMs\n";
+            ofs << "iteration,maxIt,threshold,trainPct,minInliers,bestModelCount,numPoints,n,d,noise,outlierRatio,outlierStrength,saltAndPepper,metric,variation,weighted_average,r2_regression_inlier,r2_orthogonal_inlier,mse_regression_inlier,mse_orthogonal_inlier,r2_regression,r2_orthogonal,mse_regression,mse_orthogonal,timeMs\n";
         }
         ofs.flush();
 
@@ -260,12 +341,33 @@ namespace Evaluator
                                                                 try
                                                                 {
                                                                     auto m = std::make_unique<AffineFit>(n - 1, n);
-                                                                    Eigen::MatrixXd A = Eigen::MatrixXd::Random(n, d);
-                                                                    Eigen::VectorXd b = Eigen::VectorXd::Random(n);
+                                                                    Eigen::MatrixXd W = Eigen::MatrixXd::Random(n - 1, 1);
+                                                                    Eigen::VectorXd b = Eigen::VectorXd::Random(1);
 
-                                                                    m->override_parametric(A, b);
-                                                                    Eigen::MatrixXd D = FlatSampler::sampleFlat(*m, numPoints, noise, outlierRatio, outlierStrength, saltAndPepper);
+                                                                    m->override_explicit(W, b);
 
+                                                                    auto [D_inlier, D_outlier] = FlatSampler::sampleFlatSeparated(*m, numPoints, noise, outlierRatio, outlierStrength, saltAndPepper);
+                                                                    if (D_inlier.rows() == 0) {
+                                                                        std::cout << "Skipping... No inlier found. Outlier Count: " << D_outlier.rows() << std::endl;
+                                                                        std::ostringstream oss;
+                                                                        oss << "Parameters:\n"
+                                                                            << "  maxIt: " << maxIt << "\n"
+                                                                            << "  thresh: " << thresh << "\n"
+                                                                            << "  tdp: " << tdp << "\n"
+                                                                            << "  inl: " << inl << "\n"
+                                                                            << "  bmc: " << bmc << "\n"
+                                                                            << "  numPoints: " << numPoints << "\n"
+                                                                            << "  n: " << n << "\n"
+                                                                            << "  d: " << d << "\n"
+                                                                            << "  noise: " << noise << "\n"
+                                                                            << "  outlierRatio: " << outlierRatio << "\n"
+                                                                            << "  outlierStrength: " << outlierStrength << "\n"
+                                                                            << "  saltAndPepper: " << (saltAndPepper ? "true" : "false") << "\n"
+                                                                            << "  metric: " << static_cast<int>(metric) << "\n"
+                                                                            << "  weighted_average: " << (weighted_average ? "true" : "false") << "\n";
+                                                                        std::cerr << oss.str() << std::endl;
+                                                                            continue;
+                                                                    }
                                                                     iterationCounter++;
 
                                                                     std::cout << "\rProgress: " << std::fixed << std::setprecision(2) << (progress / totalIterations) * 100 << "%" << std::flush;
@@ -274,7 +376,7 @@ namespace Evaluator
                                                                         iterationCounter,
                                                                         maxIt, thresh, tdp, inl, bmc, weighted_average,
                                                                         0.01, 1000,
-                                                                        D,
+                                                                        D_inlier, D_outlier,
                                                                         n, d, metric,
                                                                         modelFactory,
                                                                         flatModelFactory,
@@ -298,6 +400,10 @@ namespace Evaluator
                                                                             << static_cast<int>(metric) << ","
                                                                             << rec.variation << ","
                                                                             << weighted_average << ","
+                                                                            << rec.r2_regression_inlier << ","
+                                                                            << rec.r2_orthogonal_inlier << ","
+                                                                            << rec.mse_regression_inlier << ","
+                                                                            << rec.mse_orthogonal_inlier << ","
                                                                             << rec.r2_regression << ","
                                                                             << rec.r2_orthogonal << ","
                                                                             << rec.mse_regression << ","

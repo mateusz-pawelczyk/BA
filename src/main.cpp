@@ -31,13 +31,14 @@ enum class SampleFlatRepresentation
 {
     Parametric,
     Implicit,
+    Explicit,
     Count
 };
 
 SampleFlatRepresentation repr = SampleFlatRepresentation::Parametric;
 
-Eigen::VectorXd w;
-double b;
+Eigen::MatrixXd W;
+Eigen::VectorXd b;
 int points = 20;
 double noise = 0.01;
 double outlierRatio = 0.0;
@@ -48,7 +49,7 @@ int d = 2; // Hyperplane Dimensions
 int n = 3; // Ambient Space Dimensions
 int average_contributions = 10;
 bool saltAndPepper = false;
-MetricType metric = MetricType::MSE_Regression;
+MetricType metric = MetricType::MSE;
 
 int ransac_max_iterations = 50;
 double ransac_threshold = 0.0001;
@@ -65,8 +66,8 @@ Eigen::VectorXf b_vec_ui = Eigen::VectorXf::Random(n);
 Eigen::MatrixXf N_ui = Eigen::MatrixXf::Random(n - d, n);
 Eigen::VectorXf c_ui = Eigen::VectorXf::Random(n - d);
 
-Eigen::VectorXf w_ui;
-float b_ui;
+Eigen::MatrixXf W_ui = Eigen::MatrixXf::Random(d, n - d);
+Eigen::VectorXf b_ui = Eigen::VectorXf::Random(n - d);
 float noise_ui = static_cast<float>(noise);
 float outlierRatio_ui = static_cast<float>(outlierRatio);
 float outlierStrength_ui = static_cast<float>(outlierStrength);
@@ -75,7 +76,9 @@ float flatAlpha = 0.7;
 float ransac_threshold_ui = static_cast<float>(ransac_threshold);
 float ransac_train_data_percenatge_ui = static_cast<float>(ransac_train_data_percenatge);
 
-Eigen::MatrixXd hyperplanePoints;
+Eigen::MatrixXd hyperplaneInlier;
+Eigen::MatrixXd hyperplaneOutlier;
+Eigen::MatrixXd D;
 
 // Function to register types
 template <typename T>
@@ -156,18 +159,18 @@ void visualizeFittingPlane()
         // Maybe move to global to avoid reinitialization???
         RANSAC ransac(ransac_max_iterations, ransac_threshold, ransac_train_data_percenatge, ransac_min_inliners, metric);
 
-        // Eigen::MatrixXd X = hyperplanePoints.leftCols(d);
-        // Eigen::VectorXd Y = hyperplanePoints.col(d);
+        // Eigen::MatrixXd X = hyperplaneInlier.leftCols(d);
+        // Eigen::VectorXd Y = hyperplaneInlier.col(d);
 
         // std::unique_ptr<Model> singleBestModel = ransac.run(X, Y, model.get(), loss_fn, metric_fn);
 
         MedianSDF *averager = new MedianSDF(n - 1, n, 0.01, 1000);
-        std::unique_ptr<FlatModel> averagedBestModel = ransac.run2(hyperplanePoints, (FlatModel *)model.get(), average_contributions, averager);
+        std::unique_ptr<FlatModel> averagedBestModel = ransac.run2(D, (FlatModel *)model.get(), average_contributions, averager);
         averager->reset();
-        std::unique_ptr<FlatModel> lineAveragedBestModel = ransac.run_slow(hyperplanePoints, (FlatModel *)model.get(), average_contributions, averager);
+        std::unique_ptr<FlatModel> lineAveragedBestModel = ransac.run_slow(D, (FlatModel *)model.get(), average_contributions, averager);
 
         HuberRegression *huber = new HuberRegression(n - 1, n);
-        huber->fit(hyperplanePoints);
+        huber->fit(D);
         // if (singleBestModel == nullptr)
         // {
         //     std::cout << "No good Model with these parameters could be found." << std::endl;
@@ -179,26 +182,25 @@ void visualizeFittingPlane()
         FlatModel *lineAveragedBestModel_ptr = (FlatModel *)lineAveragedBestModel.get();
 
         // double singleBestModelMSE = singleBestModel_ptr->MSE(X, Y);
-        double averagedBestModelMSE = averagedBestModel_ptr->quadratic_loss(hyperplanePoints).mean();
-        double lineAveragedBestModelMSE = lineAveragedBestModel_ptr->quadratic_loss(hyperplanePoints).mean();
-        double huberMSE = huber->quadratic_loss(hyperplanePoints).mean();
+        double averagedBestModelMSE = averagedBestModel_ptr->quadratic_loss(hyperplaneInlier).mean();
+        double lineAveragedBestModelMSE = lineAveragedBestModel_ptr->quadratic_loss(hyperplaneInlier).mean();
+        double huberMSE = huber->quadratic_loss(hyperplaneInlier).mean();
 
-        std::cout << "[PERFORMANCE:MSE]" << std::endl;
+        std::cout << "[PERFORMANCE:MSE Orthogonal]" << std::endl;
         std::cout << "Averaged Best Model [1]: " << averagedBestModelMSE << std::endl;
         std::cout << "Averaged Best Model [2]: " << lineAveragedBestModelMSE << std::endl;
         std::cout << "Huber Regression: " << huberMSE << std::endl;
 
-        double averagedBestModelR2 = averagedBestModel_ptr->R2(hyperplanePoints);
-        double lineAveragedBestModelR2 = lineAveragedBestModel_ptr->R2(hyperplanePoints);
-        double huberR2 = huber->R2(hyperplanePoints);
+        double averagedBestModelR2 = averagedBestModel_ptr->R2(hyperplaneInlier);
+        double lineAveragedBestModelR2 = lineAveragedBestModel_ptr->R2(hyperplaneInlier);
+        double huberR2 = huber->R2(hyperplaneInlier);
 
-        std::cout << "[PERFORMANCE:R2]" << std::endl;
+        std::cout << "[PERFORMANCE:R2 Orthogonal]" << std::endl;
         std::cout << "Averaged Best Model [1]: " << averagedBestModelR2 << std::endl;
         std::cout << "Averaged Best Model [2]: " << lineAveragedBestModelR2 << std::endl;
         std::cout << "Huber Regression: " << huberR2 << std::endl;
-
-        Eigen::MatrixXd X = hyperplanePoints.leftCols(d);
-        Eigen::VectorXd Y = hyperplanePoints.col(d);
+        Eigen::MatrixXd X = hyperplaneInlier.leftCols(n-1);
+        Eigen::VectorXd Y = hyperplaneInlier.col(n-1);
         double averagedBestModelR2Regression = averagedBestModel_ptr->R2(X, Y);
         double lineAveragedBestModelR2Regression = lineAveragedBestModel_ptr->R2(X, Y);
         double huberR2Regression = huber->R2(X, Y);
@@ -211,7 +213,7 @@ void visualizeFittingPlane()
         std::cout << "--------------------------------" << std::endl;
 
         float pointRadius = calculatePointRadius();
-        Visualizer::plotPoints(hyperplanePoints, "Hyperplane Point Cloud", sphereRepr ? "Sphere" : "Quad", pointRadius);
+        Visualizer::plotPoints(D, "Hyperplane Point Cloud", sphereRepr ? "Sphere" : "Quad", pointRadius);
 
         // singleBestModel_ptr->visualize("Single Best Flat", 6.0, pointRadius / 2.0, 0.6);
         averagedBestModel_ptr->visualize("Averaged Best Flat", 6.0, pointRadius / 2.0, 0.6);
@@ -220,22 +222,54 @@ void visualizeFittingPlane()
     }
 }
 
+Eigen::MatrixXd mergeAndShuffle(const Eigen::MatrixXd &mat1, const Eigen::MatrixXd &mat2, std::mt19937 &gen)
+{
+    // Ensure both matrices have the same number of columns.
+    if (mat1.cols() != mat2.cols())
+    {
+        throw std::runtime_error("Matrices must have the same number of columns to merge.");
+    }
+    
+    int totalRows = mat1.rows() + mat2.rows();
+    int cols = mat1.cols();
+
+    // Concatenate matrices vertically.
+    Eigen::MatrixXd merged(totalRows, cols);
+    merged << mat1, mat2;
+
+    // Create an index vector for the rows.
+    std::vector<int> indices(totalRows);
+    std::iota(indices.begin(), indices.end(), 0);
+
+    // Shuffle the indices.
+    std::shuffle(indices.begin(), indices.end(), gen);
+
+    // Build the output matrix using the shuffled indices.
+    Eigen::MatrixXd shuffled(totalRows, cols);
+    for (int i = 0; i < totalRows; ++i)
+    {
+        shuffled.row(i) = merged.row(indices[i]);
+    }
+
+    return shuffled;
+}
+
 void generatePointCloud()
 {
-    int subspaceNum = 1;
-    int points_per_subspace = points / subspaceNum;
+    hyperplaneInlier = Eigen::MatrixXd::Zero(points, n);
+  
+    AffineFit *m =  (AffineFit *)model.get();
+    // override with random values
+    auto [subsetInlier, subsetOutlier] = FlatSampler::sampleFlatSeparated(*m, points, noise, outlierRatio, outlierStrength, saltAndPepper);
 
-    // Generate points for each subspace and concatenate them together in hyperplanePoints
-    hyperplanePoints = Eigen::MatrixXd::Zero(points, n);
-    for (int i = 0; i < subspaceNum; ++i)
-    {
-        AffineFit *m = new AffineFit(d, n);
-        // override with random values
-        m->override_parametric(Eigen::MatrixXf::Random(n, d).cast<double>(), Eigen::VectorXf::Random(n).cast<double>());
-        Eigen::MatrixXd subspacePoints = FlatSampler::sampleFlat(*m, points_per_subspace, noise, outlierRatio, outlierStrength, saltAndPepper);
+    hyperplaneInlier = subsetInlier;
+    hyperplaneOutlier = subsetOutlier;
 
-        hyperplanePoints.block(i * points_per_subspace, 0, points_per_subspace, n) = subspacePoints;
-    }
+    std::random_device rd;
+    std::mt19937 gen(rd());
+
+    D = mergeAndShuffle(hyperplaneInlier, hyperplaneOutlier, gen);
+    
 
     visualizeFittingPlane();
 }
@@ -318,11 +352,21 @@ void implicitRepresentationGUI()
     editDynamicVectorGui(c_ui, "c");
 }
 
+void explicitRepresentationGUI()
+{
+    ImGui::Text("Explicit Representation");
+    ImGui::Text("W");
+    editDynamicMatrixGui(W_ui, "W");
+    ImGui::Text("b");
+    editDynamicVectorGui(b_ui, "b");
+}
+
 void flatParameterGUI()
 {
     const char *representationNames[] = {
         "Parametric",
-        "Implicit"};
+        "Implicit",
+        "Explicit"};
 
     ImGui::Text("Flat Parameters");
 
@@ -340,13 +384,16 @@ void flatParameterGUI()
     case SampleFlatRepresentation::Implicit:
         implicitRepresentationGUI();
         break;
+    case SampleFlatRepresentation::Explicit:
+        explicitRepresentationGUI();
+        break;
     default:
         break;
     }
 
-    // for (int i = 0; i < w_ui.size(); ++i)
+    // for (int i = 0; i < W_ui.size(); ++i)
     // {
-    //     ImGui::SliderFloat(std::format("w[{}]", i).c_str(), &w_ui[i], -5.0f, 5.0f);
+    //     ImGui::SliderFloat(std::format("W[{}]", i).c_str(), &W_ui[i], -5.0f, 5.0f);
     // }
 
     // ImGui::SliderFloat("b", &b_ui, -10.0f, 10.0f);
@@ -381,6 +428,8 @@ void dataParameterGUI()
     b_vec_ui.conservativeResize(n);
     N_ui.conservativeResize(n - d, n);
     c_ui.conservativeResize(n - d);
+    W_ui.conservativeResize(d, n - d);
+    b_ui.conservativeResize(n - d);
 
     if (last_n >= n && last_d >= d)
     {
@@ -436,7 +485,7 @@ void modelSelectionGUI()
             {
                 current_item = items[i];
                 model = createObject(items[i], d, n);
-                // model->fit(hyperplanePoints.leftCols(d), hyperplanePoints.col(d));
+                // model->fit(hyperplaneInlier.leftCols(d), hyperplaneInlier.col(d));
             }
             if (is_selected)
                 ImGui::SetItemDefaultFocus();
@@ -444,7 +493,7 @@ void modelSelectionGUI()
         ImGui::EndCombo();
     }
 }
-
+ 
 void evaluate()
 {
     // 1) Prepare data for Variation 1
@@ -455,9 +504,9 @@ void evaluate()
     // 2) Prepare data for Variation 2 & 3
     //    Nx(D+1), last col is label
     AffineFit *m = new AffineFit(n - 1, n);
-    w = Eigen::MatrixXd::Random(n - 1, 1);
-    b = Eigen::VectorXd::Random(1)(0);
-    m->override_explicit(w, Eigen::VectorXd::Random(1));
+    W = Eigen::MatrixXd::Random(n - 1, 1);
+    b = Eigen::VectorXd::Random(1);
+    m->override_explicit(W, Eigen::VectorXd::Random(1));
 
     Eigen::MatrixXd D = FlatSampler::sampleFlat(*m, points, noise, outlierRatio, outlierStrength, saltAndPepper);
 
@@ -467,15 +516,15 @@ void evaluate()
     grid.trainDataPercentages = {0.2};
     grid.minInliers = {100};
     grid.bestModelCounts = {1, 100};
-    grid.metrics = {MetricType::R2_Regression, MetricType::MSE_Regression, MetricType::R2_Orthogonal, MetricType::MSE_Orthogonal};
+    grid.metrics = {MetricType::R2, MetricType::MSE};
     grid.weightedAverages = {false};
 
     DataParameterGrid dataGrid;
     dataGrid.numPoints = {500};
-    dataGrid.subspaceDimentions = {1, 3, 7, 15, 31};
-    dataGrid.ambientDimentions = {2, 4, 8, 16, 32};
+    dataGrid.subspaceDimentions = {1, 3, 7, 15, 31, 63};
+    dataGrid.ambientDimentions = {2, 4, 8, 16, 32, 64};
     dataGrid.noiseLevels = {0.0, 0.1, 0.3, 0.5};
-    dataGrid.outlierRatios = {0.0, 0.1, 0.3, 0.5};
+    dataGrid.outlierRatios = {0.0, 0.3, 0.5};
     dataGrid.outlierStrengths = {2.5};
     dataGrid.saltAndPepper = {true, false};
 
@@ -529,56 +578,59 @@ void evaluate()
 int main()
 {
     evaluate();
-    // polyscope::init();
+    polyscope::init();
 
-    // initializeLabelToModel();
+    initializeLabelToModel();
     // model->override_parametric(A_ui.cast<double>(), b_vec_ui.cast<double>());
-    // generatePointCloud();
+    Eigen::MatrixXd W = Eigen::MatrixXd::Random(n - 1, 1);
+    Eigen::VectorXd b = Eigen::VectorXd::Random(1);
+    model->override_explicit(W, b);
+    generatePointCloud();
 
-    // // UI for sliders
-    // polyscope::state::userCallback = [&]()
-    // {
-    //     flatParameterGUI();
-    //     modelSelectionGUI();
-    //     dataParameterGUI();
-    //     ransacParameterGUI();
-    //     dataReprGUI();
+    // UI for sliders
+    polyscope::state::userCallback = [&]()
+    {
+        flatParameterGUI();
+        modelSelectionGUI();
+        dataParameterGUI();
+        ransacParameterGUI();
+        dataReprGUI();
 
-    //     if (ImGui::Button("Regenerate Line"))
-    //     {
-    //         polyscope::removeAllStructures();
-    //         w_ui.conservativeResize(d);
-    //         w.conservativeResize(d);
-    //         w = w_ui.cast<double>();
-    //         b = static_cast<double>(b_ui);
-    //         noise = static_cast<double>(noise_ui);
-    //         outlierRatio = static_cast<double>(outlierRatio_ui);
-    //         outlierStrength = static_cast<double>(outlierStrength_ui);
+        if (ImGui::Button("Regenerate Line"))
+        {
+            polyscope::removeAllStructures();
 
-    //         ransac_threshold = static_cast<double>(ransac_threshold_ui);
-    //         ransac_train_data_percenatge = static_cast<double>(ransac_train_data_percenatge_ui);
+            noise = static_cast<double>(noise_ui);
+            outlierRatio = static_cast<double>(outlierRatio_ui);
+            outlierStrength = static_cast<double>(outlierStrength_ui);
 
-    //         d = std::min(d, n - 1);
-    //         k = std::min(k, d - 1);
+            ransac_threshold = static_cast<double>(ransac_threshold_ui);
+            ransac_train_data_percenatge = static_cast<double>(ransac_train_data_percenatge_ui);
 
-    //         Eigen::MatrixXd A_double;
-    //         switch (repr)
-    //         {
-    //         case SampleFlatRepresentation::Parametric:
-    //             model->override_parametric(A_ui.cast<double>(), b_vec_ui.cast<double>());
-    //             break;
-    //         case SampleFlatRepresentation::Implicit:
-    //             model->override_implicit(N_ui.cast<double>(), c_ui.cast<double>());
-    //             break;
-    //         default:
-    //             break;
-    //         }
+            d = std::min(d, n - 1);
+            k = std::min(k, d - 1);
 
-    //         generatePointCloud();
-    //     }
-    // };
+            Eigen::MatrixXd A_double;
+            switch (repr)
+            {
+            case SampleFlatRepresentation::Parametric:
+                model->override_parametric(A_ui.cast<double>(), b_vec_ui.cast<double>());
+                break;
+            case SampleFlatRepresentation::Implicit:
+                model->override_implicit(N_ui.cast<double>(), c_ui.cast<double>());
+                break;
+            case SampleFlatRepresentation::Explicit:
+                model->override_explicit(W_ui.cast<double>(), b_ui.cast<double>());
+                break;
+            default:
+                break;
+            }
 
-    // polyscope::show();
+            generatePointCloud();
+        }
+    };
 
-    // return 0;
+    polyscope::show();
+
+    return 0;
 }

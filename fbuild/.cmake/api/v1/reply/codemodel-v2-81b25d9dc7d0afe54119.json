@@ -1,0 +1,514 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1,
+						14
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-f5ebdc15457944623624.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.14"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2
+					]
+				},
+				{
+					"build" : "external/polyscope",
+					"childIndexes" : 
+					[
+						2,
+						13
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-external.polyscope-46709b1f5a58c4a8db41.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.5"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 1,
+					"source" : "external/polyscope"
+				},
+				{
+					"build" : "external/polyscope/deps",
+					"childIndexes" : 
+					[
+						3,
+						5,
+						7,
+						9,
+						10,
+						11,
+						12
+					],
+					"jsonFile" : "directory-external.polyscope.deps-bcaede8908fb5be94ac8.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.5"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 1,
+					"source" : "external/polyscope/deps"
+				},
+				{
+					"build" : "external/polyscope/deps/glad",
+					"childIndexes" : 
+					[
+						4
+					],
+					"jsonFile" : "directory-external.polyscope.deps.glad-c9123dbda02a5875fa56.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.5"
+					},
+					"parentIndex" : 2,
+					"projectIndex" : 1,
+					"source" : "external/polyscope/deps/glad"
+				},
+				{
+					"build" : "external/polyscope/deps/glad/src",
+					"jsonFile" : "directory-external.polyscope.deps.glad.src-9c44db488b98b59d5942.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.5"
+					},
+					"parentIndex" : 3,
+					"projectIndex" : 1,
+					"source" : "external/polyscope/deps/glad/src",
+					"targetIndexes" : 
+					[
+						3
+					]
+				},
+				{
+					"build" : "external/polyscope/deps/glfw",
+					"childIndexes" : 
+					[
+						6
+					],
+					"jsonFile" : "directory-external.polyscope.deps.glfw-de0c39653b9310352ab0.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.0"
+					},
+					"parentIndex" : 2,
+					"projectIndex" : 2,
+					"source" : "external/polyscope/deps/glfw"
+				},
+				{
+					"build" : "external/polyscope/deps/glfw/src",
+					"jsonFile" : "directory-external.polyscope.deps.glfw.src-920a48e3fe7518d8e6bd.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.0"
+					},
+					"parentIndex" : 5,
+					"projectIndex" : 2,
+					"source" : "external/polyscope/deps/glfw/src",
+					"targetIndexes" : 
+					[
+						4,
+						13
+					]
+				},
+				{
+					"build" : "external/polyscope/deps/glm",
+					"childIndexes" : 
+					[
+						8
+					],
+					"jsonFile" : "directory-external.polyscope.deps.glm-35e29a9bebc3196054ca.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.6"
+					},
+					"parentIndex" : 2,
+					"projectIndex" : 3,
+					"source" : "external/polyscope/deps/glm"
+				},
+				{
+					"build" : "external/polyscope/deps/glm/glm",
+					"jsonFile" : "directory-external.polyscope.deps.glm.glm-f21f95b016f777d1bbe2.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.6"
+					},
+					"parentIndex" : 7,
+					"projectIndex" : 3,
+					"source" : "external/polyscope/deps/glm/glm",
+					"targetIndexes" : 
+					[
+						5
+					]
+				},
+				{
+					"build" : "external/polyscope/deps/imgui",
+					"jsonFile" : "directory-external.polyscope.deps.imgui-2c8c505313c567146b27.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.5"
+					},
+					"parentIndex" : 2,
+					"projectIndex" : 1,
+					"source" : "external/polyscope/deps/imgui",
+					"targetIndexes" : 
+					[
+						10
+					]
+				},
+				{
+					"build" : "external/polyscope/deps/json",
+					"jsonFile" : "directory-external.polyscope.deps.json-ca6c8c183fd66b0e3468.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.5"
+					},
+					"parentIndex" : 2,
+					"projectIndex" : 1,
+					"source" : "external/polyscope/deps/json"
+				},
+				{
+					"build" : "external/polyscope/deps/MarchingCubeCpp",
+					"jsonFile" : "directory-external.polyscope.deps.MarchingCubeCpp-365b66c120bfc9abfa36.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.5"
+					},
+					"parentIndex" : 2,
+					"projectIndex" : 1,
+					"source" : "external/polyscope/deps/MarchingCubeCpp"
+				},
+				{
+					"build" : "external/polyscope/deps/stb",
+					"jsonFile" : "directory-external.polyscope.deps.stb-77964ffff6ed0e9869ee.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.5"
+					},
+					"parentIndex" : 2,
+					"projectIndex" : 1,
+					"source" : "external/polyscope/deps/stb",
+					"targetIndexes" : 
+					[
+						12
+					]
+				},
+				{
+					"build" : "external/polyscope/src",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-external.polyscope.src-3faee0a2b205545cdc96.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.5"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 1,
+					"source" : "external/polyscope/src",
+					"targetIndexes" : 
+					[
+						11
+					]
+				},
+				{
+					"build" : "external/googletest",
+					"childIndexes" : 
+					[
+						15
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-external.googletest-3a12ac207878cfe17c6c.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.13"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 4,
+					"source" : "external/googletest"
+				},
+				{
+					"build" : "external/googletest/googlemock",
+					"childIndexes" : 
+					[
+						16
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-external.googletest.googlemock-69b189e985f8155c81ff.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.13"
+					},
+					"parentIndex" : 14,
+					"projectIndex" : 5,
+					"source" : "external/googletest/googlemock",
+					"targetIndexes" : 
+					[
+						6,
+						7
+					]
+				},
+				{
+					"build" : "external/googletest/googletest",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-external.googletest.googletest-2af9dab1b75b54503624.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.13"
+					},
+					"parentIndex" : 15,
+					"projectIndex" : 6,
+					"source" : "external/googletest/googletest",
+					"targetIndexes" : 
+					[
+						8,
+						9
+					]
+				}
+			],
+			"name" : "",
+			"projects" : 
+			[
+				{
+					"childIndexes" : 
+					[
+						1,
+						4
+					],
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "GraphicsProject",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2
+					]
+				},
+				{
+					"childIndexes" : 
+					[
+						2,
+						3
+					],
+					"directoryIndexes" : 
+					[
+						1,
+						2,
+						3,
+						4,
+						9,
+						10,
+						11,
+						12,
+						13
+					],
+					"name" : "polyscope",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						3,
+						10,
+						11,
+						12
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						5,
+						6
+					],
+					"name" : "GLFW",
+					"parentIndex" : 1,
+					"targetIndexes" : 
+					[
+						4,
+						13
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						7,
+						8
+					],
+					"name" : "glm",
+					"parentIndex" : 1,
+					"targetIndexes" : 
+					[
+						5
+					]
+				},
+				{
+					"childIndexes" : 
+					[
+						5
+					],
+					"directoryIndexes" : 
+					[
+						14
+					],
+					"name" : "googletest-distribution",
+					"parentIndex" : 0
+				},
+				{
+					"childIndexes" : 
+					[
+						6
+					],
+					"directoryIndexes" : 
+					[
+						15
+					],
+					"name" : "gmock",
+					"parentIndex" : 4,
+					"targetIndexes" : 
+					[
+						6,
+						7
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						16
+					],
+					"name" : "gtest",
+					"parentIndex" : 5,
+					"targetIndexes" : 
+					[
+						8,
+						9
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "GraphicsProject::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-GraphicsProject-74da04a8e47f488cf076.json",
+					"name" : "GraphicsProject",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "GraphicsProjectLib::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-GraphicsProjectLib-21afa6508f52c0057cfd.json",
+					"name" : "GraphicsProjectLib",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "GraphicsProject_tests::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-GraphicsProject_tests-daf30b177c5b36e79aef.json",
+					"name" : "GraphicsProject_tests",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 4,
+					"id" : "glad::@3cfb586451dd839c6eee",
+					"jsonFile" : "target-glad-4d8ec38f9f625ed70b86.json",
+					"name" : "glad",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 6,
+					"id" : "glfw::@c28a1ca474cef961497d",
+					"jsonFile" : "target-glfw-02dc7d48ebcd84fa246f.json",
+					"name" : "glfw",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 8,
+					"id" : "glm::@bbaa60e1a56ca8279b98",
+					"jsonFile" : "target-glm-52200667d57366f36630.json",
+					"name" : "glm",
+					"projectIndex" : 3
+				},
+				{
+					"directoryIndex" : 15,
+					"id" : "gmock::@9bb205edeb8367ae50f5",
+					"jsonFile" : "target-gmock-897e116c2f72127355ef.json",
+					"name" : "gmock",
+					"projectIndex" : 5
+				},
+				{
+					"directoryIndex" : 15,
+					"id" : "gmock_main::@9bb205edeb8367ae50f5",
+					"jsonFile" : "target-gmock_main-e9dfa54e7e9100ad92ce.json",
+					"name" : "gmock_main",
+					"projectIndex" : 5
+				},
+				{
+					"directoryIndex" : 16,
+					"id" : "gtest::@405f3af846dabb1ba1ce",
+					"jsonFile" : "target-gtest-44b16d2e32161c3a3824.json",
+					"name" : "gtest",
+					"projectIndex" : 6
+				},
+				{
+					"directoryIndex" : 16,
+					"id" : "gtest_main::@405f3af846dabb1ba1ce",
+					"jsonFile" : "target-gtest_main-247d8b2dcfb2088f86a6.json",
+					"name" : "gtest_main",
+					"projectIndex" : 6
+				},
+				{
+					"directoryIndex" : 9,
+					"id" : "imgui::@a1a38aec2d3090b4a37a",
+					"jsonFile" : "target-imgui-de2663427d9a814ea26e.json",
+					"name" : "imgui",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 13,
+					"id" : "polyscope::@f26ccdd3c143c662c6ce",
+					"jsonFile" : "target-polyscope-4498f8c46177a49cc6eb.json",
+					"name" : "polyscope",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 12,
+					"id" : "stb::@065eed76b442b1f09ba7",
+					"jsonFile" : "target-stb-7cf49990070c3694561e.json",
+					"name" : "stb",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 6,
+					"id" : "update_mappings::@c28a1ca474cef961497d",
+					"jsonFile" : "target-update_mappings-59ed99a4884590ec65cb.json",
+					"name" : "update_mappings",
+					"projectIndex" : 2
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/trunt/BA/fbuild",
+		"source" : "/home/trunt/BA"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 6
+	}
+}
