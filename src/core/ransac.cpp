@@ -450,10 +450,10 @@ std::unique_ptr<FlatModel> RANSAC::run2(const Eigen::MatrixXd &D,
                     D_inliers.row(i) = D.row(inliers[i]);
                 }
 
-                model->fit(D_inliers);
+                // model->fit(D_inliers);
 
                 // 7. Evaluate the model and push onto local heap
-                double error = metric_fn2(D_inliers, model);
+                double error = metric_fn2(D_inliers, model); // orthognal vs regression
 
                 // check if error is nan or infinity
                 if (std::isnan(error) || std::isinf(error))
@@ -495,7 +495,7 @@ std::unique_ptr<FlatModel> RANSAC::run2(const Eigen::MatrixXd &D,
         if (heap.empty())
         {
             threshold *= 1.25;
-            // std::cout << "[FAST/AVERAGED] No good d-flat found. Running again with higher threshold: " << threshold << std::endl;
+            std::cout << "[FAST/AVERAGED] No good d-flat found. Running again with higher threshold: " << threshold << std::endl;
         }
     }
 
@@ -597,7 +597,7 @@ std::unique_ptr<FlatModel> RANSAC::run_slow(const Eigen::MatrixXd &D,
             {
                 D_inliers.row(i) = D.row(inliers[i]);
             }
-            model->fit(D_inliers);
+            // model->fit(D_inliers);
 
             // 7. Evaluate the model and push onto local heap
             double error = metric_fn2(D_inliers, model);
@@ -627,7 +627,7 @@ std::unique_ptr<FlatModel> RANSAC::run_slow(const Eigen::MatrixXd &D,
         if (heap.empty())
         {
             threshold *= 1.25;
-            // std::cout << "[SLOW] No good d-flat found. Running again with higher threshold: " << threshold << std::endl;
+            std::cout << "[SLOW] No good d-flat found. Running again with higher threshold: " << threshold << std::endl;
         }
     }
 

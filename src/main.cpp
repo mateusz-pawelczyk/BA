@@ -201,9 +201,19 @@ void visualizeFittingPlane()
         std::cout << "Huber Regression: " << huberR2 << std::endl;
         Eigen::MatrixXd X = hyperplaneInlier.leftCols(n-1);
         Eigen::VectorXd Y = hyperplaneInlier.col(n-1);
-        double averagedBestModelR2Regression = averagedBestModel_ptr->R2(X, Y);
-        double lineAveragedBestModelR2Regression = lineAveragedBestModel_ptr->R2(X, Y);
-        double huberR2Regression = huber->R2(X, Y);
+
+        double averagedBestModelMSERegression = averagedBestModel_ptr->MSE(X, Y);
+        double lineAveragedBestModelMSERegression = lineAveragedBestModel_ptr->MSE(X, Y);
+        double huberMSERegression = huber->MSE(X, Y);
+
+        std::cout << "[PERFORMANCE:MSE Regression]" << std::endl;
+        std::cout << "Averaged Best Model [1]: " << averagedBestModelMSERegression << std::endl;
+        std::cout << "Averaged Best Model [2]: " << lineAveragedBestModelMSERegression << std::endl;
+        std::cout << "Huber Regression: " << huberMSERegression << std::endl;
+
+        double averagedBestModelR2Regression = averagedBestModel_ptr->R2(hyperplaneInlier);
+        double lineAveragedBestModelR2Regression = lineAveragedBestModel_ptr->R2(hyperplaneInlier);
+        double huberR2Regression = huber->R2(hyperplaneInlier);
 
         std::cout << "[PERFORMANCE:R2 Regression]" << std::endl;
         std::cout << "Averaged Best Model [1]: " << averagedBestModelR2Regression << std::endl;
@@ -511,22 +521,22 @@ void evaluate()
     Eigen::MatrixXd D = FlatSampler::sampleFlat(*m, points, noise, outlierRatio, outlierStrength, saltAndPepper);
 
     RansacParameterGrid grid;
-    grid.maxIterations = {100};
-    grid.thresholds = {0.1};
+    grid.maxIterations = {300};
+    grid.thresholds = {0.0001, 0.1};
     grid.trainDataPercentages = {0.2};
-    grid.minInliers = {100};
-    grid.bestModelCounts = {1, 100};
-    grid.metrics = {MetricType::R2, MetricType::MSE};
-    grid.weightedAverages = {false};
+    grid.minInliers = {50};
+    grid.bestModelCounts = {100};
+    grid.metrics = {MetricType::R2};
+    grid.weightedAverages = {true};
 
     DataParameterGrid dataGrid;
-    dataGrid.numPoints = {500};
-    dataGrid.subspaceDimentions = {1, 3, 7, 15, 31, 63};
-    dataGrid.ambientDimentions = {2, 4, 8, 16, 32, 64};
-    dataGrid.noiseLevels = {0.0, 0.1, 0.3, 0.5};
-    dataGrid.outlierRatios = {0.0, 0.3, 0.5};
-    dataGrid.outlierStrengths = {2.5};
-    dataGrid.saltAndPepper = {true, false};
+    dataGrid.numPoints = {300};
+    dataGrid.subspaceDimentions = {2};
+    dataGrid.ambientDimentions = {3};
+    dataGrid.noiseLevels = {0.1, 0.2, 0.4};
+    dataGrid.outlierRatios = {0.2, 0.3};
+    dataGrid.outlierStrengths = {5, 10};
+    dataGrid.saltAndPepper = {true};
 
     // Am ende immer zu hyperebene
     // also d=1,..,n-1 zu hyperebene immer

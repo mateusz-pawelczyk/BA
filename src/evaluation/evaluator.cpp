@@ -300,7 +300,7 @@ namespace Evaluator
 
         int iterationCounter = 0;
         double progress = 0.0;
-        double totalIterations = grid.maxIterations.size() * grid.thresholds.size() * grid.trainDataPercentages.size() * grid.minInliers.size() * grid.bestModelCounts.size() * dataGrid.numPoints.size() * dataGrid.ambientDimentions.size() * dataGrid.subspaceDimentions.size() * dataGrid.noiseLevels.size() * dataGrid.outlierRatios.size() * dataGrid.outlierStrengths.size() * dataGrid.saltAndPepper.size() * grid.metrics.size() * grid.weightedAverages.size();
+        double totalIterations = grid.maxIterations.size() * grid.thresholds.size() * grid.trainDataPercentages.size() * grid.minInliers.size() * grid.bestModelCounts.size() * dataGrid.numPoints.size() * dataGrid.ambientDimentions.size() * 2 * dataGrid.noiseLevels.size() * dataGrid.outlierRatios.size() * dataGrid.outlierStrengths.size() * dataGrid.saltAndPepper.size() * grid.metrics.size() * grid.weightedAverages.size();
         std::cout << "Total iterations: " << totalIterations << std::endl;
 
         for (int maxIt : grid.maxIterations)
@@ -317,7 +317,7 @@ namespace Evaluator
                             {
                                 for (int n : dataGrid.ambientDimentions)
                                 {
-                                    for (int d : dataGrid.subspaceDimentions)
+                                    for (int d : {1, n - 1})
                                     {
                                         for (double noise : dataGrid.noiseLevels)
                                         {
@@ -341,8 +341,8 @@ namespace Evaluator
                                                                 try
                                                                 {
                                                                     auto m = std::make_unique<AffineFit>(n - 1, n);
-                                                                    Eigen::MatrixXd W = Eigen::MatrixXd::Random(n - 1, 1);
-                                                                    Eigen::VectorXd b = Eigen::VectorXd::Random(1);
+                                                                    Eigen::MatrixXd W = Eigen::MatrixXd::Random(n - 1, 1) * 0.05;
+                                                                    Eigen::VectorXd b = Eigen::VectorXd::Random(1) * 0.05;
 
                                                                     m->override_explicit(W, b);
 
