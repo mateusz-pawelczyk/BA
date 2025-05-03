@@ -627,7 +627,7 @@ std::unique_ptr<FlatModel> RANSAC::run_slow(const Eigen::MatrixXd &D,
         if (heap.empty())
         {
             threshold *= 1.25;
-            std::cout << "[SLOW] No good d-flat found. Running again with higher threshold: " << threshold << std::endl;
+            // std::cout << "[SLOW] No good d-flat found. Running again with higher threshold: " << threshold << std::endl;
         }
     }
 

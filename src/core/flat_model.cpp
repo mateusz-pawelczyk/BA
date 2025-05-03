@@ -479,8 +479,13 @@ double FlatModel::R2(const Eigen::MatrixXd &D)
 double FlatModel::R2(const Eigen::MatrixXd &X, const Eigen::MatrixXd &Y)
 {
     Eigen::MatrixXd Y_hat = predict(X);
+
     Eigen::MatrixXd residuals = Y - Y_hat;
+
+    Eigen::RowVectorXd mean_residuals = residuals.colwise().mean();
+
     Eigen::MatrixXd mean_Y = Y.colwise().mean().replicate(Y.rows(), 1);
+
     Eigen::MatrixXd total_variance = Y - mean_Y;
 
     double SS_res = (residuals.array().square().sum());

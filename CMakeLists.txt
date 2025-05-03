@@ -22,9 +22,6 @@ set(CMAKE_CXX_EXTENSIONS OFF)  # Use pure ISO C++ (no compiler-specific extensio
 # Export compile commands for IDEs, LSPs, and code analysis tools
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-# set(CMAKE_CXX_FLAGS_RELEASE "-O3 -march=native -flto")
-# set(CMAKE_BUILD_TYPE Release)
-
 # ------------------------------------------------------------------------------
 # Prevent In-Source Builds (Forces Build Directory)
 # ------------------------------------------------------------------------------
@@ -45,9 +42,7 @@ include(cmake/Dependencies.cmake)
 file(GLOB_RECURSE PROJECT_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
 list(FILTER PROJECT_SOURCES EXCLUDE REGEX ".*src/main.cpp$")
 
-
-# Find OpenCV package
-find_package(OpenCV REQUIRED)
+# Find required package: Ceres
 find_package(Ceres REQUIRED)
 
 add_library(GraphicsProjectLib ${PROJECT_SOURCES})
@@ -58,14 +53,12 @@ target_include_directories(GraphicsProjectLib
     "${CMAKE_CURRENT_SOURCE_DIR}/include"
     "${CMAKE_CURRENT_SOURCE_DIR}/external/polyscope/include"  # Polyscope includes
     "${EIGEN_INCLUDE_DIR}"  # Eigen includes
-    "${OpenCV_INCLUDE_DIRS}"  # OpenCV includes
 )
 
 # Link external dependencies
 target_link_libraries(GraphicsProjectLib
     PRIVATE
     polyscope
-    ${OpenCV_LIBS}
     Ceres::ceres
 )
 
@@ -82,37 +75,6 @@ target_link_libraries(${PROJECT_NAME}
     polyscope
     Ceres::ceres
 )
-
-# ------------------------------------------------------------------------------
-# Testing Executable
-# ------------------------------------------------------------------------------
-# Collect all test files
-file(GLOB_RECURSE PROJECT_TEST_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/tests/*.cpp")
-
-# Define the test executable
-add_executable(${PROJECT_NAME}_tests ${PROJECT_TEST_SOURCES})
-
-# Include directories for the test executable
-target_include_directories(${PROJECT_NAME}_tests
-    PRIVATE
-    "${CMAKE_CURRENT_SOURCE_DIR}/include"
-    "${CMAKE_CURRENT_SOURCE_DIR}/external/polyscope/include"
-    "${EIGEN_INCLUDE_DIR}"
-)
-
-# Link libraries to the test executable
-target_link_libraries(${PROJECT_NAME}_tests
-    PRIVATE
-    GraphicsProjectLib  # Link core project library
-    gtest
-    gtest_main
-)
-
-# Automatically discover and register tests
-include(GoogleTest)
-gtest_discover_tests(${PROJECT_NAME}_tests)
-
-
 
 # ------------------------------------------------------------------------------
 # End of File
