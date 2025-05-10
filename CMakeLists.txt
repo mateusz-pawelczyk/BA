@@ -41,6 +41,7 @@ include(cmake/Dependencies.cmake)
 # Collect all source files, excluding main.cpp
 file(GLOB_RECURSE PROJECT_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
 list(FILTER PROJECT_SOURCES EXCLUDE REGEX ".*src/main.cpp$")
+list(FILTER PROJECT_SOURCES EXCLUDE REGEX ".*src/old_main.cpp$")
 
 # Find required package: Ceres
 find_package(Ceres REQUIRED)

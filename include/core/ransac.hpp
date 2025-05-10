@@ -8,20 +8,17 @@
 #include "core/model.hpp"
 #include "core/flat_model.hpp"
 #include "models/mean_sdf.hpp"
+#include "core/types.hpp"
 
-// different metrics (aws ENUM or something)
-enum class MetricType
-{
-    R2,
-    MSE
-};
+
+
 
 using FlatModelEntry = std::pair<double, std::unique_ptr<FlatModel>>;
 
 class RANSAC
 {
 public:
-    RANSAC(int max_iterations, double threshold, double train_data_percenatge, int min_inliners, MetricType metric = MetricType::R2);
+    RANSAC(int max_iterations, double threshold, double train_data_percenatge, int min_inliners, MetricType metric = MetricType::R2, DistanceType distance = DistanceType::Orthogonal);
     std::unique_ptr<Model> run(const Eigen::MatrixXd &X, const Eigen::VectorXd &Y, Model *model, std::function<Eigen::VectorXd(Eigen::VectorXd, Eigen::VectorXd)> loss_fn, std::function<double(Eigen::VectorXd, Eigen::VectorXd)> metric_fn);
 
     std::unique_ptr<FlatModel> run(const Eigen::MatrixXd &D, FlatModel *model, int best_model_count, std::function<Eigen::VectorXd(Eigen::VectorXd, Eigen::VectorXd)> loss_fn, std::function<double(Eigen::VectorXd, Eigen::VectorXd)> metric_fn, FlatAverager *averager) const;

@@ -13,7 +13,8 @@
 #include <string>
 #include <vector>
 #include <fstream>
-#include <random>   // <<< add this !!
+#include <random>  
+#include <core/types.hpp>
 
 // ── Grid of independent parameters ────────────────────────────────────────────
 namespace Evaluator {
@@ -35,6 +36,8 @@ struct Grid {
     std::vector<int>    minInliers     {50, 100};
     std::vector<int>    bestModelCnt   {50};
     std::vector<bool>   weightedAvg    {true, false};
+    std::vector<MetricType> metricTypes {MetricType::R2, MetricType::MSE};
+    std::vector<DistanceType> distanceTypes {DistanceType::Orthogonal, DistanceType::Regression};
 };
 
 // ── paths & misc ──────────────────────────────────────────────────────────────
