@@ -6,11 +6,12 @@
 #include <memory>
 #include <vector>
 #include <stdexcept>
+#include "core/types.hpp"
 
-struct HuberCostFunctor
+struct HuberVerticalFunctor 
 {
     // Constructor: stores feature vector and target.
-    HuberCostFunctor(const Eigen::VectorXd &x, double y) : x_(x), y_(y) {}
+    HuberVerticalFunctor(const Eigen::VectorXd &x, double y) : x_(x), y_(y) {}
 
     // New operator() signature for DynamicAutoDiffCostFunction.
     template <typename T>
@@ -34,13 +35,39 @@ struct HuberCostFunctor
     const double y_;
 };
 
+struct HuberOrthogonalFunctor {
+    HuberOrthogonalFunctor(const Eigen::VectorXd &x) : x_(x) {}
+    
+    template <typename T>
+    bool operator()(T const* const* parameters, T* residual) const {
+      // parameters[0] holds [n₀, n₁, …, n_{n−1}, c]
+      const T* p = parameters[0];
+      int N = x_.size();
+      // compute dot(n, x) + c
+      T num = T(0);
+      for (int i = 0; i < N; ++i)
+        num += p[i] * T(x_[i]);
+      num += p[N];
+      // compute ‖n‖
+      T sq = T(0);
+      for (int i = 0; i < N; ++i)
+        sq += p[i] * p[i];
+      T norm = ceres::sqrt(sq);
+      residual[0] = num / norm;
+      return true;
+    }
+    
+    const Eigen::VectorXd x_;
+  };
+  
+
 // HuberRegression class derived from FlatModel.
 // It implements a robust regression using a Huber loss function via Ceres.
 class HuberRegression : public FlatModel
 {
 public:
     // Constructor: d is the flat's dimension, n the ambient space dimension.
-    HuberRegression(int d, int n);
+    HuberRegression(int d, int n,  DistanceType dist = DistanceType::Regression);
     virtual ~HuberRegression() noexcept override = default;
 
     // Fit the model using a data matrix D.
@@ -49,4 +76,6 @@ public:
 
     // Create a clone of this model.
     std::unique_ptr<Model> clone() const override;
+private:
+    DistanceType distance_; // Distance type (regression or orthogonal)
 };

@@ -66,7 +66,7 @@ Eigen::VectorXd orthogonal_loss(Eigen::MatrixXd D, FlatModel *model)
     return model->quadratic_loss(D);
 }
 
-RANSAC::RANSAC(int max_iterations, double threshold, double train_data_percenatge, int min_inliners, MetricType metric)
+RANSAC::RANSAC(int max_iterations, double threshold, double train_data_percenatge, int min_inliners, MetricType metric, DistanceType distance)
     : max_iterations(max_iterations), threshold(threshold), train_data_percentage(train_data_percenatge), min_inliners(min_inliners)
 {
     // Validate the metric
@@ -79,13 +79,39 @@ RANSAC::RANSAC(int max_iterations, double threshold, double train_data_percenatg
     switch (metric)
     {
     case MetricType::R2:
-        metric_fn2 = &r2_orthogonal_metric;
-        loss_fn = &orthogonal_loss;
+        if (distance == DistanceType::Orthogonal)
+        {
+            metric_fn2 = &r2_orthogonal_metric;
+            loss_fn = &orthogonal_loss;
+        }
+        else if (distance == DistanceType::Regression)
+        {
+            metric_fn2 = &r2_regression_metric;
+            loss_fn = &regression_loss;
+        }
+        else
+        {
+            throw std::runtime_error("Invalid distance type.");
+        }
         break;
     case MetricType::MSE:
-        metric_fn2 = &mse_orthogonal_metric;
-        loss_fn = &orthogonal_loss;
+        if (distance == DistanceType::Orthogonal)
+        {
+            metric_fn2 = &mse_orthogonal_metric;
+            loss_fn = &orthogonal_loss;
+        }
+        else if (distance == DistanceType::Regression)
+        {
+            metric_fn2 = &mse_regression_metric;
+            loss_fn = &regression_loss;
+        }
+        else
+        {
+            throw std::runtime_error("Invalid distance type.");
+        }
         break;
+    default:
+        throw std::runtime_error("Invalid metric type.");
 
     }
 }

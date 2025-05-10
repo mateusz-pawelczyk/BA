@@ -33,7 +33,13 @@ void writeCsvHeader(std::ofstream& csv){
          << "maxIt,thr,trainPct,minInl,bestCnt,weighted,"
          << "r2_all_mean,r2_inl_mean,r2_all_med,r2_inl_med,"
          << "mse_all_mean,mse_inl_mean,mse_all_med,mse_inl_med,"
-         << "mse_huber,mse_huber_inl,timeMs\n";
+        << "r2_all_mean_orth,r2_inl_mean_orth,r2_all_med_orth,r2_inl_med_orth,"
+        << "mse_all_mean_orth,mse_inl_mean_orth,mse_all_med_orth,mse_inl_med_orth,"
+        << "r2_all_huber,r2_inl_huber,"
+        << "mse_huber,mse_huber_inl,timeMs,"
+         << "r2_all_mean_orth_huber,r2_inl_mean_orth_huber,"
+         << "mse_all_mean_orth_huber,mse_inl_mean_orth_huber,"
+         << "metricType,distanceType\n";
 }
 
 } // <anon ns>
@@ -66,6 +72,8 @@ void runGridSearch(const Grid& g,const Config& cfg)
     for(int    minInl : g.minInliers     )
     for(int    bestK  : g.bestModelCnt   )
     for(bool   wAvg   : g.weightedAvg    )
+    for(MetricType metricType   : g.metricTypes    )
+    for(DistanceType distanceType   : g.distanceTypes    )
     {
         ++idx;
         log << "\n──────────────── Case "<<idx<<" ────────────────\n";
@@ -89,7 +97,7 @@ void runGridSearch(const Grid& g,const Config& cfg)
         D << Din, Dout;
 
         // 3) ---------- RANSAC object ----------
-        RANSAC ransac(maxIt,thr,tPct,minInl,MetricType::R2);
+        RANSAC ransac(maxIt,thr,tPct,minInl,metricType,distanceType);
         auto proto = std::make_unique<AffineFit>(d,n);
 
         // 4) ---------- MeanSDF ----------
@@ -104,7 +112,7 @@ void runGridSearch(const Grid& g,const Config& cfg)
         double ms=std::chrono::duration<double, std::milli>(t1-t0).count();
 
         // 6) ---------- Huber regression ----------
-        HuberRegression huber(n - 1,n);
+        HuberRegression huber(n - 1, n, distanceType);
         huber.fit(D);
 
         // 7) ---------- metrics ----------
@@ -119,7 +127,7 @@ void runGridSearch(const Grid& g,const Config& cfg)
 
         
 
-        // R² 
+        // R² Regression
         double r2AllMean  = r2(flatMean ,Xa,Ya);
         double r2InlMean  = r2(flatMean ,Xi,Yi);
         double r2AllMed   = r2(flatMed  ,Xa,Ya);
@@ -127,7 +135,15 @@ void runGridSearch(const Grid& g,const Config& cfg)
         double r2Huber    = huber.R2(Xa,Ya);
         double r2HuberInl = huber.R2(Xi,Yi);
 
-        // MSE
+        // R² Orthogonal
+        double r2AllMeanOrth  = flatMean ? flatMean->R2(D) : std::numeric_limits<double>::quiet_NaN();
+        double r2InlMeanOrth  = flatMean ? flatMean->R2(Din) : std::numeric_limits<double>::quiet_NaN();
+        double r2AllMedOrth   = flatMed  ? flatMed->R2(D) : std::numeric_limits<double>::quiet_NaN();
+        double r2InlMedOrth   = flatMed  ? flatMed->R2(Din) : std::numeric_limits<double>::quiet_NaN();
+        double r2HuberOrth    = huber.R2(D);
+        double r2HuberInlOrth = huber.R2(Din);
+
+        // MSE Regression
         double mseAllMean  = flatMean ? flatMean->MSE(Xa,Ya) : std::numeric_limits<double>::quiet_NaN();
         double mseInlMean  = flatMean ? flatMean->MSE(Xi,Yi) : std::numeric_limits<double>::quiet_NaN();
         double mseAllMed   = flatMed  ? flatMed->MSE(Xa,Ya) : std::numeric_limits<double>::quiet_NaN();
@@ -135,32 +151,49 @@ void runGridSearch(const Grid& g,const Config& cfg)
         double mseHuber    = huber.MSE(Xa,Ya);
         double mseHuberInl = huber.MSE(Xi,Yi);
 
-        // 8) ---------- logging ----------
-        log<<std::fixed<<std::setprecision(4);
-        log<<"  n="<<n<<" d="<<d<<" N="<<N<<" tilt="<<tiltF*100<<"%\n";
-        log<<"  noise="<<noise<<" outRatio="<<oRatio<<" outStr="<<oStr
-           <<" saltPep="<<(sPep?"yes":"no")<<"\n";
-        log<<"  RANSAC: maxIt="<<maxIt<<" thr="<<thr
-           <<" trainPct="<<tPct<<" minInl="<<minInl<<"\n";
-        log<<"  Heap bestK="<<bestK<<" weighted="<<(wAvg?"yes":"no")<<"\n";
-        log<<"  r2  (Mean)  inl="<<r2InlMean<<"  all="<<r2AllMean<<"\n";
-        log<<"  r2  (Median)inl="<<r2InlMed <<"  all="<<r2AllMed<<"\n";
-        log<<"  r2  (Huber) inl="<<r2HuberInl<<"  all="<<r2Huber<<"\n";
-        log<<"  mse (Mean)  inl="<<mseInlMean<<"  all="<<mseAllMean<<"\n";
-        log<<"  mse (Median)inl="<<mseInlMed <<"  all="<<mseAllMed<<"\n";
-        log<<"  mse (Huber) inl="<<mseHuberInl<<"  all="<<mseHuber<<"\n";
-        log<<"  runtime "<<ms<<" ms\n";
+        // MSE Orthogonal
+        double mseAllMeanOrth  = flatMean ? flatMean->MSE(D) : std::numeric_limits<double>::quiet_NaN();
+        double mseInlMeanOrth  = flatMean ? flatMean->MSE(Din) : std::numeric_limits<double>::quiet_NaN();
+        double mseAllMedOrth   = flatMed  ? flatMed->MSE(D) : std::numeric_limits<double>::quiet_NaN();
+        double mseInlMedOrth   = flatMed  ? flatMed->MSE(Din) : std::numeric_limits<double>::quiet_NaN();
+        double mseHuberOrth    = huber.MSE(D);
+        double mseHuberInlOrth = huber.MSE(Din);
+
+        // turn metric and distance types into strings
+        std::string metricStr = (metricType==MetricType::R2) ? "R2" : "MSE";
+        std::string distanceStr = (distanceType==DistanceType::Regression) ? "regression" : "orthogonal";
+
+        // // 8) ---------- logging ----------
+        // log << std::fixed << std::setprecision(4);
+        // log << "  n=" << n << " d=" << d << " N=" << N << " tilt=" << tiltF * 100 << "%\n";
+        // log << "  noise=" << noise << " outRatio=" << oRatio << " outStr=" << oStr
+        //     << " saltPep=" << (sPep ? "yes" : "no") << "\n";
+        // log << "  RANSAC: maxIt=" << maxIt << " thr=" << thr
+        //     << " trainPct=" << tPct << " minInl=" << minInl << "\n";
+        // log << "  Heap bestK=" << bestK << " weighted=" << (wAvg ? "yes" : "no") << "\n";
+        // log << "  r2  (Mean)  inl=" << r2InlMean << "  all=" << r2AllMean << "\n";
+        // log << "  r2  (Median)inl=" << r2InlMed << "  all=" << r2AllMed << "\n";
+        // log << "  r2  (Huber) inl=" << r2HuberInl << "  all=" << r2Huber << "\n";
+        // log << "  mse (Mean)  inl=" << mseInlMean << "  all=" << mseAllMean << "\n";
+        // log << "  mse (Median)inl=" << mseInlMed << "  all=" << mseAllMed << "\n";
+        // log << "  mse (Huber) inl=" << mseHuberInl << "  all=" << mseHuber << "\n";
+        // log << "  runtime " << ms << " ms\n";
+        // log << "  metric=" << metricStr << " distance=" << distanceStr << "\n";
 
         // 8) ---------- CSV ----------
-        csv<<idx<<','<<n<<','<<d<<','<<N<<','<<tiltF<<','<<noise<<','
-           <<oRatio<<','<<oStr<<','<<sPep<<','
-           <<maxIt<<','<<thr<<','<<tPct<<','<<minInl<<','<<bestK<<','
-           <<wAvg<<','
-           <<r2AllMean<<','<<r2InlMean<<','
-           <<r2AllMed <<','<<r2InlMed <<','
-           <<mseAllMean<<','<<mseInlMean<<','
-           <<mseAllMed <<','<<mseInlMed <<','
-           <<mseHuber    <<','<<mseHuberInl <<','<<ms<<"\n";
+        csv << idx << ',' << n << ',' << d << ',' << N << ',' << tiltF << ',' << noise << ','
+            << oRatio << ',' << oStr << ',' << sPep << ','
+            << maxIt << ',' << thr << ',' << tPct << ',' << minInl << ',' << bestK << ','
+            << wAvg << ','
+            << r2AllMean << ',' << r2InlMean << ',' << r2AllMed << ',' << r2InlMed << ','
+            << mseAllMean << ',' << mseInlMean << ',' << mseAllMed << ',' << mseInlMed << ','
+            << r2AllMeanOrth << ',' << r2InlMeanOrth << ',' << r2AllMedOrth << ',' << r2InlMedOrth << ','
+            << mseAllMeanOrth << ',' << mseInlMeanOrth << ',' << mseAllMedOrth << ',' << mseInlMedOrth << ','
+            << r2Huber << ',' << r2HuberInl << ','
+            << mseHuber << ',' << mseHuberInl << ',' << ms << ','
+            << r2AllMeanOrth << ',' << r2InlMeanOrth << ','
+            << mseAllMeanOrth << ',' << mseInlMeanOrth << ','
+            << metricStr << ',' << distanceStr << "\n";
         csv.flush();
     }
 
