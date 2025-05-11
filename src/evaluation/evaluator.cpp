@@ -57,6 +57,27 @@ void runGridSearch(const Grid& g,const Config& cfg)
     std::mt19937 rng(cfg.seed);
     std::size_t idx=0;
 
+    std::size_t totalCases = 1;
+    totalCases *= g.numPoints.size();
+    totalCases *= g.ambientDims.size();
+    totalCases *= 2;  // because of {1, n - 1}
+    totalCases *= g.tiltFractions.size();
+    totalCases *= g.noiseLevels.size();
+    totalCases *= g.outlierRatios.size();
+    totalCases *= g.outlierStr.size();
+    totalCases *= g.saltPepper.size();
+    totalCases *= g.maxIterations.size();
+    totalCases *= g.thresholds.size();
+    totalCases *= g.trainPcts.size();
+    totalCases *= g.minInliers.size();
+    totalCases *= g.bestModelCnt.size();
+    totalCases *= g.weightedAvg.size();
+    totalCases *= g.metricTypes.size();
+    totalCases *= g.distanceTypes.size();
+
+    std::cout << "Grid search: " << totalCases << " combinations\n";
+    std::cout << "Progress   : 0 / " << totalCases << " (0.0 %)" << std::flush;
+
     // ────────── nested loops – explicit for readability & logging ──────────
     for(int N         : g.numPoints      )
     for(int n         : g.ambientDims    )
@@ -69,14 +90,34 @@ void runGridSearch(const Grid& g,const Config& cfg)
     for(int    maxIt  : g.maxIterations  )
     for(double thr    : g.thresholds     )
     for(double tPct   : g.trainPcts      )
-    for(int    minInl : g.minInliers     )
+    for(double    minInl : g.minInliers     )
     for(int    bestK  : g.bestModelCnt   )
     for(bool   wAvg   : g.weightedAvg    )
     for(MetricType metricType   : g.metricTypes    )
     for(DistanceType distanceType   : g.distanceTypes    )
     {
         ++idx;
+        const double pct = 100.0 * idx / totalCases;
+        std::cout << '\r'
+                  << "Progress   : " << idx << " / " << totalCases
+                  << " (" << std::fixed << std::setprecision(1) << pct << " %)"
+                  << std::flush;
+        // turn metric and distance types into strings
+        std::string metricStr = (metricType==MetricType::R2) ? "R2" : "MSE";
+        std::string distanceStr = (distanceType==DistanceType::Regression) ? "regression" : "orthogonal";
+        
+        ++idx;
         log << "\n──────────────── Case "<<idx<<" ────────────────\n";
+        log << std::fixed << std::setprecision(4);
+        log << "  n=" << n << " d=" << d << " N=" << N << " tilt=" << tiltF * 100 << "%\n";
+        log << "  noise=" << noise << " outRatio=" << oRatio << " outStr=" << oStr
+            << " saltPep=" << (sPep ? "yes" : "no") << "\n";
+        log << "  RANSAC: maxIt=" << maxIt << " thr=" << thr
+            << " trainPct=" << tPct << " minInl=" << minInl << "\n";
+        log << "  Heap bestK=" << bestK << " weighted=" << (wAvg ? "yes" : "no") << "\n";
+        log << "  metric=" << metricStr << " distance=" << distanceStr << "\n";
+
+        int minInlN = static_cast<int>(std::ceil(minInl*N*tPct));
 
         // 1) ---------- ground-truth flat ----------
         Eigen::VectorXd W = randomUnitVec(n - 1,rng) * (tiltF*cfg.maxTiltMag);
@@ -97,7 +138,7 @@ void runGridSearch(const Grid& g,const Config& cfg)
         D << Din, Dout;
 
         // 3) ---------- RANSAC object ----------
-        RANSAC ransac(maxIt,thr,tPct,minInl,metricType,distanceType);
+        RANSAC ransac(maxIt,thr,tPct,minInlN,metricType,distanceType);
         auto proto = std::make_unique<AffineFit>(d,n);
 
         // 4) ---------- MeanSDF ----------
@@ -112,8 +153,11 @@ void runGridSearch(const Grid& g,const Config& cfg)
         double ms=std::chrono::duration<double, std::milli>(t1-t0).count();
 
         // 6) ---------- Huber regression ----------
+        
+        log << "Starting Huber regression...\n";
         HuberRegression huber(n - 1, n, distanceType);
         huber.fit(D);
+        log << "Finished Huber regression\n";
 
         // 7) ---------- metrics ----------
         auto Xa = D.leftCols(n - 1);
@@ -159,9 +203,6 @@ void runGridSearch(const Grid& g,const Config& cfg)
         double mseHuberOrth    = huber.MSE(D);
         double mseHuberInlOrth = huber.MSE(Din);
 
-        // turn metric and distance types into strings
-        std::string metricStr = (metricType==MetricType::R2) ? "R2" : "MSE";
-        std::string distanceStr = (distanceType==DistanceType::Regression) ? "regression" : "orthogonal";
 
         // // 8) ---------- logging ----------
         // log << std::fixed << std::setprecision(4);

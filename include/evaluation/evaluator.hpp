@@ -21,11 +21,11 @@ namespace Evaluator {
 
 struct Grid {
     // ─ data generation ─
-    std::vector<int>    numPoints      {200, 400};
+    std::vector<int>    numPoints      {200, 400, 1000};
     std::vector<int>    ambientDims    {2, 4, 6, 8};
     std::vector<double> noiseLevels    {0.1, 0.3, 0.6, 0.8, 1.1};
     std::vector<double> outlierRatios  {0.1, 0.2, 0.3, 0.4};
-    std::vector<double> outlierStr     {10.0};
+    std::vector<double> outlierStr     {20.0};
     std::vector<bool>   saltPepper     {true, false};
     std::vector<double> tiltFractions  {0.1, 0.2, 0.5, 1, 2, 5, 10}; // 0-100 %
 
@@ -33,11 +33,11 @@ struct Grid {
     std::vector<int>    maxIterations  {300};
     std::vector<double> thresholds     {1e-2};
     std::vector<double> trainPcts      {0.2};
-    std::vector<int>    minInliers     {50, 100};
+    std::vector<double> minInliers     {0.3, 0.5, 0.95};
     std::vector<int>    bestModelCnt   {50};
     std::vector<bool>   weightedAvg    {true, false};
     std::vector<MetricType> metricTypes {MetricType::R2, MetricType::MSE};
-    std::vector<DistanceType> distanceTypes {DistanceType::Orthogonal, DistanceType::Regression};
+    std::vector<DistanceType> distanceTypes {DistanceType::Orthogonal};
 };
 
 // ── paths & misc ──────────────────────────────────────────────────────────────

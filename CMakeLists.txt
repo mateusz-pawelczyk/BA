@@ -44,7 +44,6 @@ list(FILTER PROJECT_SOURCES EXCLUDE REGEX ".*src/main.cpp$")
 list(FILTER PROJECT_SOURCES EXCLUDE REGEX ".*src/old_main.cpp$")
 
 # Find required package: Ceres
-find_package(Ceres REQUIRED)
 
 add_library(GraphicsProjectLib ${PROJECT_SOURCES})
 
@@ -52,9 +51,11 @@ add_library(GraphicsProjectLib ${PROJECT_SOURCES})
 target_include_directories(GraphicsProjectLib
     PUBLIC
     "${CMAKE_CURRENT_SOURCE_DIR}/include"
-    "${CMAKE_CURRENT_SOURCE_DIR}/external/polyscope/include"  # Polyscope includes
-    "${EIGEN_INCLUDE_DIR}"  # Eigen includes
+    "${CMAKE_CURRENT_SOURCE_DIR}/external/polyscope/include"
+    "${CMAKE_CURRENT_SOURCE_DIR}/external/ceres-solver/install/include"  # ✅ force local Ceres headers
+    "${EIGEN_INCLUDE_DIR}"
 )
+
 
 # Link external dependencies
 target_link_libraries(GraphicsProjectLib

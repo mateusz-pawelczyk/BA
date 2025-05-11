@@ -1,7 +1,7 @@
 # Build artifacts
-/build/
-/fbuild/
-/sbuild/
+build/
+fbuild/
+sbuild/
 *.o
 *.obj
 *.exe

@@ -19,13 +19,13 @@ option(POLYSCOPE_IMGUI_ENABLED      "Enable ImGui within Polyscope"       ON)
 # Add the Polyscope directory
 # This will pick up Polyscope's own CMakeLists.txt file under external/polyscope/
 add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/external/polyscope")
-add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/external/googletest")
+# add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/external/googletest")
 
 #############################
 #        GOOGLE TEST        #
 #############################
-enable_testing()
-include(GoogleTest)
+# enable_testing()
+# include(GoogleTest)
 
 #############################
 #          EIGEN
@@ -34,6 +34,14 @@ include(GoogleTest)
 # We only need to set the include path to point to the Eigen folder.
 
 set(EIGEN_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/external/eigen")
+
+set(CERES_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/external/ceres-solver/install")
+set(CMAKE_PREFIX_PATH "${CERES_ROOT}" ${CMAKE_PREFIX_PATH})
+find_package(Ceres REQUIRED)
+message(STATUS "✔ Using Ceres from: ${CERES_INCLUDE_DIRS}")
+message(STATUS "✔ Ceres version: ${CERES_VERSION}")
+
+
 # In case you want to confirm if a CMakeLists.txt exists in Eigen, you can
 # add_subdirectory(...) it if you prefer. Usually, for Eigen, you only need the path.
 

@@ -660,14 +660,14 @@ int main() {
     Evaluator::Grid grid;
 
     Evaluator::Config cfg;
-    cfg.csvPath = "mySweepNew2.csv";
-    cfg.logPath = "mySweepNew2.log";
-
-    // Evaluator::runGridSearch(grid, cfg);
-    polyscope::init();
-    initializeParameters();
-    runCurrentCase();
-    ui();
-    polyscope::show();
+    cfg.csvPath = "evaluationBetter01.csv";
+    cfg.logPath = "evaluationBetter01.log";
+    std::cout << "Starting grid search...\n";
+    Evaluator::runGridSearch(grid, cfg);
+    // polyscope::init();
+    // initializeParameters();
+    // runCurrentCase();
+    // ui();
+    // polyscope::show();
     return 0;
 }
