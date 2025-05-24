@@ -95,6 +95,8 @@ void runGridSearch(const Grid& g,const Config& cfg)
     for(bool   wAvg   : g.weightedAvg    )
     for(MetricType metricType   : g.metricTypes    )
     for(DistanceType distanceType   : g.distanceTypes    )
+    for(double medErrTol : g.medianErrTols)
+    for(int    medMaxIt  : g.medianMaxIters)
     {
         ++idx;
         const double pct = 100.0 * idx / totalCases;
@@ -147,7 +149,7 @@ void runGridSearch(const Grid& g,const Config& cfg)
         auto flatMean = ransac.run_slow(D,proto.get(),bestK,&meanAvg,wAvg);
 
         // 5) ---------- MedianSDF ----------
-        MedianSDF medAvg(n - 1,n,cfg.huberErrTol,cfg.huberMaxIter);
+        MedianSDF medAvg(n - 1,n,medErrTol,medMaxIt);
         auto flatMed  = ransac.run_slow(D,proto.get(),bestK,&medAvg ,wAvg);
         auto t1=Clock::now();
         double ms=std::chrono::duration<double, std::milli>(t1-t0).count();
