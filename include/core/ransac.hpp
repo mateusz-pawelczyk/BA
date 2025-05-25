@@ -34,6 +34,12 @@ public:
                                         FlatAverager *averager,
                                         bool weighted_average = false) const;
 
+    std::unique_ptr<FlatModel> run_fast(const Eigen::MatrixXd &D,
+                                        FlatModel *prototype_model,
+                                        int best_model_count,
+                                        FlatAverager *averager,
+                                        bool weighted_average) const;
+
 private:
     Eigen::VectorXd getInliner(const Eigen::VectorXd &Y, const Eigen::VectorXd &Y_pred) const;
     int max_iterations;
@@ -43,8 +49,8 @@ private:
 
     // Eigen::VectorXd (*loss_fn)(Eigen::VectorXd, Eigen::VectorXd);
     // double (*metric_fn)(Eigen::VectorXd, Eigen::VectorXd);
-    std::function<double(Eigen::MatrixXd, FlatModel *)> metric_fn2;
-    std::function<Eigen::VectorXd(Eigen::MatrixXd, FlatModel *)> loss_fn;
+    std::function<double(const Eigen::MatrixXd&, FlatModel *)> metric_fn2;
+    std::function<Eigen::VectorXd(const Eigen::MatrixXd&, FlatModel *)> loss_fn;
 
     // FlatAverager
     // std::unique_ptr<FlatModel> FlatAverager(std::vector<std::unique_ptr<FlatModel>> &models, int k, std::vector<double> *errors = nullptr) const;
@@ -59,6 +65,7 @@ private:
 
     // Helper function to cast Model -> FlatModel in a safe way
     std::unique_ptr<FlatModel> castToModel(std::unique_ptr<Model> basePtr) const;
+    std::vector<int> findInliers(const Eigen::VectorXd &loss_values, double threshold_val) const; 
 
     void sampleRandomSubset(const Eigen::MatrixXd &X,
                             const Eigen::VectorXd &Y,
@@ -72,15 +79,11 @@ private:
                             std::vector<int> &indices,
                             std::mt19937 &g) const;
 
-    std::vector<int> findInliers(const Eigen::VectorXd &loss_values, double threshold) const;
 
     // Gathers top models from the global heap into sorted vectors
     template <typename Comparator>
     void gatherTopModels(
-        std::priority_queue<
-            FlatModelEntry,
-            std::vector<FlatModelEntry>,
-            Comparator> &heap,
+        std::priority_queue<FlatModelEntry, std::vector<FlatModelEntry>, Comparator> &heap,
         std::vector<std::unique_ptr<FlatModel>> &models,
         std::vector<double> &errors) const;
 

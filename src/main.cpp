@@ -473,6 +473,8 @@ void generatePointCloud()
     mergeAndShuffle();
 }
 
+#include <chrono> // Required for timing
+
 void fitFlats() {
     // Fit flats using RANSAC
     RANSAC ransac(
@@ -487,25 +489,85 @@ void fitFlats() {
     int n = dataParams.n;
     int d = dataParams.d;
 
-
     auto proto = std::make_unique<AffineFit>(d, n);
 
-    // MeanSDF
-    MeanSDF meanAvg(n - 1, n);
-    generatedFlats.meanSDF_Flat = ransac.run_slow(
-        D_all, proto.get(), averagerParams.modelCount, &meanAvg, averagerParams.weightedAverage
-    );
+    std::cout << "--- Fitting Models ---" << std::endl;
 
-    // MedianSDF
-    MedianSDF medAvg(n - 1, n, averagerParams.errTolerance, averagerParams.iterations);
-    generatedFlats.medianSDF_Flat = ransac.run_slow(
-        D_all, proto.get(), averagerParams.modelCount, &medAvg, averagerParams.weightedAverage
-    );
+        // MeanSDF
+        MeanSDF meanAvg(n - 1, n);
+        std::cout << "MeanSDF:" << std::endl;
+
+        auto start_slow_mean = std::chrono::high_resolution_clock::now();
+        auto meanSDF_slow_result = ransac.run_slow(
+            D_all, proto.get(), averagerParams.modelCount, &meanAvg, averagerParams.weightedAverage
+        );
+        auto end_slow_mean = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double, std::milli> duration_slow_mean = end_slow_mean - start_slow_mean;
+        std::cout << "  run_slow time: " << duration_slow_mean.count() << " ms";
+        if (meanSDF_slow_result) {
+            double mse_slow_mean = meanSDF_slow_result->MSE(D_inliers);
+            std::cout << ", MSE (Orthogonal, Inliers): " << mse_slow_mean;
+        }
+        std::cout << std::endl;
+
+        auto start_fast_mean = std::chrono::high_resolution_clock::now();
+        generatedFlats.meanSDF_Flat = ransac.run_fast(
+            D_all, proto.get(), averagerParams.modelCount, &meanAvg, averagerParams.weightedAverage
+        );
+        auto end_fast_mean = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double, std::milli> duration_fast_mean = end_fast_mean - start_fast_mean;
+        std::cout << "  run_fast time: " << duration_fast_mean.count() << " ms";
+        if (generatedFlats.meanSDF_Flat) {
+            double mse_fast_mean = generatedFlats.meanSDF_Flat->MSE(D_inliers);
+            std::cout << ", MSE (Orthogonal, Inliers): " << mse_fast_mean;
+        }
+        std::cout << std::endl;
+
+
+        // MedianSDF
+        MedianSDF medAvg(n - 1, n, averagerParams.errTolerance, averagerParams.iterations);
+        std::cout << "MedianSDF:" << std::endl;
+
+        auto start_slow_median = std::chrono::high_resolution_clock::now();
+        auto medianSDF_slow_result = ransac.run_slow(
+            D_all, proto.get(), averagerParams.modelCount, &medAvg, averagerParams.weightedAverage
+        );
+        auto end_slow_median = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double, std::milli> duration_slow_median = end_slow_median - start_slow_median;
+        std::cout << "  run_slow time: " << duration_slow_median.count() << " ms";
+        if (medianSDF_slow_result) {
+            double mse_slow_median = medianSDF_slow_result->MSE(D_all);
+            std::cout << ", MSE (Orthogonal, All): " << mse_slow_median;
+        }
+        std::cout << std::endl;
+
+        auto start_fast_median = std::chrono::high_resolution_clock::now();
+        generatedFlats.medianSDF_Flat = ransac.run_fast(
+            D_all, proto.get(), averagerParams.modelCount, &medAvg, averagerParams.weightedAverage
+        );
+        auto end_fast_median = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double, std::milli> duration_fast_median = end_fast_median - start_fast_median;
+        std::cout << "  run_fast time: " << duration_fast_median.count() << " ms";
+        if (generatedFlats.medianSDF_Flat) {
+            double mse_fast_median = generatedFlats.medianSDF_Flat->MSE(D_all);
+            std::cout << ", MSE (Orthogonal, All): " << mse_fast_median;
+        }
+        std::cout << std::endl;
+
 
     // Huber Regression
+    // This part does not use ransac.run_fast or ransac.run_slow, so it remains unchanged
+    // unless you also want to time its 'fit' method.
+    std::cout << "Huber Regression:" << std::endl;
+    auto start_huber = std::chrono::high_resolution_clock::now();
     HuberRegression huber(n - 1, n, metricParams.distance);
     huber.fit(D_all);
     generatedFlats.huber_Flat = std::make_unique<HuberRegression>(std::move(huber));
+    auto end_huber = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double, std::milli> duration_huber = end_huber - start_huber;
+    std::cout << "  fit time: " << duration_huber.count() << " ms" << std::endl;
+
+    std::cout << "--- Fitting Complete ---" << std::endl;
 }
 
 void evaluateFlats() {
@@ -657,17 +719,17 @@ void initializeParameters() {
 
 // --- main() ---------------------------------------------------------------
 int main() {
-    Evaluator::Grid grid;
+    // Evaluator::Grid grid;
 
-    Evaluator::Config cfg;
-    cfg.csvPath = "evaluationBetter01.csv";
-    cfg.logPath = "evaluationBetter01.log";
-    std::cout << "Starting grid search...\n";
-    Evaluator::runGridSearch(grid, cfg);
-    // polyscope::init();
-    // initializeParameters();
-    // runCurrentCase();
-    // ui();
-    // polyscope::show();
+    // Evaluator::Config cfg;
+    // cfg.csvPath = "evaluationBetter01.csv";
+    // cfg.logPath = "evaluationBetter01.log";
+    // std::cout << "Starting grid search...\n";
+    // Evaluator::runGridSearch(grid, cfg);
+    polyscope::init();
+    initializeParameters();
+    runCurrentCase();
+    ui();
+    polyscope::show();
     return 0;
 }

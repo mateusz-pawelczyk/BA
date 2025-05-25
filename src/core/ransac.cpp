@@ -31,13 +31,13 @@ double r2_regression_metric(const Eigen::MatrixXd &D, FlatModel *model)
     return -R2;
 }
 
-double mse_orthogonal_metric(Eigen::MatrixXd D, FlatModel *model)
+double mse_orthogonal_metric(const Eigen::MatrixXd &D, FlatModel *model)
 {
     double MSE = model->MSE(D);
     return MSE;
 }
 
-double mse_regression_metric(Eigen::MatrixXd D, FlatModel *model)
+double mse_regression_metric(const Eigen::MatrixXd &D, FlatModel *model)
 {
     int d = model->get_dimension();
     int n = model->get_ambient_dimension();
@@ -49,7 +49,7 @@ double mse_regression_metric(Eigen::MatrixXd D, FlatModel *model)
     return MSE;
 }
 
-Eigen::VectorXd regression_loss(Eigen::MatrixXd D, FlatModel *model)
+Eigen::VectorXd regression_loss(const Eigen::MatrixXd &D, FlatModel *model)
 {
     int d = model->get_dimension();
     int n = model->get_ambient_dimension();
@@ -61,7 +61,7 @@ Eigen::VectorXd regression_loss(Eigen::MatrixXd D, FlatModel *model)
     return (Y_true - Y).rowwise().squaredNorm();
 }
 
-Eigen::VectorXd orthogonal_loss(Eigen::MatrixXd D, FlatModel *model)
+Eigen::VectorXd orthogonal_loss(const Eigen::MatrixXd &D, FlatModel *model)
 {
     return model->quadratic_loss(D);
 }
@@ -666,4 +666,233 @@ std::unique_ptr<FlatModel> RANSAC::run_slow(const Eigen::MatrixXd &D,
     averager->fit(models, weighted_average ? errors : std::vector<double>());
     std::unique_ptr<FlatModel> fm = castToModel(averager->clone());
     return fm;
+}
+
+
+// Add necessary includes at the top of your .cpp file
+#include <omp.h>     // For OpenMP
+#include <atomic>    // For std::atomic (safer error handling in parallel)
+#include <iostream>  // Ensure std::cerr is available
+
+// (Your other includes: numeric, algorithm, stdexcept, cmath, etc.)
+
+std::unique_ptr<FlatModel> RANSAC::run_fast(const Eigen::MatrixXd &D,
+                                            FlatModel *prototype_model, // Renamed for clarity
+                                            int best_model_count,
+                                            FlatAverager *averager,
+                                            bool weighted_average) const
+{
+    if (prototype_model == nullptr)
+    {
+        throw std::runtime_error("Prototype model can't be `nullptr`.");
+    }
+
+    int N = D.rows();
+    int d_model_dim = prototype_model->get_dimension();
+    int n_ambient = prototype_model->get_ambient_dimension();
+
+    if (n_ambient != D.cols())
+    {
+        throw std::runtime_error("Dimension mismatch between model and data.");
+    }
+    if (N == 0) {
+        throw std::runtime_error("Input data D is empty.");
+    }
+    if (this->train_data_percentage <= 0.0 || this->train_data_percentage > 1.0) {
+        throw std::runtime_error("train_data_percentage must be between 0 (exclusive) and 1 (inclusive).");
+    }
+
+    int subset_size = static_cast<int>(std::ceil(this->train_data_percentage * N));
+    if (subset_size == 0 && N > 0) {
+        subset_size = 1;
+    }
+    if (subset_size > N) {
+        subset_size = N;
+    }
+    if (subset_size < d_model_dim + 1 && N >= d_model_dim +1) { // Basic check, model->fit might have more specific needs
+        // This condition depends on the specific requirements of `prototype_model->fit()`
+        // For generic RANSAC, subset_size should be at least the minimal number of points to define a model.
+        // For this project, it's d+1 for AffineFit.
+        // If train_data_percentage is too low, subset_size might be < d+1.
+        // We might want to ensure subset_size >= d_model_dim + 1 if N allows.
+        // For now, let the model's fit() handle insufficient points in D_subset if it occurs.
+    }
+
+
+    auto compare_models = [](const FlatModelEntry &a, const FlatModelEntry &b) {
+        return a.first < b.first; // Max-heap behavior on error (top() is largest error)
+    };
+
+    std::priority_queue<FlatModelEntry, std::vector<FlatModelEntry>, decltype(compare_models)> global_heap(compare_models);
+
+    std::random_device master_rd_device; // One master random_device
+    double current_threshold = this->threshold;
+    unsigned int base_seed_for_pass = master_rd_device(); // Initial base seed
+
+    std::atomic<bool> nan_inf_error_detected(false); // For safer error handling from parallel regions
+    while (global_heap.empty())
+    {
+        // Reset for the new pass
+        nan_inf_error_detected.store(false);
+
+        // Determine number of threads that will be used
+        int num_threads_to_use = 1;
+        #pragma omp parallel
+        {
+            #pragma omp single
+            num_threads_to_use = omp_get_num_threads();
+        }
+        
+        std::vector<std::priority_queue<FlatModelEntry, std::vector<FlatModelEntry>, decltype(compare_models)>>
+            local_heaps;
+        local_heaps.reserve(num_threads_to_use); // Optional pre-allocation
+        for (int i = 0; i < num_threads_to_use; ++i) {
+            local_heaps.emplace_back(compare_models); // Construct each PQ with the comparator
+        }
+
+        #pragma omp parallel
+        {
+            // Thread-local resources
+            std::unique_ptr<FlatModel> thread_local_model = castToModel(prototype_model->clone());
+            Eigen::MatrixXd D_subset_local(subset_size, n_ambient); // Pre-sized
+            std::vector<int> indices_local(N); // Pre-sized
+            Eigen::MatrixXd D_inliers_local;   // Resized as needed
+
+            int thread_id = omp_get_thread_num();
+            auto& current_thread_local_heap = local_heaps[thread_id];
+            // std::mt19937 is created and seeded per iteration for determinism
+
+            #pragma omp for schedule(dynamic) // Dynamic schedule for potentially uneven iteration times
+            for (int iter = 0; iter < this->max_iterations; ++iter)
+            {
+                if (nan_inf_error_detected.load()) {
+                    continue; 
+                }// Stop processing if error elsewhere
+
+                // Deterministic seeding for this iteration
+                std::mt19937 g_local(base_seed_for_pass + iter);
+
+                std::iota(indices_local.begin(), indices_local.end(), 0);
+                std::shuffle(indices_local.begin(), indices_local.end(), g_local);
+
+                if (subset_size > 0) {
+                    for (int i = 0; i < subset_size; ++i) {
+                        D_subset_local.row(i) = D.row(indices_local[i]);
+                    }
+                } else if (N > 0) { // subset_size is 0 but N > 0
+                    continue; 
+                } else { // N == 0
+                    continue;
+                }
+
+
+                thread_local_model->reset();
+                thread_local_model->fit(D_subset_local);
+
+                Eigen::VectorXd loss = this->loss_fn(D, thread_local_model.get());
+
+                std::vector<int> inliers_indices = findInliers(loss, current_threshold);
+
+                if (inliers_indices.size() < static_cast<size_t>(std::max(this->min_inliners, d_model_dim + 1)))
+                {
+                    continue;
+                }
+
+                D_inliers_local.resize(inliers_indices.size(), n_ambient);
+                for (size_t i = 0; i < inliers_indices.size(); ++i)
+                {
+                    D_inliers_local.row(i) = D.row(inliers_indices[i]);
+                }
+
+                double error = this->metric_fn2(D_inliers_local, thread_local_model.get());
+
+
+                if (std::isnan(error) || std::isinf(error))
+                {
+                    // Safely report error and signal to stop
+                    if (!nan_inf_error_detected.exchange(true)) { // Ensure only first thread reports fully
+                        // Use std::cerr for errors, less prone to cout buffering issues from threads
+                        std::cerr << "=====================" << std::endl;
+                        std::cerr << "CRITICAL ERROR in RANSAC (parallel section)" << std::endl;
+                        std::cerr << "Thread ID: " << omp_get_thread_num() << ", Iteration: " << iter << std::endl;
+                        std::cerr << "Current threshold: " << current_threshold << std::endl;
+                        std::cerr << "Error: " << error << std::endl;
+                        // Optionally print D_inliers_local if small and useful
+                        if (D_inliers_local.size() < 200) {
+                             std::cerr << "D_inliers_local (" << D_inliers_local.rows() << "x" << D_inliers_local.cols() << "):\n" << D_inliers_local << std::endl;
+                        } else {
+                             std::cerr << "D_inliers_local too large to print (" << D_inliers_local.rows() << "x" << D_inliers_local.cols() << ")" << std::endl;
+                        }
+                    }
+                    // Note: OpenMP 'for' loops can be cancelled with '#pragma omp cancel for' in OpenMP 4.0+
+                    // if cancellation is enabled. Otherwise, threads will finish their current iteration.
+                    // The 'if (nan_inf_error_detected.load()) continue;' helps stop further work.
+                    continue; // Skip adding to heap
+                }
+
+
+                std::unique_ptr<FlatModel> thread_local_model = castToModel(prototype_model->clone()); // CORRECTED
+
+                // Clone *the fitted* model, and emplace it:
+                auto model_clone = castToModel(thread_local_model->clone());
+                current_thread_local_heap.emplace(error, std::move(model_clone));
+
+                // Now pop off the worst if we exceed best_model_count
+                if (current_thread_local_heap.size() > static_cast<size_t>(best_model_count)) {
+                    current_thread_local_heap.pop();
+                }
+            } // End of #pragma omp for
+        } // End of #pragma omp parallel
+
+        // Check for error flag after parallel region before proceeding
+        if (nan_inf_error_detected.load()) {
+            throw std::runtime_error("Error (NaN or Inf) detected during parallel RANSAC execution.");
+        }
+
+        // Merge local heaps into the global heap (serially)
+        // This part needs to correctly handle moving std::unique_ptr
+        for (auto& local_h : local_heaps) {
+            std::vector<FlatModelEntry> temp_drain; // Temporary vector to hold entries from local_h
+            temp_drain.reserve(local_h.size());
+            while(!local_h.empty()) {
+                // Move from priority_queue's top. This is tricky.
+                // const_cast is one way but generally unsafe if not careful.
+                // A safer pattern for unique_ptr in PQ:
+                // 1. Get error (copy).
+                // 2. Get a non-const ref to unique_ptr in top() (requires const_cast or helper).
+                // 3. Move unique_ptr.
+                // 4. Pop.
+                // For simplicity and because we are draining:
+                FlatModelEntry& top_entry_ref = const_cast<FlatModelEntry&>(local_h.top());
+                temp_drain.push_back(std::move(top_entry_ref)); // Moves the pair, including unique_ptr
+                local_h.pop(); // Pop the now moved-from element
+            }
+
+            for(auto& entry_to_add : temp_drain) {
+                global_heap.push(std::move(entry_to_add));
+                if (global_heap.size() > static_cast<size_t>(best_model_count)) {
+                    global_heap.pop();
+                }
+            }
+        }
+        
+        if (global_heap.empty())
+        {
+            current_threshold *= 1.25;
+            base_seed_for_pass = master_rd_device(); // Get a new base seed for the next pass
+            // std::cout << "[RANSAC Parallel] No good d-flat. Higher threshold: " << current_threshold << std::endl;
+        }
+    } // End of while(global_heap.empty())
+
+    std::vector<std::unique_ptr<FlatModel>> top_models;
+    std::vector<double> top_errors;
+    top_models.reserve(global_heap.size());
+    top_errors.reserve(global_heap.size());
+
+    gatherTopModels(global_heap, top_models, top_errors); // Assumes this can drain the global_heap
+
+    averager->fit(top_models, weighted_average ? top_errors : std::vector<double>());
+    std::unique_ptr<FlatModel> final_model = castToModel(averager->clone());
+    
+    return final_model;
 }
